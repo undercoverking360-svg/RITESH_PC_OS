@@ -8,14 +8,15 @@
   <meta content='Ultra-futuristic cybernetic OS engineered with 4K Frosted Glass UI, 3-in-1 combo (Debian Bookworm 12 Linux + Android Waydroid + Windows Layer), 15s instant live boot, and immutable BIOS security.' name='description'/>
   <meta content='#040609' name='theme-color'/>
 
-  <!-- Google Fonts -->
+  <!-- Google Cyber Fonts -->
   <link href='https://fonts.googleapis.com' rel='preconnect'/>
   <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
   <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Orbitron:wght@400;600;700;800;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Rajdhani:wght@500;600;700&amp;display=swap' rel='stylesheet'/>
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS CDN -->
   <script src='https://cdn.tailwindcss.com'></script>
-  <script><![CDATA[
+  <script>
+    //<![CDATA[
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -28,20 +29,19 @@
           }
         }
       }
-    }
-  ]]></script>
+    };
+    //]]>
+  </script>
 
-  <!-- React 18 & Babel & Confetti & Lucide CDNs via jsDelivr / cdnjs -->
-  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js'></script>
-  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js'></script>
-  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.4/babel.min.js'></script>
+  <!-- Confetti library -->
   <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js'></script>
 
-  <!-- Blogger Skin (Mandatory for Blogger Theme Engine - Prevents Delimiter Errors) -->
+  <!-- Blogger Skin Stylesheet (Zero Delimiter Errors) -->
   <b:skin><![CDATA[
-    /* Reset default blogger widgets & navbar */
+    /* Reset default Blogger garbage */
     .navbar, #navbar, .widget-item-control, .quickedit, .status-msg-wrap { display: none !important; }
-    body {
+    
+    html, body {
       margin: 0;
       padding: 0;
       background-color: #040609 !important;
@@ -50,7 +50,11 @@
       overflow-x: hidden;
     }
 
-    /* Cyber Glows & Glassmorphism */
+    .font-cyber { font-family: 'Orbitron', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .font-tech { font-family: 'Rajdhani', sans-serif; }
+
+    /* Frosted Cyber Glassmorphism */
     .glass-panel {
       background: rgba(8, 14, 26, 0.75);
       backdrop-filter: blur(20px);
@@ -77,6 +81,8 @@
         linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
     }
+
+    /* Scanlines & Animations */
     .animate-scan {
       animation: scanAnim 2.5s ease-in-out infinite;
     }
@@ -92,355 +98,561 @@
     .animate-pulse-glow {
       animation: pulseGlowAnim 4s ease-in-out infinite;
     }
+
+    /* Custom Cyber Scrollbars */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #040609; }
     ::-webkit-scrollbar-thumb { background: #152238; border-radius: 4px; border: 1px solid rgba(0, 240, 255, 0.2); }
     ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.5); }
+
+    /* Hidden tabs */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   ]]></b:skin>
 </head>
 <body class='bg-[#040609] text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden'>
 
-  <!-- Root Container where React will mount -->
-  <div id='root'></div>
+  <!-- Floating Canvas Background -->
+  <canvas class='fixed inset-0 pointer-events-none z-0' id='bg-canvas'></canvas>
+  <div class='fixed inset-0 cyber-grid opacity-30 pointer-events-none z-0'></div>
+  <div class='fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0'></div>
+  <div class='fixed top-1/3 right-10 w-[350px] h-[350px] bg-rose-600/10 rounded-full blur-[120px] pointer-events-none z-0'></div>
 
-  <!-- Mandatory Blogger Section & Widget (Required by Blogger XML Parser, hidden from UI) -->
+  <!-- Master Top Navigation Bar -->
+  <header class='fixed top-0 left-0 right-0 w-full h-16 bg-[#080b10]/90 backdrop-blur-xl border-b border-cyan-500/20 z-50 flex items-center justify-between px-4 sm:px-6 shadow-[0_4px_30px_rgba(0,0,0,0.8)]'>
+    <!-- Left Branding -->
+    <div class='flex items-center gap-3 cursor-pointer' onclick='switchTab("overview")'>
+      <div class='w-9 h-9 relative flex items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 via-[#0a1224] to-rose-500/20 border border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.3)]'>
+        <span class='font-cyber font-black text-cyan-400 text-lg'>R</span>
+      </div>
+      <div>
+        <div class='flex items-center gap-2'>
+          <span class='font-cyber font-black text-sm sm:text-base tracking-wider text-white'>RITESH PC OS</span>
+          <span class='px-1.5 py-0.5 rounded bg-rose-950/90 border border-rose-500/60 text-[9px] font-mono text-rose-300 font-bold'>v2.0 LIVE</span>
+        </div>
+        <span class='text-[10px] font-mono text-cyan-400 tracking-wider uppercase font-semibold'>DEBIAN 12 • KERNEL 6.12</span>
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Center Group -->
+    <nav class='hidden md:flex items-center gap-1 bg-[#0f172a]/70 border border-cyan-500/30 px-3 py-1 rounded-full' id='desktop-nav'>
+      <button class='nav-btn active flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(0,240,255,0.3)] font-bold' data-tab='overview' onclick='switchTab("overview")'>
+        <span>🏠 Overview</span>
+      </button>
+      <button class='nav-btn flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10' data-tab='simulator' onclick='switchTab("simulator")'>
+        <span>💻 UEFI Sandbox</span>
+      </button>
+      <button class='nav-btn flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10' data-tab='ecosystem' onclick='switchTab("ecosystem")'>
+        <span>💠 3-in-1 Matrix</span>
+      </button>
+      <button class='nav-btn flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10' data-tab='security' onclick='switchTab("security")'>
+        <span>🛡️ Security</span>
+      </button>
+      <button class='nav-btn flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10' data-tab='bootflow' onclick='switchTab("bootflow")'>
+        <span>⚡ 15s Boot &amp; Specs</span>
+      </button>
+      <button class='flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono text-amber-300 hover:bg-amber-500/20 border border-amber-500/30 bg-amber-500/10' onclick='openModal("donate-modal"); triggerConfetti();'>
+        <span>💛 Donate UPI</span>
+      </button>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class='flex items-center gap-2 sm:gap-3'>
+      <div class='hidden lg:flex font-mono text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-full items-center gap-1.5'>
+        <span class='w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse'></span>
+        <span id='live-clock'>00:00:00 UTC</span>
+      </div>
+      <button class='bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg text-xs tracking-wider shadow-lg shadow-cyan-500/25 uppercase flex items-center gap-1.5 cursor-pointer' onclick='openModal("download-modal")'>
+        <svg class='w-3.5 h-3.5 stroke-[2.5]' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path><polyline points='7 10 12 15 17 10'></polyline><line x1='12' x2='12' y1='15' y2='3'></line></svg>
+        <span>DOWNLOAD ISO</span>
+      </button>
+      <button class='p-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 md:hidden' onclick='toggleMobileMenu()'>
+        <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><line x1='3' x2='21' y1='12' y2='12'></line><line x1='3' x2='21' y1='6' y2='6'></line><line x1='3' x2='21' y1='18' y2='18'></line></svg>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class='hidden md:hidden absolute top-16 left-0 right-0 bg-[#070b14]/98 backdrop-blur-2xl border-b border-cyan-500/30 px-5 py-4 space-y-2 font-mono text-sm shadow-2xl z-50' id='mobile-drawer'>
+      <button class='block w-full text-left py-2 px-3 rounded-lg text-cyan-300 bg-cyan-500/20 font-bold' onclick='switchTab("overview"); toggleMobileMenu();'>🏠 Overview</button>
+      <button class='block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-cyan-300' onclick='switchTab("simulator"); toggleMobileMenu();'>💻 UEFI Sandbox</button>
+      <button class='block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-cyan-300' onclick='switchTab("ecosystem"); toggleMobileMenu();'>💠 3-in-1 Matrix</button>
+      <button class='block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-cyan-300' onclick='switchTab("security"); toggleMobileMenu();'>🛡️ Security</button>
+      <button class='block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-cyan-300' onclick='switchTab("bootflow"); toggleMobileMenu();'>⚡ 15s Boot &amp; Specs</button>
+      <button class='block w-full text-left py-2 px-3 rounded-lg text-amber-300 bg-amber-500/10 border border-amber-500/30' onclick='openModal("donate-modal"); toggleMobileMenu(); triggerConfetti();'>💛 Donate UPI</button>
+    </div>
+  </header>
+
+  <!-- Main Body Content (Tabs) -->
+  <main class='relative z-10 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12'>
+
+    <!-- TAB 1: OVERVIEW -->
+    <section class='tab-content active space-y-12' id='tab-overview'>
+      <!-- Hero Headline -->
+      <div class='text-center space-y-6 pt-4'>
+        <div class='inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#081020]/90 backdrop-blur-xl border border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.2)]'>
+          <span class='w-2 h-2 rounded-full bg-cyan-400 animate-pulse'></span>
+          <span class='font-mono text-xs font-semibold text-cyan-300 uppercase'>LIVE UEFI 64-BIT HYBRID KERNEL v6.12</span>
+          <span class='hidden sm:inline text-slate-600'>|</span>
+          <span class='hidden sm:inline font-mono text-xs text-rose-400 font-bold'>3-IN-1 ECOSYSTEM</span>
+        </div>
+        <h1 class='font-cyber font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white'>
+          RITESH PC OS <br/>
+          <span class='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-rose-400'>
+            CYBERNETIC 3-IN-1 SUITE
+          </span>
+        </h1>
+        <p class='text-slate-300 max-w-3xl mx-auto text-sm sm:text-base md:text-lg'>
+          Ultra-futuristic cybernetic OS engineered with 4K Frosted Glass UI, 3-in-1 combo (Debian Bookworm 12 Linux + Android Waydroid + Windows Layer), 15s instant live boot, and immutable BIOS security.
+        </p>
+        <div class='flex flex-wrap justify-center gap-4 pt-2'>
+          <button class='px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 font-cyber font-bold text-sm shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-105 transition-transform flex items-center gap-2' onclick='openModal("download-modal")'>
+            <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'></path><polyline points='7 10 12 15 17 10'></polyline><line x1='12' x2='12' y1='15' y2='3'></line></svg>
+            <span>DOWNLOAD HYBRID ISO (3.8 GB)</span>
+          </button>
+          <button class='px-6 py-3 rounded-xl glass-panel text-cyan-300 font-mono text-sm border border-cyan-500/40 hover:bg-cyan-500/10 transition-colors flex items-center gap-2' onclick='switchTab("simulator")'>
+            <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><rect height='14' rx='2' ry='2' width='20' x='2' y='3'></rect><line x1='8' x2='16' y1='21' y2='21'></line><line x1='12' x2='12' y1='17' y2='21'></line></svg>
+            <span>TEST UEFI SANDBOX</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Quick Stats -->
+      <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
+        <div class='glass-panel glass-card-hover p-5 rounded-2xl border border-cyan-500/20'>
+          <div class='text-amber-400 font-cyber text-2xl font-black mb-1'>15s Boot</div>
+          <div class='text-white font-bold text-sm'>Ultra-Fast NVMe Engine</div>
+          <p class='text-slate-400 text-xs font-mono mt-1'>Debian 12 Liquorix 6.12 Kernel</p>
+        </div>
+        <div class='glass-panel glass-card-hover p-5 rounded-2xl border border-cyan-500/20'>
+          <div class='text-cyan-400 font-cyber text-2xl font-black mb-1'>3-in-1 OS</div>
+          <div class='text-white font-bold text-sm'>Debian + Android + Windows</div>
+          <p class='text-slate-400 text-xs font-mono mt-1'>Waydroid 11 + WineHQ 9.0</p>
+        </div>
+        <div class='glass-panel glass-card-hover p-5 rounded-2xl border border-cyan-500/20'>
+          <div class='text-rose-400 font-cyber text-2xl font-black mb-1'>Immutable</div>
+          <div class='text-white font-bold text-sm'>Chattr +i BIOS Lock</div>
+          <p class='text-slate-400 text-xs font-mono mt-1'>Priority #1 NVRAM Protection</p>
+        </div>
+        <div class='glass-panel glass-card-hover p-5 rounded-2xl border border-cyan-500/20'>
+          <div class='text-emerald-400 font-cyber text-2xl font-black mb-1'>4K Glass UI</div>
+          <div class='text-white font-bold text-sm'>Compton Frosted Compositor</div>
+          <p class='text-slate-400 text-xs font-mono mt-1'>Tint2 Cyber Glass Dock</p>
+        </div>
+      </div>
+
+      <!-- Architecture Ecosystem Overview -->
+      <div class='glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/30'>
+        <div class='flex items-center justify-between border-b border-cyan-500/20 pb-4 mb-6'>
+          <div>
+            <h2 class='font-cyber font-bold text-xl text-white'>Live System Architecture</h2>
+            <p class='text-slate-400 text-xs font-mono'>Simulated active kernel &amp; container status</p>
+          </div>
+          <button class='px-3 py-1.5 rounded-lg bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-mono flex items-center gap-1.5 hover:bg-slate-800' onclick='openModal("terminal-modal")'>
+            <svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><polyline points='4 17 10 11 4 5'></polyline><line x1='12' x2='20' y1='19' y2='19'></line></svg>
+            <span>Launch Terminal</span>
+          </button>
+        </div>
+
+        <div class='grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-sm'>
+          <div class='p-4 rounded-xl bg-slate-950/60 border border-cyan-500/20 space-y-2'>
+            <div class='text-cyan-400 font-bold text-xs'>HOST LINUX CORE</div>
+            <div class='text-white text-base font-cyber'>Debian Bookworm 12</div>
+            <p class='text-slate-400 text-xs'>Kernel 6.12 Liquorix Low-Latency Audio/Video Driver stack with Tint2 Cyber Glass Panel.</p>
+          </div>
+          <div class='p-4 rounded-xl bg-slate-950/60 border border-emerald-500/20 space-y-2'>
+            <div class='text-emerald-400 font-bold text-xs'>ANDROID SUBSYSTEM</div>
+            <div class='text-white text-base font-cyber'>Waydroid 11 Subsystem</div>
+            <p class='text-slate-400 text-xs'>Zero-latency GPU shared buffer, Google Play Store integration, full touch/mouse compatibility.</p>
+          </div>
+          <div class='p-4 rounded-xl bg-slate-950/60 border border-rose-500/20 space-y-2'>
+            <div class='text-rose-400 font-bold text-xs'>IMMUTABLE BOOTLOADER</div>
+            <div class='text-white text-base font-cyber'>Cybernetic UEFI GRUB</div>
+            <p class='text-slate-400 text-xs'>Hardware level priority #1 NVRAM entry, self-healing bootloader fallback scripts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: UEFI SANDBOX SIMULATOR -->
+    <section class='tab-content space-y-6' id='tab-simulator'>
+      <div class='glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/40'>
+        <div class='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyan-500/20 pb-4'>
+          <div>
+            <h2 class='font-cyber font-bold text-2xl text-white'>Interactive UEFI Bootloader Simulator</h2>
+            <p class='text-slate-400 text-xs font-mono'>Use [UP/DOWN] keys or click items. Press [ENTER] or click [BOOT NOW].</p>
+          </div>
+          <div class='flex items-center gap-3'>
+            <span class='px-3 py-1 rounded-full bg-rose-950 border border-rose-500 text-rose-300 font-mono text-xs'>Countdown: <span id='grub-timer'>5</span>s</span>
+            <button class='px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold font-cyber text-xs hover:bg-cyan-400' onclick='bootSelectedEntry()'>BOOT NOW</button>
+          </div>
+        </div>
+
+        <!-- GRUB Simulator Box -->
+        <div class='mt-6 p-6 rounded-2xl bg-[#03060c] border-2 border-cyan-500/50 font-mono text-sm relative overflow-hidden shadow-[0_0_30px_rgba(0,240,255,0.2)]'>
+          <div class='text-center text-cyan-400 font-cyber font-bold text-sm tracking-widest border-b border-cyan-500/30 pb-3 mb-4'>
+            RITESH PC OS — GRUB 2.12 UEFI 64-BIT DUAL BOOTLOADER
+          </div>
+          <div class='space-y-2' id='grub-entries'>
+            <div class='grub-entry active p-3 rounded-lg bg-cyan-500/20 border border-cyan-500 text-cyan-300 font-bold cursor-pointer' data-index='0' onclick='selectGrubEntry(0)'>
+              * RITESH PC OS (Debian 12 + Liquorix Kernel 6.12 + 4K Glass UI) [Default]
+            </div>
+            <div class='grub-entry p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 cursor-pointer hover:border-slate-700' data-index='1' onclick='selectGrubEntry(1)'>
+              &gt; RITESH PC OS (Recovery Mode / CLI Terminal / Immutable Root)
+            </div>
+            <div class='grub-entry p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 cursor-pointer hover:border-slate-700' data-index='2' onclick='selectGrubEntry(2)'>
+              &gt; Android Subsystem (Waydroid 11 Direct Hardware Acceleration)
+            </div>
+            <div class='grub-entry p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 cursor-pointer hover:border-slate-700' data-index='3' onclick='selectGrubEntry(3)'>
+              &gt; Windows 11 Compatibility Layer (WineHQ 9.0 Gaming Subsystem)
+            </div>
+          </div>
+          <div class='mt-6 text-xs text-slate-500 border-t border-cyan-500/20 pt-3 flex justify-between'>
+            <span>Status: UEFI BIOS Priority #1 (NVRAM LOCKED)</span>
+            <span>Fast Boot: 15.2s</span>
+          </div>
+        </div>
+
+        <div class='mt-6 p-4 rounded-xl bg-slate-950 border border-cyan-500/20 text-xs font-mono text-slate-300' id='boot-log-output'>
+          [System Ready] Click [BOOT NOW] or select an entry to preview kernel boot log.
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 3-IN-1 MATRIX -->
+    <section class='tab-content space-y-6' id='tab-ecosystem'>
+      <div class='glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/40 space-y-6'>
+        <div class='text-center space-y-2'>
+          <h2 class='font-cyber font-bold text-3xl text-white'>3-in-1 Cybernetic Ecosystem Matrix</h2>
+          <p class='text-slate-400 text-xs sm:text-sm font-mono'>Debian 12 Host + Waydroid Android 11 + Windows 11 Layer combined in 1 Single ISO.</p>
+        </div>
+        <div class='grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-sm'>
+          <div class='p-6 rounded-2xl bg-cyan-950/20 border border-cyan-500/40 space-y-3'>
+            <div class='text-cyan-400 font-cyber font-bold text-lg'>1. Linux Host OS</div>
+            <div class='text-white font-bold'>Debian 12 Bookworm</div>
+            <ul class='space-y-1.5 text-xs text-slate-300 list-disc list-inside'>
+              <li>Kernel: 6.12.8 Liquorix Low-Latency</li>
+              <li>RAM Footprint: ~450 MB Idle</li>
+              <li>UI: Tint2 Frosted Glass &amp; Openbox</li>
+              <li>Security: Chattr +i immutable root</li>
+            </ul>
+          </div>
+          <div class='p-6 rounded-2xl bg-emerald-950/20 border border-emerald-500/40 space-y-3'>
+            <div class='text-emerald-400 font-cyber font-bold text-lg'>2. Android Layer</div>
+            <div class='text-white font-bold'>Waydroid 11 Multi-touch</div>
+            <ul class='space-y-1.5 text-xs text-slate-300 list-disc list-inside'>
+              <li>Direct Mesa GPU Passthrough</li>
+              <li>Google Play Store Certified</li>
+              <li>APK &amp; App Sideloading support</li>
+              <li>Auto-resize &amp; portrait/landscape</li>
+            </ul>
+          </div>
+          <div class='p-6 rounded-2xl bg-rose-950/20 border border-rose-500/40 space-y-3'>
+            <div class='text-rose-400 font-cyber font-bold text-lg'>3. Windows Layer</div>
+            <div class='text-white font-bold'>WineHQ 9.0 + DXVK</div>
+            <ul class='space-y-1.5 text-xs text-slate-300 list-disc list-inside'>
+              <li>DirectX 11/12 Vulkan Translation</li>
+              <li>Native .exe &amp; .msi Installer</li>
+              <li>Gaming &amp; Windows tools ready</li>
+              <li>Zero VM overhead / Bare-metal speed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: SECURITY -->
+    <section class='tab-content space-y-6' id='tab-security'>
+      <div class='glass-panel p-6 sm:p-8 rounded-3xl border border-rose-500/40 space-y-6'>
+        <div class='text-center space-y-2'>
+          <h2 class='font-cyber font-bold text-3xl text-white'>Immutable BIOS &amp; EFI Security Architecture</h2>
+          <p class='text-slate-400 text-xs sm:text-sm font-mono'>Hardware protection, self-healing GRUB, and anti-crash drivers.</p>
+        </div>
+        <div class='grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs'>
+          <div class='p-5 rounded-2xl bg-slate-950/80 border border-rose-500/30 space-y-3'>
+            <h3 class='text-rose-400 font-cyber font-bold text-sm'>Immutable Chattr +i Lock</h3>
+            <p class='text-slate-300'>Root EFI directories `/boot/efi/EFI/ritesh_pc` are locked using file system immutable flags, preventing Windows Update or malware from deleting the bootloader.</p>
+          </div>
+          <div class='p-5 rounded-2xl bg-slate-950/80 border border-rose-500/30 space-y-3'>
+            <h3 class='text-cyan-400 font-cyber font-bold text-sm'>Self-Healing Fallback Scripts</h3>
+            <p class='text-slate-300'>Built-in auto-recovery scripts (`fix_bootloader.sh` and `clean_efi_partition.sh`) ensure fallback EFI binaries are restored in under 2 seconds if damaged.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: 15S BOOTFLOW & SPECS -->
+    <section class='tab-content space-y-6' id='tab-bootflow'>
+      <div class='glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/40 space-y-6'>
+        <div class='text-center space-y-2'>
+          <h2 class='font-cyber font-bold text-3xl text-white'>15-Second Instant Boot Telemetry</h2>
+          <p class='text-slate-400 text-xs sm:text-sm font-mono'>Parallelized systemd startup pipeline benchmarking.</p>
+        </div>
+        <div class='space-y-3 font-mono text-xs'>
+          <div class='p-4 rounded-xl bg-slate-950 border border-cyan-500/30 flex justify-between items-center'>
+            <span class='text-cyan-400'>0.0s ➔ 1.2s: UEFI Firmware Init</span>
+            <span class='text-emerald-400 font-bold'>[COMPLETED]</span>
+          </div>
+          <div class='p-4 rounded-xl bg-slate-950 border border-cyan-500/30 flex justify-between items-center'>
+            <span class='text-cyan-400'>1.2s ➔ 4.5s: Liquorix 6.12 Kernel &amp; NVMe RAM-Disk Mount</span>
+            <span class='text-emerald-400 font-bold'>[COMPLETED]</span>
+          </div>
+          <div class='p-4 rounded-xl bg-slate-950 border border-cyan-500/30 flex justify-between items-center'>
+            <span class='text-cyan-400'>4.5s ➔ 9.8s: Systemd Parallel Services &amp; Network Daemon</span>
+            <span class='text-emerald-400 font-bold'>[COMPLETED]</span>
+          </div>
+          <div class='p-4 rounded-xl bg-slate-950 border border-cyan-500/30 flex justify-between items-center'>
+            <span class='text-cyan-400'>9.8s ➔ 15.0s: Compton 4K Frosted Glass Compositor &amp; Waydroid LXC</span>
+            <span class='text-emerald-400 font-bold'>[DESKTOP READY]</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- 1. Download Modal -->
+  <div class='hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4' id='download-modal'>
+    <div class='glass-panel p-6 sm:p-8 rounded-3xl max-w-lg w-full border border-cyan-500/50 space-y-5'>
+      <div class='flex justify-between items-center'>
+        <h3 class='font-cyber font-bold text-lg text-white'>DOWNLOAD RITESH PC OS ISO</h3>
+        <button class='text-slate-400 hover:text-white' onclick='closeModal("download-modal")'>✕</button>
+      </div>
+      <div class='space-y-3 font-mono text-xs text-slate-300'>
+        <div class='p-3 rounded-xl bg-slate-950 border border-cyan-500/30'>
+          <div class='text-cyan-400 font-bold'>RITESH_PC_OS_v2.0_HYBRID_X86_64.iso</div>
+          <div class='text-slate-400 mt-1'>Size: 3.8 GB • SHA256: 9f8a7e4b...verified</div>
+        </div>
+        <p class='text-slate-400'>Direct mirror hosted on ultra-fast GitHub Releases &amp; CDN network.</p>
+      </div>
+      <div class='flex gap-3'>
+        <a class='flex-1 py-3 text-center rounded-xl bg-cyan-500 text-slate-950 font-bold font-cyber text-xs hover:bg-cyan-400' href='https://github.com/undercoverking360-svg/RITESH_PC_OS/releases' target='_blank'>
+          MIRROR 1 (GITHUB DIRECT)
+        </a>
+        <button class='px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-xs font-mono' onclick='closeModal("download-modal")'>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Donate UPI Modal -->
+  <div class='hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4' id='donate-modal'>
+    <div class='glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-amber-500/50 text-center space-y-4'>
+      <div class='flex justify-between items-center'>
+        <h3 class='font-cyber font-bold text-lg text-amber-300'>SUPPORT RITESH PC OS</h3>
+        <button class='text-slate-400 hover:text-white' onclick='closeModal("donate-modal")'>✕</button>
+      </div>
+      <p class='text-slate-300 text-xs font-mono'>Scan via any UPI App (GPay, PhonePe, Paytm) to support project development!</p>
+      <div class='p-4 rounded-2xl bg-white inline-block shadow-[0_0_20px_rgba(245,158,11,0.3)]'>
+        <img alt='UPI QR' class='w-40 h-40' src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;data=upi://pay?pa=riteshguru@upi&amp;pn=RITESH_PC_OS'/>
+      </div>
+      <div class='font-mono text-xs text-amber-400 font-bold'>UPI ID: riteshguru@upi</div>
+    </div>
+  </div>
+
+  <!-- 3. Terminal Modal -->
+  <div class='hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4' id='terminal-modal'>
+    <div class='glass-panel p-5 rounded-2xl max-w-2xl w-full border border-cyan-500/50 font-mono text-xs space-y-3'>
+      <div class='flex justify-between items-center border-b border-cyan-500/20 pb-2'>
+        <span class='text-cyan-400 font-bold'>root@ritesh-pc-os: ~</span>
+        <button class='text-slate-400 hover:text-white' onclick='closeModal("terminal-modal")'>✕</button>
+      </div>
+      <div class='bg-slate-950 p-4 rounded-xl text-emerald-400 space-y-1 h-60 overflow-y-auto' id='terminal-log'>
+        <div>[OK] Kernel 6.12.8-liquorix-amd64 mounted</div>
+        <div>[OK] Waydroid container bridge started on lxc0</div>
+        <div>[OK] Chattr +i protection activated on /boot/efi/EFI/ritesh_pc</div>
+        <div>[INFO] Ready for live command inputs...</div>
+      </div>
+      <div class='flex gap-2 items-center'>
+        <span class='text-cyan-400'>$</span>
+        <input class='flex-1 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-slate-100 outline-none focus:border-cyan-400' id='terminal-input' placeholder='Type command (e.g. neofetch, uname -a, clear)...' type='text'/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mandatory Blogger Section & Widget (Required by Blogger XML Engine) -->
   <div style='display:none;'>
     <b:section id='main' maxwidgets='1' showaddelement='no'>
       <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2' visible='false'/>
     </b:section>
   </div>
 
-  <!-- Full Application Embedded in CDATA (Zero Blogger XML Parser Delimiter Errors) -->
-  <script type='text/babel'><![CDATA[
-    const { useState, useEffect, useRef } = React;
+  <!-- Footer -->
+  <footer class='border-t border-cyan-500/20 bg-[#040609] py-8 text-center text-xs font-mono text-slate-500 relative z-10'>
+    <p>RITESH PC OS © 2026 • Engineered by Ritesh • Pure Debian 12 + Waydroid Hybrid Suite</p>
+  </footer>
 
-    // SVG Icons
-    const Icons = {
-      Download: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-      Zap: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-      Shield: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-      Terminal: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>,
-      Layers: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
-      Monitor: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
-      Menu: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
-      X: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-      Check: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-      Home: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
-      Sparkles: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>,
-      Cpu: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>,
-      DollarSign: (props) => <svg className={props.className || "w-4 h-4"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    };
-
-    // Metallic Logo Component
-    function MetallicLogo({ size = 40 }) {
-      return (
-        <div style={{ width: size, height: size }} className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 via-[#0a1224] to-rose-500/20 border border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-          <span className="font-cyber font-black text-cyan-400 tracking-tighter" style={{ fontSize: size * 0.45 }}>R</span>
-        </div>
-      );
+  <!-- Pure JavaScript Logic (Zero Delimiter & Syntax Errors) -->
+  <script>
+    //<![CDATA[
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      const el = document.getElementById('live-clock');
+      if (el) el.innerText = now.toLocaleTimeString('en-US', { hour12: false }) + ' UTC';
     }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    // App Main Component
-    function App() {
-      const [activeTab, setActiveTab] = useState('overview');
-      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-      const [downloadModalOpen, setDownloadModalOpen] = useState(false);
-      const [donateModalOpen, setDonateModalOpen] = useState(false);
-      const [terminalModalOpen, setTerminalModalOpen] = useState(false);
-      const [liveTime, setLiveTime] = useState('00:00:00');
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.add('active');
 
-      useEffect(() => {
-        const update = () => {
-          const d = new Date();
-          setLiveTime(d.toLocaleTimeString('en-US', { hour12: false }));
-        };
-        update();
-        const id = setInterval(update, 1000);
-        return () => clearInterval(id);
-      }, []);
-
-      const triggerConfetti = () => {
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.className = 'nav-btn active flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(0,240,255,0.3)] font-bold';
+        } else {
+          btn.className = 'nav-btn flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10';
         }
-      };
-
-      return (
-        <div className="min-h-screen bg-[#040609] text-slate-100 relative">
-          {/* Background Grid & Neon Glows */}
-          <div className="fixed inset-0 cyber-grid opacity-30 pointer-events-none" />
-          <div className="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-          <div className="fixed top-1/3 right-10 w-[350px] h-[350px] bg-rose-600/10 rounded-full blur-[120px] pointer-events-none" />
-
-          {/* Master Top Navbar */}
-          <header className="fixed top-0 left-0 right-0 w-full h-16 bg-[#080b10]/90 backdrop-blur-xl border-b border-cyan-500/20 z-50 flex items-center justify-between px-4 sm:px-6 shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('overview')}>
-              <MetallicLogo size={36} />
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-cyber font-black text-sm sm:text-base tracking-wider text-white">RITESH PC OS</span>
-                  <span className="px-1.5 py-0.5 rounded bg-rose-950/90 border border-rose-500/60 text-[9px] font-mono text-rose-300 font-bold">v2.0 LIVE</span>
-                </div>
-                <span className="text-[10px] font-mono text-cyan-400 tracking-wider uppercase font-semibold">DEBIAN 12 • KERNEL 6.12</span>
-              </div>
-            </div>
-
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 bg-[#0f172a]/70 border border-cyan-500/30 px-3 py-1 rounded-full">
-              {[
-                { id: 'overview', label: 'Overview', icon: Icons.Home },
-                { id: 'simulator', label: 'UEFI Sandbox', icon: Icons.Monitor },
-                { id: 'ecosystem', label: '3-in-1 Matrix', icon: Icons.Layers },
-                { id: 'security', label: 'Security', icon: Icons.Shield },
-                { id: 'bootflow', label: '15s Boot & Specs', icon: Icons.Zap },
-              ].map(tab => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all ${
-                      activeTab === tab.id
-                        ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(0,240,255,0.3)] font-bold'
-                        : 'text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10'
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-              <button
-                onClick={() => { setDonateModalOpen(true); triggerConfetti(); }}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono text-amber-300 hover:bg-amber-500/20 border border-amber-500/30 bg-amber-500/10"
-              >
-                <Icons.DollarSign className="w-3.5 h-3.5 text-amber-400" />
-                <span>Donate UPI</span>
-              </button>
-            </nav>
-
-            {/* Right Buttons */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="hidden lg:flex font-mono text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-full items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>{liveTime}</span>
-              </div>
-              <button
-                onClick={() => setDownloadModalOpen(true)}
-                className="bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg text-xs tracking-wider shadow-lg shadow-cyan-500/25 uppercase flex items-center gap-1.5"
-              >
-                <Icons.Download className="w-3.5 h-3.5" />
-                <span>DOWNLOAD ISO</span>
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 md:hidden"
-              >
-                {mobileMenuOpen ? <Icons.X className="w-5 h-5" /> : <Icons.Menu className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {/* Mobile Drawer */}
-            {mobileMenuOpen && (
-              <div className="md:hidden absolute top-16 left-0 right-0 bg-[#070b14]/98 backdrop-blur-2xl border-b border-cyan-500/30 px-5 py-4 space-y-2 font-mono text-sm shadow-2xl z-50">
-                {[
-                  { id: 'overview', label: 'Overview' },
-                  { id: 'simulator', label: 'UEFI Sandbox' },
-                  { id: 'ecosystem', label: '3-in-1 Matrix' },
-                  { id: 'security', label: 'Security' },
-                  { id: 'bootflow', label: '15s Boot & Specs' },
-                ].map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => { setActiveTab(item.id); setMobileMenuOpen(false); }}
-                    className={`block w-full text-left py-2 px-3 rounded-lg ${activeTab === item.id ? 'bg-cyan-500/20 text-cyan-300 font-bold' : 'text-slate-300'}`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-                <button
-                  onClick={() => { setDonateModalOpen(true); setMobileMenuOpen(false); triggerConfetti(); }}
-                  className="block w-full text-left py-2 px-3 rounded-lg text-amber-300 bg-amber-500/10 border border-amber-500/30"
-                >
-                  Donate UPI
-                </button>
-              </div>
-            )}
-          </header>
-
-          {/* Main Hero & Content Section */}
-          <main className="relative z-10 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
-            {/* Hero Header */}
-            <div className="text-center space-y-6 pt-6">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#081020]/90 backdrop-blur-xl border border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.2)]">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="font-mono text-xs font-semibold text-cyan-300 uppercase">LIVE UEFI 64-BIT HYBRID KERNEL v6.12</span>
-              </div>
-              <h1 className="font-cyber font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white">
-                RITESH PC OS <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-rose-400">
-                  CYBERNETIC 3-IN-1 SUITE
-                </span>
-              </h1>
-              <p className="text-slate-300 max-w-3xl mx-auto text-sm sm:text-base md:text-lg">
-                Ultra-futuristic cybernetic OS engineered with 4K Frosted Glass UI, 3-in-1 combo (Debian Bookworm 12 Linux + Android Waydroid + Windows Layer), 15s instant live boot, and immutable BIOS security.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 pt-2">
-                <button
-                  onClick={() => setDownloadModalOpen(true)}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 font-cyber font-bold text-sm shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-105 transition-transform flex items-center gap-2"
-                >
-                  <Icons.Download className="w-4 h-4" />
-                  <span>DOWNLOAD HYBRID ISO</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('simulator')}
-                  className="px-6 py-3 rounded-xl glass-panel text-cyan-300 font-mono text-sm border border-cyan-500/40 hover:bg-cyan-500/10 transition-colors flex items-center gap-2"
-                >
-                  <Icons.Monitor className="w-4 h-4" />
-                  <span>TEST UEFI SANDBOX</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Highlights Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                { title: '15s Boot Flow', desc: 'Instant NVMe RAM loading engine', icon: Icons.Zap, color: 'text-amber-400' },
-                { title: '3-in-1 Ecosystem', desc: 'Debian 12 + Android + Windows Layer', icon: Icons.Layers, color: 'text-cyan-400' },
-                { title: 'Immutable Security', desc: 'Chattr +i NVRAM lock & BIOS protection', icon: Icons.Shield, color: 'text-rose-400' },
-                { title: '4K Frosted Glass', desc: 'Hardware accelerated compositor', icon: Icons.Sparkles, color: 'text-emerald-400' },
-              ].map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <div key={idx} className="glass-panel glass-card-hover p-5 rounded-2xl border border-cyan-500/20">
-                    <Icon className={`w-8 h-8 ${item.color} mb-3`} />
-                    <h3 className="font-cyber font-bold text-white text-base mb-1">{item.title}</h3>
-                    <p className="text-slate-400 text-xs font-mono">{item.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Interactive Section Container */}
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/30">
-              <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4 mb-6">
-                <div>
-                  <h2 className="font-cyber font-bold text-xl text-white">Live System Ecosystem</h2>
-                  <p className="text-slate-400 text-xs font-mono">Real-time simulated architectural telemetry</p>
-                </div>
-                <button
-                  onClick={() => setTerminalModalOpen(true)}
-                  className="px-3 py-1.5 rounded-lg bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-mono flex items-center gap-1.5"
-                >
-                  <Icons.Terminal className="w-3.5 h-3.5" />
-                  <span>Launch Terminal</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-sm">
-                <div className="p-4 rounded-xl bg-slate-950/60 border border-cyan-500/20 space-y-2">
-                  <div className="text-cyan-400 font-bold text-xs">HOST LINUX CORE</div>
-                  <div className="text-white text-base font-cyber">Debian Bookworm 12</div>
-                  <p className="text-slate-400 text-xs">Kernel 6.12 Liquorix Low-Latency Audio/Video Driver stack with Tint2 Cyber Glass Panel.</p>
-                </div>
-                <div className="p-4 rounded-xl bg-slate-950/60 border border-emerald-500/20 space-y-2">
-                  <div className="text-emerald-400 font-bold text-xs">ANDROID SUBSYSTEM</div>
-                  <div className="text-white text-base font-cyber">Waydroid 11 Subsystem</div>
-                  <p className="text-slate-400 text-xs">Zero-latency GPU shared buffer, Google Play Store integration, full touch/mouse compatibility.</p>
-                </div>
-                <div className="p-4 rounded-xl bg-slate-950/60 border border-rose-500/20 space-y-2">
-                  <div className="text-rose-400 font-bold text-xs">IMMUTABLE BOOTLOADER</div>
-                  <div className="text-white text-base font-cyber">Cybernetic UEFI GRUB</div>
-                  <p className="text-slate-400 text-xs">Hardware level priority #1 NVRAM entry, self-healing bootloader fallback scripts.</p>
-                </div>
-              </div>
-            </div>
-          </main>
-
-          {/* Modals */}
-          {/* Download Modal */}
-          {downloadModalOpen && (
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className="glass-panel p-6 sm:p-8 rounded-3xl max-w-lg w-full border border-cyan-500/50 space-y-5">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-cyber font-bold text-lg text-white">DOWNLOAD RITESH PC OS ISO</h3>
-                  <button onClick={() => setDownloadModalOpen(false)} className="text-slate-400 hover:text-white">
-                    <Icons.X className="w-5 h-5" />
-                  </button>
-                </div>
-                <div className="space-y-3 font-mono text-xs text-slate-300">
-                  <div className="p-3 rounded-xl bg-slate-950 border border-cyan-500/30">
-                    <div className="text-cyan-400 font-bold">RITESH_PC_OS_v2.0_HYBRID_X86_64.iso</div>
-                    <div className="text-slate-400 mt-1">Size: 3.8 GB • SHA256: 9f8a7e4b...verified</div>
-                  </div>
-                  <p className="text-slate-400">Direct download mirror hosted on ultra-fast GitHub Releases & CDN network.</p>
-                </div>
-                <div className="flex gap-3">
-                  <a
-                    href="https://github.com/undercoverking360-svg/RITESH_PC_OS/releases"
-                    target="_blank"
-                    className="flex-1 py-3 text-center rounded-xl bg-cyan-500 text-slate-950 font-bold font-cyber text-xs hover:bg-cyan-400"
-                  >
-                    MIRROR 1 (GITHUB DIRECT)
-                  </a>
-                  <button onClick={() => setDownloadModalOpen(false)} className="px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-xs font-mono">
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Donate Modal */}
-          {donateModalOpen && (
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className="glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-amber-500/50 text-center space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-cyber font-bold text-lg text-amber-300">SUPPORT RITESH PC OS</h3>
-                  <button onClick={() => setDonateModalOpen(false)} className="text-slate-400 hover:text-white">
-                    <Icons.X className="w-5 h-5" />
-                  </button>
-                </div>
-                <p className="text-slate-300 text-xs font-mono">Scan via any UPI App (GPay, PhonePe, Paytm) to support the project development!</p>
-                <div className="p-4 rounded-2xl bg-white inline-block shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=riteshguru@upi&pn=RITESH_PC_OS" alt="UPI QR" className="w-40 h-40" />
-                </div>
-                <div className="font-mono text-xs text-amber-400 font-bold">UPI ID: riteshguru@upi</div>
-              </div>
-            </div>
-          )}
-
-          {/* Terminal Modal */}
-          {terminalModalOpen && (
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className="glass-panel p-5 rounded-2xl max-w-2xl w-full border border-cyan-500/50 font-mono text-xs space-y-3">
-                <div className="flex justify-between items-center border-b border-cyan-500/20 pb-2">
-                  <span className="text-cyan-400 font-bold">root@ritesh-pc-os: ~</span>
-                  <button onClick={() => setTerminalModalOpen(false)} className="text-slate-400 hover:text-white">
-                    <Icons.X className="w-4 h-4" />
-                  </button>
-                </div>
-                <div className="bg-slate-950 p-4 rounded-xl text-emerald-400 space-y-1 h-60 overflow-y-auto">
-                  <div>[OK] Kernel 6.12.8-liquorix-amd64 mounted</div>
-                  <div>[OK] Waydroid container bridge started on lxc0</div>
-                  <div>[OK] Chattr +i protection activated on /boot/efi/EFI/ritesh_pc</div>
-                  <div>[INFO] Ready for live command inputs...</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Footer */}
-          <footer className="border-t border-cyan-500/20 bg-[#040609] py-8 text-center text-xs font-mono text-slate-500">
-            <p>RITESH PC OS © 2026 • Engineered by Ritesh • Pure Debian 12 + Waydroid Hybrid Suite</p>
-          </footer>
-        </div>
-      );
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Mount to DOM
-    ReactDOM.render(<App />, document.getElementById('root'));
-  ]]></script>
+    // Modals
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    // Mobile Menu
+    function toggleMobileMenu() {
+      const el = document.getElementById('mobile-drawer');
+      if (el) el.classList.toggle('hidden');
+    }
+
+    // Confetti
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      }
+    }
+
+    // GRUB Simulator Logic
+    let selectedGrubIndex = 0;
+    const grubLogDescriptions = [
+      '[OK] Booting Debian 12 (Kernel 6.12 Liquorix)... Loading 4K Frosted Glass UI in 15s.',
+      '[OK] Loading Recovery Root... Immutable Chattr status: VERIFIED SECURE.',
+      '[OK] Launching Waydroid Subsystem... Initializing Android 11 Mesa GPU buffer.',
+      '[OK] Mounting WineHQ 9.0 prefix... Windows compatibility layer online.'
+    ];
+
+    function selectGrubEntry(index) {
+      selectedGrubIndex = index;
+      const entries = document.querySelectorAll('.grub-entry');
+      entries.forEach((el, idx) => {
+        if (idx === index) {
+          el.className = 'grub-entry active p-3 rounded-lg bg-cyan-500/20 border border-cyan-500 text-cyan-300 font-bold cursor-pointer';
+        } else {
+          el.className = 'grub-entry p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 cursor-pointer hover:border-slate-700';
+        }
+      });
+    }
+
+    function bootSelectedEntry() {
+      const out = document.getElementById('boot-log-output');
+      if (out) {
+        out.innerHTML = '<span class="text-cyan-400 font-bold">>>> EXECUTE: </span>' + grubLogDescriptions[selectedGrubIndex];
+      }
+    }
+
+    // Terminal Emulator
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalLog = document.getElementById('terminal-log');
+    if (terminalInput && terminalLog) {
+      terminalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const cmd = terminalInput.value.trim().toLowerCase();
+          terminalInput.value = '';
+          const line = document.createElement('div');
+          line.className = 'text-cyan-300';
+          line.innerText = '$ ' + cmd;
+          terminalLog.appendChild(line);
+
+          const resp = document.createElement('div');
+          if (cmd === 'clear') {
+            terminalLog.innerHTML = '<div>[INFO] Terminal cleared.</div>';
+            return;
+          } else if (cmd === 'uname -a') {
+            resp.className = 'text-slate-300';
+            resp.innerText = 'Linux ritesh-pc 6.12.8-liquorix-amd64 #1 ZEN SMP PREEMPT x86_64 GNU/Linux';
+          } else if (cmd === 'neofetch' || cmd === 'fetch') {
+            resp.className = 'text-cyan-400';
+            resp.innerHTML = 'OS: RITESH PC OS v2.0<br/>Host: Cybernetic Hybrid Suite<br/>Kernel: 6.12.8-liquorix<br/>DE: 4K Frosted Glass<br/>Memory: 450MB / 16384MB';
+          } else {
+            resp.className = 'text-amber-400';
+            resp.innerText = 'Command recognized: ' + cmd + ' [Available commands: neofetch, uname -a, clear]';
+          }
+          terminalLog.appendChild(resp);
+          terminalLog.scrollTop = terminalLog.scrollHeight;
+        }
+      });
+    }
+
+    // Floating Cyber Particles Canvas
+    const canvas = document.getElementById('bg-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      for (let i = 0; i < 35; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.5) * 0.6,
+          radius: Math.random() * 2 + 1
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+
+        for (let i = 0; i < particles.length; i++) {
+          let p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            let p2 = particles[j];
+            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+    //]]>
+  </script>
 </body>
 </html>
