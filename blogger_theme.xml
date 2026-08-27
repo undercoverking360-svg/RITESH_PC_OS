@@ -10,9 +10,10 @@
 
   <link href='https://fonts.googleapis.com' rel='preconnect'/>
   <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
-  <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Orbitron:wght@400;700;900&amp;family=Space+Grotesk:wght@400;600;700&amp;family=Rajdhani:wght@600;700&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Orbitron:wght@400;700;900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Rajdhani:wght@500;600;700&amp;display=swap' rel='stylesheet'/>
 
-  <link href='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@main/dist/assets/index.css' rel='stylesheet'/>
+  <!-- Version-Locked CSS to bypass CDN Cache 100% -->
+  <link href='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@751b7adf9c66593fe92b880300722ffaf7783fdf/dist/assets/index.css' rel='stylesheet'/>
 
   <b:skin><![CDATA[
     #b-navbar, .widget-item-control, .quickedit, .status-msg-wrap, .Blog, .b-mobile { display: none !important; }
@@ -23,24 +24,6 @@
       color: #e2e8f0 !important;
       font-family: 'Space Grotesk', system-ui, sans-serif !important;
       overflow-x: hidden !important;
-    }
-    header {
-      display: flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      height: 64px !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      width: 100% !important;
-      position: fixed !important;
-      z-index: 9999 !important;
-      background-color: rgba(8, 11, 16, 0.95) !important;
-      backdrop-filter: blur(20px) !important;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
-      padding-left: 1rem !important;
-      padding-right: 1rem !important;
     }
   ]]></b:skin>
 </head>
@@ -53,6 +36,7 @@
     </b:section>
   </div>
 
-  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@main/dist/assets/index.js' type='module'></script>
+  <!-- Version-Locked JS to bypass CDN Cache 100% -->
+  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@751b7adf9c66593fe92b880300722ffaf7783fdf/dist/assets/index.js' type='module'></script>
 </body>
 </html>
