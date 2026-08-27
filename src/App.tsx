@@ -74,31 +74,26 @@ export default function App() {
     handleTabChange('ecosystem');
   };
 
-  // Slide-in animation variants
+  // Slide-in animation variants with smooth fade
   const slideVariants = {
     enter: (dir: number) => ({
-      x: dir >= 0 ? 90 : -90,
+      x: dir >= 0 ? 50 : -50,
       opacity: 0,
-      filter: 'blur(4px)',
     }),
     center: {
       x: 0,
       opacity: 1,
-      filter: 'blur(0px)',
       transition: {
-        x: { type: 'spring', stiffness: 280, damping: 28 },
-        opacity: { duration: 0.25 },
-        filter: { duration: 0.2 },
+        x: { type: 'spring', stiffness: 300, damping: 30 },
+        opacity: { duration: 0.3 },
       },
     },
     exit: (dir: number) => ({
-      x: dir >= 0 ? -90 : 90,
+      x: dir >= 0 ? -50 : 50,
       opacity: 0,
-      filter: 'blur(4px)',
       transition: {
-        x: { type: 'spring', stiffness: 280, damping: 28 },
+        x: { type: 'spring', stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
-        filter: { duration: 0.15 },
       },
     }),
   };
@@ -120,7 +115,7 @@ export default function App() {
         onOpenDonate={handleOpenDonate}
       />
 
-      {/* 3. Main Animated Page Content with Directional Slide-in */}
+      {/* 3. Main Animated Page Content with Directional Slide-in & Smooth Scroll Reveal */}
       <main className="relative z-10 min-h-[70vh] pt-20 sm:pt-24 pb-24">
         <AnimatePresence mode="wait" custom={direction}>
           {activeTab === 'overview' && (
@@ -149,7 +144,7 @@ export default function App() {
                       Live Hardware Simulation Engine
                     </div>
                     <h2 className="font-cyber font-black text-2xl sm:text-3xl md:text-4xl text-white">
-                      Interactive UEFI Bootloader & Desktop Sandbox
+                      Interactive UEFI Bootloader &amp; Desktop Sandbox
                     </h2>
                     <p className="text-slate-400 text-xs sm:text-sm font-mono max-w-2xl mx-auto">
                       Navigate the exact Master GRUB interface from the real hardware build. Press Enter to boot
@@ -219,17 +214,16 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="pt-10 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8"
+              className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8"
             >
               <div className="text-center space-y-3 max-w-3xl mx-auto">
                 <h1 className="font-cyber font-black text-3xl sm:text-5xl text-white">
-                  UEFI GRUB2 & 4K Frosted Glass Sandbox
+                  UEFI GRUB 2 &amp; 4K Frosted Glass Sandbox
                 </h1>
                 <p className="text-slate-300 text-sm font-mono">
                   Interact directly with the custom 5-menu GRUB bootloader. Use keyboard Arrow keys or on-screen buttons, then press Enter to trigger the 7-second video splash transition to the live desktop.
                 </p>
               </div>
-
               <LiveBootloaderSimulator onOpenDownload={handleOpenDownload} />
             </motion.div>
           )}
@@ -295,7 +289,7 @@ export default function App() {
                 </p>
               </div>
 
-              {/* 3 Download Flavor Cards */}
+              {/* Flavor Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
                   {
@@ -304,7 +298,7 @@ export default function App() {
                     size: '4.2 GB',
                     desc: 'The complete powerhouse: Debian 12 Bookworm, Waydroid 13 APK gaming, and Bottles / Wine 9.0 Windows compatibility.',
                     kernel: '6.12.0-custom-x86_64',
-                    sha: '9f8a3c4e7b2d1094f61e89a5c3e7d1b2f0a4c8e6d2b8a0f4e2c6d8a0b4c2e6f8',
+                    sha: '9f8a3c4e7b2d189af61e89a5c3e7d1b2fa4c8e6d2b8a0f4e2c6d8a0b4c2e6f8',
                     popular: true,
                   },
                   {
@@ -313,7 +307,7 @@ export default function App() {
                     size: '3.6 GB',
                     desc: 'Pre-configured to copy the full filesystem into RAM at boot for zero storage latency and infinite responsiveness.',
                     kernel: '6.12.0-toram-x86_64',
-                    sha: '3d8b1c4e9f2a0076a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2',
+                    sha: '3c8b1c4e9f2a0076a5b4c3d2e1f8a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2',
                     popular: false,
                   },
                   {
@@ -322,7 +316,7 @@ export default function App() {
                     size: '4.9 GB',
                     desc: 'Hardened Linux kernel loaded with Wi-Fi monitor mode, Bluetooth packet analysis, and encrypted memory vaults.',
                     kernel: '6.12.0-hardened-x86_64',
-                    sha: '7a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',
+                    sha: '7a1b2c3e4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4c5',
                     popular: false,
                   },
                 ].map((item, idx) => (
@@ -339,10 +333,16 @@ export default function App() {
                         <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-300 font-bold">
                           {item.badge}
                         </span>
-                        <span className="text-xs font-mono text-cyan-400 font-bold">{item.size}</span>
+                        <span className="text-xs font-mono text-cyan-400 font-bold">
+                          {item.size}
+                        </span>
                       </div>
-                      <h3 className="font-cyber font-black text-xl text-white">{item.title}</h3>
-                      <p className="text-xs text-slate-300 leading-relaxed font-mono">{item.desc}</p>
+                      <h3 className="font-cyber font-black text-xl text-white">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-slate-300 leading-relaxed font-mono">
+                        {item.desc}
+                      </p>
                       <div className="text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-800">
                         Kernel: <span className="text-slate-300">{item.kernel}</span>
                       </div>
@@ -363,28 +363,28 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Live Flashing Instructions */}
+              {/* USB Flash Instructions */}
               <div className="p-6 rounded-3xl bg-[#080d19]/90 border border-cyan-500/20 font-mono text-xs space-y-4">
                 <div className="text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-2">
-                  <HardDrive className="w-4 h-4" />
-                  USB Flashing Instructions (Ventoy & Rufus):
+                  <Zap className="w-4 h-4" />
+                  USB Flashing Instructions (Ventoy &amp; Rufus):
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300">
                   <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
-                    <span className="text-cyan-300 font-bold">Method A: Ventoy (Drag & Drop)</span>
-                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                    <div className="text-cyan-300 font-bold">Method A: Ventoy (Drag &amp; Drop)</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
                       1. Install Ventoy on any 16GB+ USB flash drive.<br />
-                      2. Copy the downloaded <code className="text-cyan-400">RiteshPC-OS.iso</code> directly to the USB drive.<br />
+                      2. Copy the downloaded <code>.iso</code> directly to the USB drive.<br />
                       3. Reboot PC and select USB in UEFI Boot Menu.
-                    </p>
+                    </div>
                   </div>
                   <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
-                    <span className="text-rose-300 font-bold">Method B: Rufus (Windows)</span>
-                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                    <div className="text-cyan-300 font-bold">Method B: Rufus (Windows)</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
                       1. Select USB drive and the ISO in Rufus.<br />
-                      2. Partition Scheme: <strong className="text-white">GPT</strong>, Target System: <strong className="text-white">UEFI (non-CSM)</strong>.<br />
+                      2. Partition Scheme: <strong>GPT</strong>, Target System: <strong>UEFI (non-CSM)</strong>.<br />
                       3. Click Start and flash in ISO or DD image mode.
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -404,20 +404,19 @@ export default function App() {
               <div className="text-center max-w-2xl mx-auto space-y-2">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono uppercase tracking-widest">
                   <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-                  Cybernetic CLI Console
+                  Cybernetic CLT Console (Live Web CLI)
                 </div>
                 <h1 className="font-cyber font-black text-3xl sm:text-4xl text-white">
-                  Interactive System Diagnostics CLI
+                  Interactive System Diagnostics (LT)
                 </h1>
                 <p className="text-slate-400 text-xs font-mono">
                   Execute diagnostics, check kernel drivers, inspect Waydroid LXC binder status, or trigger benchmark tests.
                 </p>
               </div>
 
-              {/* Embedded Interactive CLI Card */}
+              {/* Terminal View Container */}
               <div className="rounded-3xl bg-[#04070d] border border-cyan-500/40 shadow-[0_0_50px_rgba(0,240,255,0.15)] overflow-hidden flex flex-col h-[520px]">
-                {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 bg-[#080e1b] border-b border-cyan-500/20 font-mono text-xs">
+                <div className="flex items-center justify-between px-4 py-3 bg-[#080d18] border-b border-cyan-500/20 font-mono text-xs">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1.5">
                       <span className="w-3 h-3 rounded-full bg-rose-500/80" />
@@ -429,41 +428,38 @@ export default function App() {
                       ritesh@pc-os: ~ (zsh / bash 5.9)
                     </span>
                   </div>
-                  <span className="text-emerald-400 text-[11px] font-mono">● LIVE RUNTIME</span>
+                  <div className="text-emerald-400 text-[11px] font-mono">
+                    [LIVE RUNTIME]
+                  </div>
                 </div>
 
-                {/* Body with preloaded diagnostic output */}
                 <div className="flex-1 p-5 overflow-y-auto font-mono text-xs space-y-3 cyber-grid">
-                  <div className="text-cyan-400 font-cyber font-bold text-sm">
-                    ⚡ RITESH PC OS v2.0 (Debian 12 Bookworm / Linux Kernel 6.12.0-x86_64)
-                  </div>
-                  <div className="text-slate-300">
-                    Type commands or click quick action pills below:
-                  </div>
+                  <div className="text-cyan-400 font-bold">RITESH PC OS v2.0 (Debian 12 Bookworm / Linux Kernel 6.12.0-x86_64)</div>
+                  <div className="text-slate-300">Type commands or click quick action pills below:</div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
                     {[
-                      { cmd: 'neofetch', label: '🖥️ neofetch' },
+                      { cmd: 'neofetch', label: '📊 neofetch' },
                       { cmd: 'waydroid', label: '🤖 waydroid status' },
                       { cmd: 'wine', label: '🪟 wine 9.0 test' },
                       { cmd: 'grub', label: '🛡️ grub chattr +i' },
-                    ].map((item) => (
+                    ].map((k) => (
                       <button
-                        key={item.cmd}
-                        onClick={handleOpenTerminal}
+                        key={k.cmd}
+                        onClick={() => {}}
                         className="p-2 rounded-xl bg-black/60 border border-slate-800 hover:border-cyan-500/50 text-cyan-300 text-xs font-mono text-left transition-colors cursor-pointer"
                       >
-                        {item.label}
+                        {k.label}
                       </button>
                     ))}
                   </div>
 
                   <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/20 text-[11px] space-y-1 text-slate-300">
-                    <div className="text-emerald-400 font-bold">[✓] UEFI NVRAM Entry: 0001 (RITESH-PC-OS-UEFI) → Priority #1</div>
-                    <div className="text-emerald-400 font-bold">[✓] Direct DRM/KMS Framebuffer Video Splash: Sync 60 FPS</div>
-                    <div className="text-emerald-400 font-bold">[✓] Waydroid Android LXC Passthrough: /dev/dri/renderD128 Vulkan 1.3 Active</div>
-                    <div className="text-emerald-400 font-bold">[✓] Toram SquashFS RAM Caching: 15.2 GB/s NVMe Throughput</div>
-                    <div className="text-cyan-300 font-bold">System Status: 100% OPERATIONAL // ZERO COMPROMISE</div>
+                    <div className="text-emerald-400 font-bold">[✓] UEFI NVRAM Entry: 0001 (RITESH-PC-OS-UEFI) - Priority #1</div>
+                    <div>[✓] Direct DRM/KMS Framebuffer Video Splash: Sync 60 FPS</div>
+                    <div>[✓] Waydroid Android LXC Passthrough: /dev/dri/renderD128 Vulkan 1.3 Active</div>
+                    <div>[✓] Toram SquashFS RAM Caching: 15.2 GB/s NVMe Throughput</div>
+                    <div className="text-cyan-300 font-bold">SYSTEM STATUS: 100% OPERATIONAL // ZERO COMPROMISE</div>
                   </div>
 
                   <div className="pt-2">
@@ -472,7 +468,7 @@ export default function App() {
                       className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-cyber font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2"
                     >
                       <Terminal className="w-4 h-4" />
-                      Open Full Interactive Terminal Popup
+                      <span>Open Full Interactive Terminal Popup</span>
                     </button>
                   </div>
                 </div>
@@ -482,8 +478,8 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      {/* 5. Floating Action Buttons */}
-      <div className="fixed bottom-5 right-5 z-40 flex items-center gap-3">
+      {/* 4. Floating Action Buttons (Desktop & Tablet) */}
+      <div className="hidden sm:flex fixed bottom-5 right-5 z-40 items-center gap-3">
         <button
           onClick={handleOpenTerminal}
           className="p-3.5 rounded-full bg-[#081020]/90 hover:bg-cyan-950 border border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all hover:scale-110 active:scale-95 cursor-pointer"
@@ -502,26 +498,26 @@ export default function App() {
         </button>
       </div>
 
-      {/* 6. Interactive Hacker Terminal Modal */}
+      {/* 5. Interactive Hacker Terminal Modal */}
       <InteractiveTerminal
         isOpen={terminalModalOpen}
         onClose={handleCloseTerminal}
         onOpenDownload={handleOpenDownload}
       />
 
-      {/* 7. Download Distribution Modal */}
+      {/* 6. Download Distribution Modal */}
       <DownloadModal
         isOpen={downloadModalOpen}
         onClose={handleCloseDownload}
       />
 
-      {/* 8. Donation & Payment Gateway Modal */}
+      {/* 7. Donation & Payment Gateway Modal */}
       <DonateModal
         isOpen={donateModalOpen}
         onClose={handleCloseDonate}
       />
 
-      {/* 9. Footer */}
+      {/* 8. Footer */}
       <Footer
         onOpenDownload={handleOpenDownload}
         onOpenTerminal={handleOpenTerminal}

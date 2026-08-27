@@ -68,7 +68,7 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
     }
   }, [turboMode]);
 
-  // Core loads response: high during touch/interaction, low/resting when idle
+  // Core loads response: high during interaction, low/resting when idle
   useEffect(() => {
     const interval = setInterval(() => {
       setCoreLoads((prev) =>
@@ -95,8 +95,13 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
     return () => clearInterval(interval);
   }, [isEmpowering, turboMode]);
 
-  // Trigger electric pulse & circuit branch from touch point
+  // Trigger electric pulse & circuit branch from mouse pointer (Desktop Only)
   const triggerTouchEnergy = useCallback((x: number, y: number) => {
+    // CRITICAL: Disable touch physics animation on mobile / touch viewports
+    if (typeof window !== 'undefined' && (window.innerWidth < 1024 || ('ontouchstart' in window))) {
+      return;
+    }
+
     isInteractingRef.current = true;
     setIsEmpowering(true);
     setLastTouchCoord({ x, y });
@@ -104,7 +109,7 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
     if (decayTimerRef.current) {
       window.clearTimeout(decayTimerRef.current);
     }
-    // Fade back to resting mode 1.8 seconds after last touch
+    // Fade back to resting mode 1.8 seconds after last interaction
     decayTimerRef.current = window.setTimeout(() => {
       isInteractingRef.current = false;
       setIsEmpowering(false);
@@ -177,16 +182,17 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
     }
   }, [turboMode]);
 
-  // Handle Touch / Pointer interactions on the global window/document
+  // Handle pointer interactions (Desktop Mouse Clicks only)
   useEffect(() => {
     const handlePointerDown = (e: PointerEvent) => {
-      // Don't interfere if interacting with interactive inputs/buttons directly unless touch background
+      // Only for fine mouse pointers
+      if (e.pointerType === 'touch') return;
       triggerTouchEnergy(e.clientX, e.clientY);
       activeTouchPointsRef.current = [{ x: e.clientX, y: e.clientY }];
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      // Only emit particle trails if pointer is pressed or on touch drag
+      if (e.pointerType === 'touch') return;
       if (e.buttons > 0) {
         triggerTouchEnergy(e.clientX, e.clientY);
       }
@@ -196,39 +202,21 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
       activeTouchPointsRef.current = [];
     };
 
-    const handleTouchStart = (e: TouchEvent) => {
-      for (let i = 0; i < e.touches.length; i++) {
-        const touch = e.touches[i];
-        triggerTouchEnergy(touch.clientX, touch.clientY);
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      for (let i = 0; i < e.touches.length; i++) {
-        const touch = e.touches[i];
-        triggerTouchEnergy(touch.clientX, touch.clientY);
-      }
-    };
-
     window.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     return () => {
       window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
       if (decayTimerRef.current) {
         window.clearTimeout(decayTimerRef.current);
       }
     };
   }, [triggerTouchEnergy]);
 
-  // Main Canvas Rendering Loop (Driven on-demand by touch events & active energy)
+  // Canvas Animation Frame Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -236,79 +224,86 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
 
     const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
+    handleResize();
     window.addEventListener('resize', handleResize);
 
+    // Ambient floating grid particles
+    const ambientParticles: { x: number; y: number; vx: number; vy: number; size: number; alpha: number }[] = [];
+    const ambientCount = 35;
+    for (let i = 0; i < ambientCount; i++) {
+      ambientParticles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        size: Math.random() * 2 + 1,
+        alpha: Math.random() * 0.4 + 0.1,
+      });
+    }
+
     const render = () => {
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const hasActivePulses = touchPulsesRef.current.length > 0;
-      const hasActiveSparks = sparkLinesRef.current.length > 0;
-      const hasActiveParticles = touchParticlesRef.current.length > 0;
-      const isInteracting = isInteractingRef.current;
+      // 1. Render Ambient Particle Constellation
+      ctx.fillStyle = turboMode ? 'rgba(255, 0, 85, 0.6)' : 'rgba(0, 240, 255, 0.4)';
+      ambientParticles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
 
-      // 1. Draw Subtle Static PCB Traces only (resting background grid)
-      // When screen is touched, brighten the circuit pads near the touch
-      const lastCoord = lastTouchCoord;
-      if (isInteracting && lastCoord) {
-        const radialGlow = ctx.createRadialGradient(lastCoord.x, lastCoord.y, 10, lastCoord.x, lastCoord.y, 160);
-        radialGlow.addColorStop(0, turboMode ? 'rgba(255, 0, 85, 0.25)' : 'rgba(0, 240, 255, 0.2)');
-        radialGlow.addColorStop(0.5, turboMode ? 'rgba(255, 70, 0, 0.08)' : 'rgba(0, 150, 255, 0.08)');
-        radialGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = radialGlow;
         ctx.beginPath();
-        ctx.arc(lastCoord.x, lastCoord.y, 160, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
-      }
+      });
 
-      // 2. Render and Update Expanding Touch Electromagnetic Shockwaves
+      // 2. Draw Touch Shockwave Ripples (Desktop)
       for (let i = touchPulsesRef.current.length - 1; i >= 0; i--) {
         const pulse = touchPulsesRef.current[i];
         pulse.radius += pulse.speed;
-        pulse.alpha -= 0.018;
+        pulse.alpha -= 0.016;
 
         if (pulse.alpha <= 0 || pulse.radius >= pulse.maxRadius) {
           touchPulsesRef.current.splice(i, 1);
           continue;
         }
 
-        ctx.strokeStyle = pulse.color;
-        ctx.globalAlpha = Math.max(0, pulse.alpha * (turboMode ? 0.9 : 0.7));
-        ctx.lineWidth = Math.max(1, 3 * pulse.alpha);
+        ctx.save();
         ctx.beginPath();
         ctx.arc(pulse.x, pulse.y, pulse.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = pulse.color;
+        ctx.globalAlpha = Math.max(0, pulse.alpha);
+        ctx.lineWidth = Math.max(1, 4 * (1 - pulse.radius / pulse.maxRadius));
+        ctx.shadowColor = pulse.color;
+        ctx.shadowBlur = 15;
         ctx.stroke();
-
-        // Secondary inner echo ring
-        if (pulse.radius > 20) {
-          ctx.beginPath();
-          ctx.arc(pulse.x, pulse.y, pulse.radius * 0.6, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 1.0;
+        ctx.restore();
       }
 
-      // 3. Render and Update Electric Circuit Branches
+      // 3. Draw Lightning Spark Lines (Desktop)
       for (let i = sparkLinesRef.current.length - 1; i >= 0; i--) {
         const spark = sparkLinesRef.current[i];
-        spark.progress += turboMode ? 0.08 : 0.05;
-        spark.alpha -= 0.025;
+        spark.progress += 0.06;
+        spark.alpha -= 0.02;
 
-        if (spark.alpha <= 0 || spark.progress >= 1.2) {
+        if (spark.alpha <= 0 || spark.progress >= 1) {
           sparkLinesRef.current.splice(i, 1);
           continue;
         }
 
+        ctx.save();
         ctx.strokeStyle = spark.color;
         ctx.globalAlpha = Math.max(0, spark.alpha);
         ctx.lineWidth = 2;
+        ctx.shadowColor = spark.color;
+        ctx.shadowBlur = 10;
 
         ctx.beginPath();
         ctx.moveTo(spark.segments[0].x, spark.segments[0].y);
@@ -316,34 +311,29 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
           ctx.lineTo(spark.segments[s].x, spark.segments[s].y);
         }
         ctx.stroke();
-
-        // Terminal contact pin glow
-        const endPt = spark.segments[spark.segments.length - 1];
-        ctx.fillStyle = spark.color;
-        ctx.beginPath();
-        ctx.arc(endPt.x, endPt.y, 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.globalAlpha = 1.0;
+        ctx.restore();
       }
 
-      // 4. Render and Update Floating Cyber Data Particles
+      // 4. Draw Binary / Hex Particles (Desktop)
       for (let i = touchParticlesRef.current.length - 1; i >= 0; i--) {
-        const p = touchParticlesRef.current[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.022;
+        const tp = touchParticlesRef.current[i];
+        tp.x += tp.vx;
+        tp.y += tp.vy;
+        tp.alpha -= 0.02;
 
-        if (p.alpha <= 0) {
+        if (tp.alpha <= 0) {
           touchParticlesRef.current.splice(i, 1);
           continue;
         }
 
-        ctx.font = `${p.size}px monospace`;
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = Math.max(0, p.alpha);
-        ctx.fillText(p.text, p.x, p.y);
-        ctx.globalAlpha = 1.0;
+        ctx.save();
+        ctx.font = `${tp.size}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = tp.color;
+        ctx.globalAlpha = Math.max(0, tp.alpha);
+        ctx.shadowColor = tp.color;
+        ctx.shadowBlur = 8;
+        ctx.fillText(tp.text, tp.x, tp.y);
+        ctx.restore();
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -361,14 +351,14 @@ export const CpuEmpoweringBackground: React.FC<CpuEmpoweringBackgroundProps> = (
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-      {/* Interactive Background Canvas (Renders electric energy on touch) */}
+      {/* Interactive Background Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
       {/* Cyber Grid Texture Overlay */}
       <div className="absolute inset-0 cyber-grid opacity-20" />
 
-      {/* Centered Sleek Bottom Telemetry Dock */}
-      <div className="pointer-events-auto fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center max-w-[95vw]">
+      {/* Centered Sleek Bottom Telemetry Dock (Visible on Tablets & Desktops) */}
+      <div className="hidden sm:flex pointer-events-auto fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 items-center justify-center max-w-[95vw]">
         {hudMinimized ? (
           <button
             onClick={() => setHudMinimized(false)}
