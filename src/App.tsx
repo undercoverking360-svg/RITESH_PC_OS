@@ -124,20 +124,20 @@ export default function App() {
               exit="exit"
               className="space-y-4 sm:space-y-6 pt-1"
             >
-              {/* Hero Section */}
+              {/* SECTION 1: Hero Section */}
               <HeroSection
                 onOpenDownload={handleOpenDownload}
                 onOpenTerminal={handleOpenTerminal}
                 onExploreArch={handleExploreArch}
               />
 
-              {/* Live Interactive GRUB Simulator Preview */}
+              {/* SECTION 2: Live Interactive GRUB Simulator Preview */}
               <motion.section
                 id="simulator"
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                 className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative"
               >
                 <div className="max-w-7xl mx-auto space-y-5 sm:space-y-6">
@@ -159,21 +159,22 @@ export default function App() {
                 </div>
               </motion.section>
 
-              {/* 3-in-1 Ecosystem Matrix */}
+              {/* SECTION 3: 3-in-1 Ecosystem Matrix */}
               <EcosystemMatrix />
 
-              {/* Advanced Tooling & Security */}
+              {/* SECTION 4: Advanced Tooling & Security (VaultPulse Sharing Matrix) */}
               <AdvancedToolingGrid />
 
-              {/* Boot Sequence & Hardware Specs */}
+              {/* SECTION 5: Boot Sequence & Hardware Specs */}
               <InteractiveBootSequence />
 
-              {/* Epic Call to Action */}
+              {/* SECTION 6: Epic Call to Action */}
               <motion.section
-                initial={{ opacity: 0, y: 40 }}
+                id="cta-upgrade"
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                 className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#050811] via-[#081224] to-[#040609] overflow-hidden"
               >
                 <div className="max-w-5xl mx-auto text-center relative z-10 space-y-5 sm:space-y-6">

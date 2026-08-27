@@ -23,10 +23,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
       className="relative pt-6 sm:pt-10 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col justify-center"
     >
       {/* Background Cyber Grid with Ambient Neon Glows */}
@@ -36,7 +36,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <div className="max-w-7xl mx-auto w-full relative z-10">
         {/* Top Floating Cyber Status Badge */}
-        <div className="flex justify-center mb-5 sm:mb-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex justify-center mb-5 sm:mb-6"
+        >
           <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-[#081020]/90 backdrop-blur-xl border border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.2)] max-w-full">
             <span className="flex h-2 w-2 relative flex-shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -50,26 +56,44 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               3-IN-1 ECOSYSTEM
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Epic Headline */}
         <div className="text-center max-w-4xl mx-auto space-y-5 sm:space-y-6">
-          <h1 className="font-cyber font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight sm:leading-none">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="font-cyber font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight sm:leading-none"
+          >
             RITESH PC OS
             <span className="block mt-2 text-2xl sm:text-4xl md:text-5xl bg-gradient-to-r from-cyan-400 via-sky-300 to-rose-400 bg-clip-text text-transparent">
               The Next-Gen Cybernetic Operating System
             </span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-sm sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed px-2">
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="text-sm sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed px-2"
+          >
             Engineered with a stunning <span className="text-cyan-300 font-semibold">4K Frosted Glass UI</span>,{' '}
             <span className="text-white font-semibold">15-second instant live boot</span>, native{' '}
             <span className="text-emerald-400 font-semibold">Android Waydroid</span> &amp;{' '}
             <span className="text-blue-400 font-semibold">Windows compatibility subsystems</span>, and hardware UEFI/NVRAM security.
-          </p>
+          </motion.p>
 
-          {/* Symmetrically Aligned Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4">
+          {/* Symmetrically Aligned 3 Action CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4"
+          >
             {/* Button 1: Download ISO */}
             <button
               onClick={onOpenDownload}
@@ -99,10 +123,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span>Run CLI Diagnostic</span>
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent transition-transform" />
             </button>
-          </div>
+          </motion.div>
 
           {/* Quick Specs Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-y-2 gap-x-4 sm:gap-x-6 text-[11px] sm:text-xs font-mono text-slate-400 pt-2">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex flex-wrap items-center justify-center gap-y-2 gap-x-4 sm:gap-x-6 text-[11px] sm:text-xs font-mono text-slate-400 pt-2"
+          >
             <span className="flex items-center gap-1.5 text-slate-300">
               <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
               Debian Bookworm 12 (64-bit)
@@ -115,11 +145,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <CheckCircle2 className="w-3.5 h-3.5 text-rose-400" />
               UEFI / NVRAM Priority
             </span>
-          </div>
+          </motion.div>
         </div>
 
         {/* Highlight Stat Gauges */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-10 sm:mt-12 max-w-5xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-10 sm:mt-12 max-w-5xl mx-auto"
+        >
           {highlights.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -142,7 +178,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </motion.section>
   );
