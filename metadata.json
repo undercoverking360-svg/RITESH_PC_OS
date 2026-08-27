@@ -1,0 +1,6 @@
+{
+  "name": "RITESH PC OS",
+  "description": "Ultra-futuristic cybernetic OS publishing platform engineered with 4K Frosted Glass UI, 3-in-1 Power Combo (Linux, Android Waydroid, Windows Compatibility), 7s video bootloader, and immutable UEFI security.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
