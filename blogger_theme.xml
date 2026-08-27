@@ -31,7 +31,7 @@
 </head>
 <body class='bg-[#040609] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden'>
 
-  <!-- React 19 App Mount Container -->
+  <!-- React 19 Root Container -->
   <div id='root'></div>
 
   <!-- Mandatory Blogger Section & Widget -->
@@ -41,7 +41,7 @@
     </b:section>
   </div>
 
-  <!-- Production Compiled React 19 Bundle (Zero Inlined Code = 0% Parser Error) -->
+  <!-- Production Compiled JS from GitHub CDN -->
   <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@main/dist/assets/index.js' type='module'></script>
 </body>
 </html>
