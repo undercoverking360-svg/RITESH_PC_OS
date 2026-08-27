@@ -70,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         className="flex items-center gap-2.5 sm:gap-3 group text-left cursor-pointer flex-shrink-0"
       >
         <div className="relative flex-shrink-0">
-          <MetallicLogo size={34} glowColor="cyan" interactive={false} />
+          <MetallicLogo size={36} glowColor="cyan" interactive={false} />
         </div>
         <div className="flex flex-col justify-center">
           <div className="flex items-center gap-1.5 sm:gap-2 leading-none">
@@ -88,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       </button>
 
       {/* 2. CENTER SECTION (Desktop Glass Navigation Pill Group) */}
-      <nav className="hidden xl:flex items-center gap-1 bg-[#0f172a]/80 border border-cyan-500/40 px-3 py-1 rounded-full shadow-inner shadow-cyan-500/10 flex-shrink-0">
+      <nav className="hidden lg:flex items-center gap-1 bg-[#0f172a]/80 border border-cyan-500/40 px-3 py-1 rounded-full shadow-inner shadow-cyan-500/10 flex-shrink-0">
         {/* [🏠 Overview] */}
         <button
           onClick={() => onSelectTab('overview')}
@@ -167,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* 3. RIGHT SECTION (System Telemetry & Primary CTA) */}
       <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         {/* Live UTC Clock badge */}
-        <div className="hidden 2xl:flex font-mono text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-full items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
+        <div className="hidden lg:flex font-mono text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-full items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <span>{liveTime} UTC</span>
           <span className="text-emerald-600">|</span>
@@ -183,10 +183,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>DOWNLOAD ISO</span>
         </button>
 
-        {/* Mobile Hamburger Toggle (Visible on screens < xl) */}
+        {/* Mobile Hamburger Toggle (Visible on screens < lg) */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white xl:hidden cursor-pointer"
+          className="p-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white lg:hidden cursor-pointer"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -195,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden fixed top-16 left-0 right-0 bg-[#070b14]/98 backdrop-blur-2xl border-b border-cyan-500/30 px-5 py-4 space-y-2 font-mono text-sm shadow-2xl z-50">
+        <div className="lg:hidden fixed top-16 left-0 right-0 bg-[#070b14]/98 backdrop-blur-2xl border-b border-cyan-500/30 px-5 py-4 space-y-2 font-mono text-sm shadow-2xl z-50">
           <button
             onClick={() => {
               onSelectTab('overview');
