@@ -13,7 +13,7 @@
   <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Orbitron:wght@400;700;900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Rajdhani:wght@500;600;700&amp;display=swap' rel='stylesheet'/>
 
   <!-- Version-Locked CSS to bypass CDN Cache 100% -->
-  <link href='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@a230d75484220f7b3ce5e586ee703594b1e54d8d/dist/assets/index.css' rel='stylesheet'/>
+  <link href='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@5b110e58d503dffd57b0dd9e64b9b1cb797da70b/dist/assets/index.css' rel='stylesheet'/>
 
   <b:skin><![CDATA[
     #b-navbar, .widget-item-control, .quickedit, .status-msg-wrap, .Blog, .b-mobile { display: none !important; }
@@ -37,6 +37,6 @@
   </div>
 
   <!-- Version-Locked JS to bypass CDN Cache 100% -->
-  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@a230d75484220f7b3ce5e586ee703594b1e54d8d/dist/assets/index.js' type='module'></script>
+  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@5b110e58d503dffd57b0dd9e64b9b1cb797da70b/dist/assets/index.js' type='module'></script>
 </body>
 </html>
