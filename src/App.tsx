@@ -116,7 +116,7 @@ export default function App() {
       />
 
       {/* 3. Main Animated Page Content with Directional Slide-in & Smooth Scroll Reveal */}
-      <main className="relative z-10 min-h-[70vh] pt-20 sm:pt-24 pb-24">
+      <main className="relative z-10 min-h-[70vh] pt-16 sm:pt-20 pb-20">
         <AnimatePresence mode="wait" custom={direction}>
           {activeTab === 'overview' && (
             <motion.div
@@ -126,7 +126,7 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="space-y-6 pt-2"
+              className="space-y-4 sm:space-y-6 pt-1"
             >
               {/* Hero Section */}
               <HeroSection
@@ -136,9 +136,16 @@ export default function App() {
               />
 
               {/* Live Interactive GRUB Simulator Preview */}
-              <section id="simulator" className="px-4 sm:px-6 lg:px-8 py-10 relative">
-                <div className="max-w-7xl mx-auto space-y-6">
-                  <div className="text-center space-y-2">
+              <motion.section
+                id="simulator"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative"
+              >
+                <div className="max-w-7xl mx-auto space-y-5 sm:space-y-6">
+                  <div className="text-center space-y-2 max-w-3xl mx-auto">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono uppercase tracking-widest">
                       <Sparkles className="w-3.5 h-3.5 text-rose-400" />
                       Live Hardware Simulation Engine
@@ -154,7 +161,7 @@ export default function App() {
 
                   <LiveBootloaderSimulator onOpenDownload={handleOpenDownload} />
                 </div>
-              </section>
+              </motion.section>
 
               {/* 3-in-1 Ecosystem Matrix */}
               <EcosystemMatrix />
@@ -166,28 +173,34 @@ export default function App() {
               <InteractiveBootSequence />
 
               {/* Epic Call to Action */}
-              <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#050811] via-[#081224] to-[#040609] overflow-hidden">
-                <div className="max-w-5xl mx-auto text-center relative z-10 space-y-6">
+              <motion.section
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#050811] via-[#081224] to-[#040609] overflow-hidden"
+              >
+                <div className="max-w-5xl mx-auto text-center relative z-10 space-y-5 sm:space-y-6">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold tracking-widest uppercase">
                     <Shield className="w-3.5 h-3.5" />
                     DEPLOY TO YOUR PC / USB TODAY
                   </div>
 
-                  <h2 className="font-cyber font-black text-3xl sm:text-5xl text-white tracking-tight leading-tight">
+                  <h2 className="font-cyber font-black text-2xl sm:text-4xl md:text-5xl text-white tracking-tight leading-tight">
                     Ready to Upgrade to the Ultimate <br />
                     <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-rose-400 bg-clip-text text-transparent">
                       Cybernetic 3-in-1 Experience?
                     </span>
                   </h2>
 
-                  <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-slate-300 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed px-2">
                     No need to wipe your hard drive. Flash to any 16GB USB drive and experience 15-second instant live boot with full persistence, Android gaming, and Windows software compatibility.
                   </p>
 
-                  <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                  <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-3">
                     <button
                       onClick={handleOpenDownload}
-                      className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-black text-sm sm:text-base tracking-wider uppercase shadow-[0_0_30px_rgba(0,240,255,0.5)] transform hover:scale-105 active:scale-95 transition-all flex items-center gap-3 cursor-pointer"
+                      className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-black text-xs sm:text-base tracking-wider uppercase shadow-[0_0_30px_rgba(0,240,255,0.5)] transform hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer"
                     >
                       <Download className="w-5 h-5 text-black" />
                       <span>Download Live ISO (v2.0)</span>
@@ -195,14 +208,14 @@ export default function App() {
 
                     <button
                       onClick={handleOpenTerminal}
-                      className="px-6 py-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/40 text-emerald-400 font-mono text-sm tracking-wider transition-all flex items-center gap-2 cursor-pointer"
+                      className="w-full sm:w-auto px-6 py-3.5 sm:py-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/40 text-emerald-400 font-mono text-xs sm:text-sm tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Terminal className="w-4 h-4 text-emerald-400" />
                       <span>Launch Interactive Terminal</span>
                     </button>
                   </div>
                 </div>
-              </section>
+              </motion.section>
             </motion.div>
           )}
 
@@ -214,13 +227,13 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8"
+              className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-8"
             >
-              <div className="text-center space-y-3 max-w-3xl mx-auto">
-                <h1 className="font-cyber font-black text-3xl sm:text-5xl text-white">
+              <div className="text-center space-y-2 sm:space-y-3 max-w-3xl mx-auto">
+                <h1 className="font-cyber font-black text-2xl sm:text-5xl text-white">
                   UEFI GRUB 2 &amp; 4K Frosted Glass Sandbox
                 </h1>
-                <p className="text-slate-300 text-sm font-mono">
+                <p className="text-slate-300 text-xs sm:text-sm font-mono">
                   Interact directly with the custom 5-menu GRUB bootloader. Use keyboard Arrow keys or on-screen buttons, then press Enter to trigger the 7-second video splash transition to the live desktop.
                 </p>
               </div>
@@ -236,7 +249,7 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="py-10"
+              className="py-6 sm:py-10"
             >
               <EcosystemMatrix />
             </motion.div>
@@ -250,7 +263,7 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="py-10"
+              className="py-6 sm:py-10"
             >
               <AdvancedToolingGrid />
             </motion.div>
@@ -264,7 +277,7 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="py-10"
+              className="py-6 sm:py-10"
             >
               <InteractiveBootSequence />
             </motion.div>
@@ -278,19 +291,19 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="pt-10 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-12"
+              className="pt-6 sm:pt-10 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-8 sm:space-y-12"
             >
               <div className="text-center max-w-3xl mx-auto space-y-3">
-                <h1 className="font-cyber font-black text-3xl sm:text-5xl text-white">
+                <h1 className="font-cyber font-black text-2xl sm:text-5xl text-white">
                   Download RITESH PC OS (v2.0)
                 </h1>
-                <p className="text-slate-300 text-sm font-mono">
+                <p className="text-slate-300 text-xs sm:text-sm font-mono">
                   Select your desired ISO flavor. All builds include UEFI 64-bit Secure Boot compatibility, NVMe SSD TRIM discard schedulers, and Master GRUB with immutable chattr +i.
                 </p>
               </div>
 
               {/* Flavor Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
                 {[
                   {
                     title: 'Ultimate 3-in-1 Edition',
@@ -322,7 +335,7 @@ export default function App() {
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className={`p-6 rounded-3xl border flex flex-col justify-between space-y-6 ${
+                    className={`p-5 sm:p-6 rounded-3xl border flex flex-col justify-between space-y-5 sm:space-y-6 ${
                       item.popular
                         ? 'bg-[#081224]/90 border-cyan-400 shadow-[0_0_30px_rgba(0,240,255,0.25)]'
                         : 'bg-[#070b16]/80 border-slate-800 hover:border-slate-700'
@@ -337,7 +350,7 @@ export default function App() {
                           {item.size}
                         </span>
                       </div>
-                      <h3 className="font-cyber font-black text-xl text-white">
+                      <h3 className="font-cyber font-black text-lg sm:text-xl text-white">
                         {item.title}
                       </h3>
                       <p className="text-xs text-slate-300 leading-relaxed font-mono">
@@ -345,6 +358,9 @@ export default function App() {
                       </p>
                       <div className="text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-800">
                         Kernel: <span className="text-slate-300">{item.kernel}</span>
+                      </div>
+                      <div className="text-[10px] font-mono text-slate-400 break-all select-all pt-1">
+                        SHA256: <span className="text-cyan-300 font-bold">{item.sha}</span>
                       </div>
                     </div>
 
@@ -364,7 +380,7 @@ export default function App() {
               </div>
 
               {/* USB Flash Instructions */}
-              <div className="p-6 rounded-3xl bg-[#080d19]/90 border border-cyan-500/20 font-mono text-xs space-y-4">
+              <div className="p-5 sm:p-6 rounded-3xl bg-[#080d19]/90 border border-cyan-500/20 font-mono text-xs space-y-4">
                 <div className="text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-2">
                   <Zap className="w-4 h-4" />
                   USB Flashing Instructions (Ventoy &amp; Rufus):
@@ -399,14 +415,14 @@ export default function App() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6"
+              className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6"
             >
               <div className="text-center max-w-2xl mx-auto space-y-2">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono uppercase tracking-widest">
                   <Terminal className="w-3.5 h-3.5 text-emerald-400" />
                   Cybernetic CLT Console (Live Web CLI)
                 </div>
-                <h1 className="font-cyber font-black text-3xl sm:text-4xl text-white">
+                <h1 className="font-cyber font-black text-2xl sm:text-4xl text-white">
                   Interactive System Diagnostics (LT)
                 </h1>
                 <p className="text-slate-400 text-xs font-mono">
@@ -433,7 +449,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="flex-1 p-5 overflow-y-auto font-mono text-xs space-y-3 cyber-grid">
+                <div className="flex-1 p-4 sm:p-5 overflow-y-auto font-mono text-xs space-y-3 cyber-grid">
                   <div className="text-cyan-400 font-bold">RITESH PC OS v2.0 (Debian 12 Bookworm / Linux Kernel 6.12.0-x86_64)</div>
                   <div className="text-slate-300">Type commands or click quick action pills below:</div>
 

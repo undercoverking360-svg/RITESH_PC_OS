@@ -197,7 +197,14 @@ export const AdvancedToolingGrid: React.FC = () => {
   ];
 
   return (
-    <section id="features" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#040609] overflow-hidden">
+    <motion.section
+      id="features"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#040609] overflow-hidden"
+    >
       {/* Background Cyber Glows */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-rose-500/5 rounded-full blur-[140px] pointer-events-none" />
@@ -290,6 +297,6 @@ export const AdvancedToolingGrid: React.FC = () => {
           <ToolDetailModal tool={selectedTool} onClose={() => setSelectedTool(null)} />
         )}
       </AnimatePresence>
-    </section>
+    </motion.section>
   );
 };

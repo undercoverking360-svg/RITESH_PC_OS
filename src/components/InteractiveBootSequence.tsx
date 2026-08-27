@@ -128,8 +128,15 @@ export const InteractiveBootSequence: React.FC = () => {
   const compatibility = getCompatibilityScore();
 
   return (
-    <section id="boot-sequence" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#050811] overflow-hidden">
-      <div className="max-w-7xl mx-auto relative z-10 space-y-16">
+    <motion.section
+      id="boot-sequence"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#050811] overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto relative z-10 space-y-10 sm:space-y-12">
         {/* Section Title */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
@@ -426,6 +433,6 @@ export const InteractiveBootSequence: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

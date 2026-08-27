@@ -111,31 +111,31 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-xl overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="w-full max-w-4xl rounded-3xl bg-[#070c18] border border-cyan-500/40 p-6 sm:p-8 shadow-2xl space-y-6 my-auto"
+        className="w-full max-w-4xl rounded-3xl bg-[#070c18] border border-cyan-500/40 p-5 sm:p-8 shadow-2xl space-y-6 my-auto"
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
-              <Download className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
+              <Download className="w-5 sm:w-6 h-5 sm:h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">
+              <span className="text-[10px] sm:text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">
                 OFFICIAL ISO DISTRIBUTION
               </span>
-              <h3 className="font-cyber font-black text-xl sm:text-2xl text-white">
+              <h3 className="font-cyber font-black text-lg sm:text-2xl text-white">
                 Download RITESH PC OS (v2.0)
               </h3>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -179,32 +179,34 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
         </div>
 
         {/* Selected Package Details & Download Actions */}
-        <div className="p-5 rounded-2xl bg-black/60 border border-cyan-500/20 space-y-4">
+        <div className="p-4 sm:p-5 rounded-2xl bg-black/60 border border-cyan-500/20 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <div className="font-cyber font-bold text-lg text-white">{current.isoName}</div>
+              <div className="font-cyber font-bold text-base sm:text-lg text-white break-words">{current.isoName}</div>
               <div className="text-xs font-mono text-cyan-400">
                 UEFI 64-bit • Direct USB / NVMe Live Boot • 5-Menu GRUB Suite Included
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5 whitespace-nowrap">
                 <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
                 Global CDN Online
               </span>
             </div>
           </div>
 
-          {/* SHA-256 Checksum Box */}
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-3 text-xs font-mono">
-            <div className="flex items-center gap-2 truncate">
-              <Shield className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-              <span className="text-slate-400 font-bold">SHA-256:</span>
-              <span className="text-slate-300 truncate">{current.sha256}</span>
+          {/* Fully Wrapped SHA-256 Checksum Box with No Overflow */}
+          <div className="p-3.5 rounded-2xl bg-[#040812] border border-cyan-500/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 font-mono">
+            <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
+              <Shield className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5 sm:mt-0" />
+              <div className="min-w-0 flex-1">
+                <span className="text-[10px] sm:text-xs text-slate-400 font-bold block sm:inline mr-2">SHA-256 CHECKSUM:</span>
+                <span className="text-[10px] sm:text-xs text-cyan-300 break-all select-all font-mono tracking-tighter sm:tracking-normal">{current.sha256}</span>
+              </div>
             </div>
             <button
               onClick={copySha256}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white transition-colors flex-shrink-0"
+              className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 hover:text-white transition-all text-xs font-mono font-bold flex-shrink-0 shadow-[0_0_10px_rgba(0,240,255,0.15)] cursor-pointer"
             >
               {copiedSha ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedSha ? 'Copied!' : 'Copy Hash'}</span>
@@ -215,15 +217,15 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <button
               onClick={() => triggerDownload('direct')}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-sm tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
             >
               <Download className="w-4 h-4" />
-              <span>Direct High-Speed ISO (4.2 GB)</span>
+              <span>Direct High-Speed ISO ({current.size})</span>
             </button>
 
             <button
               onClick={() => triggerDownload('torrent')}
-              className="px-6 py-3.5 rounded-xl bg-[#0a1324] hover:bg-[#0f1d38] border border-cyan-500/40 text-cyan-300 hover:text-white font-cyber font-bold text-sm tracking-wider uppercase flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              className="px-6 py-3.5 rounded-xl bg-[#0a1324] hover:bg-[#0f1d38] border border-cyan-500/40 text-cyan-300 hover:text-white font-cyber font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <Zap className="w-4 h-4 text-cyan-400" />
               <span>Torrent Magnet Link</span>
@@ -235,14 +237,14 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider font-bold">
-              Flashing & Live Boot Guide:
+              Flashing &amp; Live Boot Guide:
             </span>
             <div className="flex gap-2 text-xs font-mono">
               {(['ventoy', 'rufus', 'dd'] as const).map((method) => (
                 <button
                   key={method}
                   onClick={() => setActiveGuide(method)}
-                  className={`px-3 py-1 rounded-lg transition-colors ${
+                  className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
                     activeGuide === method
                       ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold'
                       : 'bg-black/40 text-slate-500 hover:text-slate-300'
@@ -268,7 +270,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             {activeGuide === 'dd' && (
               <div>
                 <span className="text-cyan-400 font-bold">3. Linux Terminal DD CLI:</span>{' '}
-                <code className="text-emerald-400 bg-slate-950 p-1 rounded">
+                <code className="text-emerald-400 bg-slate-950 p-1 rounded break-all">
                   sudo dd if=RiteshPC-OS.iso of=/dev/sdX bs=4M status=progress oflag=sync
                 </code>
               </div>
