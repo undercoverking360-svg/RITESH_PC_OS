@@ -226,7 +226,7 @@
   </div>
 
   <!-- Full Original Cybernetic Application Script -->
-  <script type='text/babel'>
+  <script data-presets='react,typescript,env' type='text/babel'>
     //<![CDATA[
 
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
@@ -261,23 +261,6 @@ const motion = (window.Motion && window.Motion.motion) ? window.Motion.motion : 
   }
 };
 const AnimatePresence = (props) => props.children;
-
-// Lucide Icon Helper
-const LucideIcon = ({ name, size = 16, className = "", color = "currentColor", ...rest }) => {
-  const iconRef = useRef(null);
-  useEffect(() => {
-    if (window.lucide && iconRef.current) {
-      window.lucide.createIcons();
-    }
-  }, [name]);
-  return React.createElement('i', {
-    ref: iconRef,
-    'data-lucide': name,
-    className: className,
-    style: { width: size, height: size, display: 'inline-flex', verticalAlign: 'middle' },
-    ...rest
-  });
-};
 
 // Lucide React Components Mapping
 const createIcon = (name) => (props) => {
@@ -637,9 +620,9 @@ const MetallicLogo = ({
 
 
 [];
-  progress: number;
-  alpha: number;
-  color: string;
+  progress;
+  alpha;
+  color;
 }
 
 
@@ -702,7 +685,7 @@ const CpuEmpoweringBackground = ({
   }, [isEmpowering, turboMode]);
 
   // Trigger electric pulse & circuit branch from touch point
-  const triggerTouchEnergy = useCallback((x: number, y: number) => {
+  const triggerTouchEnergy = useCallback((x, y) => {
     isInteractingRef.current = true;
     setIsEmpowering(true);
     setLastTouchCoord({ x, y });
@@ -725,7 +708,7 @@ const CpuEmpoweringBackground = ({
       x,
       y,
       radius: 5,
-      maxRadius: Math.min(window.innerWidth, window.innerHeight) * 0.45,
+      maxRadius.min(window.innerWidth, window.innerHeight) * 0.45,
       alpha: 1.0,
       color: colors[Math.floor(Math.random() * colors.length)],
       speed: turboMode ? 9 : 6,
@@ -773,25 +756,25 @@ const CpuEmpoweringBackground = ({
       touchParticlesRef.current.push({
         x,
         y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
+        vx.cos(angle) * speed,
+        vy.sin(angle) * speed,
         alpha: 1.0,
         text: hexChars[Math.floor(Math.random() * hexChars.length)],
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: Math.floor(Math.random() * 4) + 10,
+        size.floor(Math.random() * 4) + 10,
       });
     }
   }, [turboMode]);
 
   // Handle Touch / Pointer interactions on the global window/document
   useEffect(() => {
-    const handlePointerDown = (e: PointerEvent) => {
+    const handlePointerDown = (e) => {
       // Don't interfere if interacting with interactive inputs/buttons directly unless touch background
       triggerTouchEnergy(e.clientX, e.clientY);
       activeTouchPointsRef.current = [{ x: e.clientX, y: e.clientY }];
     };
 
-    const handlePointerMove = (e: PointerEvent) => {
+    const handlePointerMove = (e) => {
       // Only emit particle trails if pointer is pressed or on touch drag
       if (e.buttons > 0) {
         triggerTouchEnergy(e.clientX, e.clientY);
@@ -802,14 +785,14 @@ const CpuEmpoweringBackground = ({
       activeTouchPointsRef.current = [];
     };
 
-    const handleTouchStart = (e: TouchEvent) => {
+    const handleTouchStart = (e) => {
       for (let i = 0; i < e.touches.length; i++) {
         const touch = e.touches[i];
         triggerTouchEnergy(touch.clientX, touch.clientY);
       }
     };
 
-    const handleTouchMove = (e: TouchEvent) => {
+    const handleTouchMove = (e) => {
       for (let i = 0; i < e.touches.length; i++) {
         const touch = e.touches[i];
         triggerTouchEnergy(touch.clientX, touch.clientY);
@@ -841,7 +824,7 @@ const CpuEmpoweringBackground = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
+    let animationFrameId;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
@@ -1073,10 +1056,10 @@ const HeroSection = ({
   onExploreArch,
 }) => {
   const highlights = [
-    { label: 'Instant Boot Time', value: '15s', sub: 'NVMe / Fast RAM Mode', icon: Zap },
-    { label: 'Display Engine', value: '4K 60FPS', sub: 'Frosted Glass Compositor', icon: Sparkles },
-    { label: 'Zero Bloat', value: '0.0%', sub: 'Pure Debian Bookworm 12', icon: Cpu },
-    { label: 'BIOS Priority', value: '#1 NVRAM', sub: 'Immutable Chattr +i Lock', icon: Shield },
+    { label: 'Instant Boot Time', value: '15s', sub: 'NVMe / Fast RAM Mode', icon },
+    { label: 'Display Engine', value: '4K 60FPS', sub: 'Frosted Glass Compositor', icon },
+    { label: 'Zero Bloat', value: '0.0%', sub: 'Pure Debian Bookworm 12', icon },
+    { label: 'BIOS Priority', value: '#1 NVRAM', sub: 'Immutable Chattr +i Lock', icon },
   ];
 
   return (
@@ -1339,7 +1322,7 @@ const LiveBootloaderSimulator = ({
 
   // Handle keyboard navigation for authentic GRUB experience
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (bootState !== 'grub') return;
 
       if (e.key === 'ArrowDown') {
@@ -1364,7 +1347,7 @@ const LiveBootloaderSimulator = ({
 
   // Countdown timer in GRUB
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer.Timeout;
     if (bootState === 'grub' && isCounting && countdown > 0) {
       timer = setTimeout(() => {
         setCountdown((prev) => prev - 1);
@@ -1386,8 +1369,8 @@ const LiveBootloaderSimulator = ({
       '[  OK  ] Loading Initial Ramdisk /initrd.img-6.12-ritesh ...',
       '[  OK  ] Initializing Zstandard Live Overlay (Decompressed 4.2GB in 1.4s)',
       '[  OK  ] Mounting NVMe SSD Persistence /live/persistence [chattr +i enabled]',
-      '[  OK  ] Waydroid Subsystem: Binder IPC and Hardware GPU acceleration ready',
-      '[  OK  ] Wine / Proton 9.0 Compatibility Layer: Direct3D 12 -> Vulkan (DXVK 2.3)',
+      '[  OK  ] Waydroid Subsystem IPC and Hardware GPU acceleration ready',
+      '[  OK  ] Wine / Proton 9.0 Compatibility Layer 12 -> Vulkan (DXVK 2.3)',
       '[  OK  ] Starting 4K Frosted Glass Compositor (Picom / Wayland-Hybrid)...',
       '[  OK  ] RITESH PC OS Desktop Ready in 7.42 Seconds. Welcome, Riteshguru!',
     ];
@@ -1458,7 +1441,7 @@ const LiveBootloaderSimulator = ({
 
         <AnimatePresence mode="wait">
           {/* ============================================================ */}
-          {/* VIEW 1: GRUB BOOTLOADER (Exact match to preview_homescreen_5) */}
+          {/* VIEW 1 BOOTLOADER (Exact match to preview_homescreen_5) */}
           {/* ============================================================ */}
           {bootState === 'grub' && (
             <motion.div
@@ -1639,7 +1622,7 @@ const LiveBootloaderSimulator = ({
           )}
 
           {/* ============================================================ */}
-          {/* VIEW 3: LIVE 4K CYBERNETIC DESKTOP EXPERIENCE               */}
+          {/* VIEW 3 4K CYBERNETIC DESKTOP EXPERIENCE               */}
           {/* ============================================================ */}
           {bootState === 'desktop' && (
             <motion.div
@@ -1694,7 +1677,7 @@ const LiveBootloaderSimulator = ({
 
               {/* Desktop Main Workspace / Windows */}
               <div className="relative z-10 flex-1 p-4 flex items-center justify-center">
-                {/* Simulated Window: System Monitor */}
+                {/* Simulated Window Monitor */}
                 {activeDesktopApp === 'stats' && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -1758,7 +1741,7 @@ const LiveBootloaderSimulator = ({
                   </motion.div>
                 )}
 
-                {/* Simulated Window: Waydroid APK Android Store */}
+                {/* Simulated Window APK Android Store */}
                 {activeDesktopApp === 'waydroid' && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -1790,7 +1773,7 @@ const LiveBootloaderSimulator = ({
                   </motion.div>
                 )}
 
-                {/* Simulated Window: Wine / Bottles Engine */}
+                {/* Simulated Window / Bottles Engine */}
                 {activeDesktopApp === 'wine' && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -1924,24 +1907,7 @@ const EcosystemMatrix = () => {
   const [activeTab, setActiveTab] = useState('linux');
 
   const ecosystems = {
-    linux: {
-      title: 'Native Linux Cyber Workstation',
-      subtitle: 'Debian Bookworm 12 • Custom Linux Kernel 6.12 • Kali-Grade Glass Compositor',
-      icon: Terminal,
-      accentColor: 'cyan',
-      tag: 'CORE WORKSTATION',
-      badge: '4K 60FPS FROSTED GLASS',
-      description:
-        'Engineered directly upon Debian 12 Bookworm with an ultra-lightweight custom compositor. Features a customized 4K Frosted Glass desktop, pre-tuned zRAM compression, and streamlined F1-F12 multi-monitor shortcuts for security researchers, developers, and power users.',
-      keyPoints: [
-        'Pure 64-bit Linux Kernel 6.12 with low-latency real-time kernel patches',
-        'Picom / Wayland Frosted Glass Compositor (GPU-rendered backdrop blur)',
-        'Customized F1-F12 quick toolbindings for one-touch workspace routing',
-        'Pre-loaded with cyber security tools, network auditors, and developer compilers',
-        'Zstandard compressed live overlay for lightning-fast memory execution',
-      ],
-      benchmarks: [
-        { label: 'Idle RAM Usage', value: '480 MB', compare: 'vs 4.2 GB on Win 11' },
+    linux,
         { label: 'Boot to Desktop', value: '14.8s', compare: 'Instant NVMe read' },
         { label: 'Kernel Latency', value: '< 0.4ms', compare: 'Real-time tuned' },
       ],
@@ -1968,24 +1934,7 @@ const EcosystemMatrix = () => {
         </div>
       ),
     },
-    android: {
-      title: 'Direct Hardware Android (Waydroid)',
-      subtitle: 'LXC Container Subsystem • Zero-Emulation Kernel Pass • Full GPU Vulkan 1.3',
-      icon: Smartphone,
-      accentColor: 'emerald',
-      tag: 'NATIVE ANDROID ENGINE',
-      badge: 'ZERO EMULATION OVERHEAD',
-      description:
-        'Unlike slow, resource-heavy virtual machines (BlueStacks/LDPlayer), RITESH PC OS runs Android directly on the bare Linux kernel via custom Waydroid LXC integration with direct GPU hardware acceleration. Launch APKs and Android games natively side-by-side with Linux apps.',
-      keyPoints: [
-        'Direct hardware GPU passthrough for 60-120 FPS Android gaming',
-        'Native Binder IPC kernel bridge for zero latency input & touch',
-        'Google Play Store & MicroG compatibility layer preconfigured',
-        'Seamless multi-window Android multitasking with shared clipboard and files',
-        'Automatic APK drag-and-drop installer tool included',
-      ],
-      benchmarks: [
-        { label: 'GPU Passthrough', value: '100% Native', compare: 'Direct Vulkan/OpenGL' },
+    android,
         { label: 'Game FPS (COD/PUBG)', value: '60 - 120 FPS', compare: '0% Virtual Machine lag' },
         { label: 'Startup Overhead', value: '1.2s', compare: 'Shared Kernel LXC' },
       ],
@@ -1993,9 +1942,9 @@ const EcosystemMatrix = () => {
       mockupContent: (
         <div className="space-y-4 font-mono text-xs text-slate-300">
           <div className="flex items-center justify-between bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/30">
-            <span className="text-emerald-300 font-bold">LXC Subsystem: Android 13 Tiramisu</span>
+            <span className="text-emerald-300 font-bold">LXC Subsystem 13 Tiramisu</span>
             <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">
-              GPU Vulkan: ENABLED
+              GPU Vulkan
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -2015,24 +1964,7 @@ const EcosystemMatrix = () => {
         </div>
       ),
     },
-    windows: {
-      title: 'Windows Compatibility Layer (Bottles/Wine)',
-      subtitle: 'Wine 9.0 • Proton-GE • DXVK 2.3 DirectX 12 -> Vulkan Translation',
-      icon: Layers,
-      accentColor: 'blue',
-      tag: 'WIN32 / WIN64 ECOSYSTEM',
-      badge: 'RUN ANY .EXE / .MSI',
-      description:
-        'Run mission-critical Windows applications, productivity tools, and modern DirectX games without needing a full Windows partition or VM license. Bundled with tuned Bottles sandboxes, Wine 9.0 Staging, and DXVK for native rendering speeds.',
-      keyPoints: [
-        'Preconfigured Bottles environment with Gaming, Software & Custom sandboxes',
-        'DirectX 9/10/11/12 hardware translation via DXVK 2.3 and VKD3D',
-        'Right-click to execute any .exe or .msi file directly from File Manager',
-        'Isolated Wine prefixes to prevent registry bloat and malware containment',
-        'Full support for MS Office, Adobe Suite, CAD software, and Steam Windows titles',
-      ],
-      benchmarks: [
-        { label: 'DirectX 12 Translation', value: 'DXVK 2.3', compare: 'Native Vulkan speed' },
+    windows,
         { label: 'App Compatibility', value: '98.4%', compare: 'Over 20,000+ EXE tested' },
         { label: 'RAM Footprint', value: 'Low', compare: 'No background Win services' },
       ],
@@ -2040,7 +1972,7 @@ const EcosystemMatrix = () => {
       mockupContent: (
         <div className="space-y-4 font-mono text-xs text-slate-300">
           <div className="flex items-center justify-between bg-blue-950/40 p-3 rounded-xl border border-blue-500/30">
-            <span className="text-blue-300 font-bold">Bottles Prefix: Gaming & Software Pro</span>
+            <span className="text-blue-300 font-bold">Bottles Prefix & Software Pro</span>
             <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 text-[10px]">
               DXVK 2.3 + Proton 9.0
             </span>
@@ -2131,7 +2063,7 @@ const EcosystemMatrix = () => {
             transition={{ duration: 0.4 }}
             className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch"
           >
-            {/* Left Column: Details & Technical Highlights */}
+            {/* Left Column & Technical Highlights */}
             <div className="lg:col-span-6 flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-[#080e1b]/80 backdrop-blur-2xl border border-slate-700/60 shadow-2xl space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -2182,7 +2114,7 @@ const EcosystemMatrix = () => {
               </div>
             </div>
 
-            {/* Right Column: Live Simulated Subsystem Window */}
+            {/* Right Column Simulated Subsystem Window */}
             <div className="lg:col-span-6 flex flex-col rounded-3xl bg-[#060a14] border border-cyan-500/30 overflow-hidden shadow-2xl">
               {/* Window Titlebar */}
               <div className="flex items-center justify-between px-4 py-3 bg-[#0a1120] border-b border-cyan-500/20 font-mono text-xs">
@@ -2333,14 +2265,14 @@ const AdvancedToolingGrid = () => {
       title: 'Master 5-Menu GRUB Suite',
       badge: 'IMMUTABLE CHATTR +I',
       category: 'BOOT SECURITY',
-      icon: Shield,
+      icon,
       glow: 'cyan',
       description:
         'Customized UEFI Boot Manager with automatic BIOS NVRAM sync (Priority #1). Protected by file system immutable flags (chattr +i /boot/grub/grub.cfg) to prevent OS overwrites, malware tampering, and partition corruption.',
       specs: [
         'Motherboard BIOS NVRAM auto-injection via efibootmgr',
         'chattr +i immutable attribute lock on all boot config files',
-        'Direct RAM Fast Boot (Toram mode: SSD to RAM pre-fetch)',
+        'Direct RAM Fast Boot (Toram mode to RAM pre-fetch)',
         'Automatic dual-boot detection (Windows 11 / Kali / Arch / MX)',
         'Built-in memtest86+ hardware memory diagnostics',
       ],
@@ -2353,7 +2285,7 @@ const AdvancedToolingGrid = () => {
       title: '7-Second Video Boot Engine',
       badge: '4K CINEMATIC SPLASH',
       category: 'DISPLAY COMPOSITOR',
-      icon: Video,
+      icon,
       glow: 'crimson',
       description:
         'A full-screen dynamic MP4 / WebM hardware-accelerated video bootloader splash sequence that smoothly bridges the gap between UEFI POST and the XFCE/KDE desktop environment with zero screen flicker.',
@@ -2366,14 +2298,14 @@ const AdvancedToolingGrid = () => {
       ],
       terminalCommand: 'ritesh-boot --test-splash',
       terminalOutput:
-        '[OK] Video Driver: Intel/Nvidia/AMD DRM Kernel Mode Setting active\n[OK] Resolution: 3840x2160 @ 60Hz 10-bit Color\n[OK] Splash Duration: 7.42 Seconds (Frame buffer sync verified)',
+        '[OK] Video Driver/Nvidia/AMD DRM Kernel Mode Setting active\n[OK] Resolution: 3840x2160 @ 60Hz 10-bit Color\n[OK] Splash Duration: 7.42 Seconds (Frame buffer sync verified)',
     },
     {
       id: 'vaultpulse',
       title: 'VaultPulse Security Matrix',
       badge: 'MILITARY ENCRYPTION',
       category: 'KERNEL INTEGRITY',
-      icon: Lock,
+      icon,
       glow: 'cyan',
       description:
         'Real-time cryptographic process isolation, LUKS2 volume encryption, and 1-touch profile lockdown. Safeguards developer keys, tokens, and browser credentials against unauthorized memory dumps.',
@@ -2386,21 +2318,21 @@ const AdvancedToolingGrid = () => {
       ],
       terminalCommand: 'vaultpulse --verify-integrity',
       terminalOutput:
-        '[OK] TPM 2.0 Chip: Detected & Enrolled\n[OK] Memory Integrity: Verified (Zero rogue ptrace hooks)\n[OK] Profile Status: ENCRYPTED // 4096-bit RSA keys active',
+        '[OK] TPM 2.0 Chip & Enrolled\n[OK] Memory Integrity (Zero rogue ptrace hooks)\n[OK] Profile Status // 4096-bit RSA keys active',
     },
     {
       id: 'cleaner-suite',
       title: 'Deep NVMe SSD Cleaner & RAM Optimizer',
       badge: 'TORAM FAST MODE',
       category: 'SYSTEM ACCELERATOR',
-      icon: Trash2,
+      icon,
       glow: 'emerald',
       description:
         'High-performance system maintenance suite that executes TRIM discards on NVMe drives, clears system journal caches, flushes inactive page caches, and manages background app freezing for peak FPS.',
       specs: [
         'Automated NVMe SSD TRIM discard scheduler for zero write degradation',
         'Dynamic zRAM cache compressor with zstd algorithm (3:1 ratio)',
-        'Toram loader: Copy root filesystem to RAM for infinite zero-lag speed',
+        'Toram loader root filesystem to RAM for infinite zero-lag speed',
         'Background application sleep freezer to save up to 40% battery',
         'Deep package cache cleaner removing orphan Debian dependencies',
       ],
@@ -2543,13 +2475,13 @@ const InteractiveBootSequence = () => {
       path: '\\EFI\\RITESH-PC-OS\\BOOTX64.EFI',
       duration: '0.4s',
       badge: 'BIOS PRIORITY #1',
-      icon: Cpu,
+      icon,
       description:
         'Motherboard hardware firmware detects RITESH PC OS NVRAM signature injected by efibootmgr. Direct 64-bit EFI executable executes with Secure Boot dual-compatibility key verification.',
       technicalDetails: [
         'EFI image: x86_64 PE32+ executable with signed SHA-512 hashes',
         'NVRAM BootOrder: 0001 (Overriding Windows Boot Manager priority)',
-        'Firmware Handshake: Zero wait state ACPI & DSDT table load',
+        'Firmware Handshake wait state ACPI & DSDT table load',
       ],
     },
     {
@@ -2558,13 +2490,13 @@ const InteractiveBootSequence = () => {
       path: '/boot/grub/grub.cfg (chattr +i protected)',
       duration: '5.0s (or instant enter)',
       badge: 'IMMUTABLE FS',
-      icon: Shield,
+      icon,
       description:
         'Customized GRUB2 graphics subsystem loads the metallic "R" centered holographic theme at native 3840x2160 or 1080p resolution with keyboard cursor control and fast memory boot options.',
       technicalDetails: [
         'GRUB Theme: 4K 3D Brushed Metallic "R" with Concentric Cyber Rings',
-        'Option 1: Live UEFI 64-bit standard kernel',
-        'Option 2: Direct SSD-to-RAM Toram Fast Mode (Loads entire squashfs into memory)',
+        'Option 1 UEFI 64-bit standard kernel',
+        'Option 2 SSD-to-RAM Toram Fast Mode (Loads entire squashfs into memory)',
       ],
     },
     {
@@ -2573,7 +2505,7 @@ const InteractiveBootSequence = () => {
       path: '/live/filesystem.squashfs -> /sysroot',
       duration: '1.2s',
       badge: 'ZSTD COMPRESSION',
-      icon: HardDrive,
+      icon,
       description:
         'Custom initramfs dynamically uncompresses kernel modules and user packages using multi-threaded Zstandard algorithm at 15.2 GB/s, mounting the persistent read-write overlay.',
       technicalDetails: [
@@ -2588,7 +2520,7 @@ const InteractiveBootSequence = () => {
       path: '/usr/share/plymouth/themes/ritesh-video',
       duration: '7.0s',
       badge: 'ZERO-FLICKER DRM',
-      icon: Video,
+      icon,
       description:
         'Direct DRM/KMS framebuffer plays the seamless cybernetic video bootloader while background threads initialize the Waydroid Android LXC container and Wine / DXVK graphics translation layer.',
       technicalDetails: [
@@ -2603,12 +2535,12 @@ const InteractiveBootSequence = () => {
       path: 'XFCE / KDE Hybrid Compositor + Picom',
       duration: 'Instant',
       badge: 'ONLINE',
-      icon: Sparkles,
+      icon,
       description:
         'Compositor triggers full hardware acceleration, custom F1-F12 hotkeys, system tray telemetry, and provides immediate single-click access to Linux, Android, and Windows software.',
       technicalDetails: [
         'Total boot time from cold power-on to live responsive desktop: 14.8s',
-        'Idle memory footprint: Under 500 MB RAM',
+        'Idle memory footprint 500 MB RAM',
         'Immediate native execution readiness for APKs, EXEs, and Linux ELF binaries',
       ],
     },
@@ -2973,7 +2905,7 @@ const InteractiveTerminal = ({
             Welcome to the Cybernetic CLI Environment. Type <span className="text-cyan-300 font-bold">help</span> to list available diagnostic tools.
           </div>
           <div className="text-emerald-400">
-            [+] 3-in-1 Power Combo: Linux Native • Waydroid Android • Wine 9.0 Loaded
+            [+] 3-in-1 Power Combo Native • Waydroid Android • Wine 9.0 Loaded
           </div>
         </div>
       ),
@@ -2995,13 +2927,13 @@ const InteractiveTerminal = ({
 
   if (!isOpen) return null;
 
-  const handleCommand = (e: React.FormEvent) => {
+  const handleCommand = (e) => {
     e.preventDefault();
     const cmd = inputVal.trim().toLowerCase();
     if (!cmd) return;
 
     const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-    let result: React.ReactNode = '';
+    let result = '';
 
     switch (cmd) {
       case 'help':
@@ -3050,9 +2982,9 @@ const InteractiveTerminal = ({
       case 'status':
         result = (
           <div className="space-y-1 text-xs text-slate-300">
-            <div className="text-emerald-400 font-bold">[✓] UEFI 64-bit Handshake: PASSED (BootOrder: 0001)</div>
-            <div className="text-emerald-400 font-bold">[✓] Linux Kernel 6.12: HARDWARE LOADED</div>
-            <div className="text-emerald-400 font-bold">[✓] Toram RAM Mode: READY (3.2x zstd compression)</div>
+            <div className="text-emerald-400 font-bold">[✓] UEFI 64-bit Handshake (BootOrder: 0001)</div>
+            <div className="text-emerald-400 font-bold">[✓] Linux Kernel 6.12 LOADED</div>
+            <div className="text-emerald-400 font-bold">[✓] Toram RAM Mode (3.2x zstd compression)</div>
             <div className="text-emerald-400 font-bold">[✓] Root Persistence: /live/persistence (chattr +i enabled)</div>
             <div className="text-cyan-300 font-bold">System Status: 100% HEALTHY // ZERO ANOMALIES DETECTED</div>
           </div>
@@ -3064,10 +2996,10 @@ const InteractiveTerminal = ({
           <div className="space-y-1 text-xs text-slate-300">
             <div className="text-cyan-400 font-bold">WAYDROID LXC CONTAINER SUBSYSTEM:</div>
             <div>• Android Version: 13 (Tiramisu GApps)</div>
-            <div>• Binder IPC Driver: Loaded (/dev/binder, /dev/hwbinder, /dev/vndbinder)</div>
-            <div>• GPU Passthrough: Direct Vulkan 1.3 to /dev/dri/card0</div>
-            <div>• APK Support: Native Hardware Execution (Zero Emulation)</div>
-            <div className="text-emerald-400">● Container Status: ACTIVE // 120 FPS PASSTHROUGH</div>
+            <div>• Binder IPC Driver (/dev/binder, /dev/hwbinder, /dev/vndbinder)</div>
+            <div>• GPU Passthrough Vulkan 1.3 to /dev/dri/card0</div>
+            <div>• APK Support Hardware Execution (Zero Emulation)</div>
+            <div className="text-emerald-400">● Container Status // 120 FPS PASSTHROUGH</div>
           </div>
         );
         break;
@@ -3076,9 +3008,9 @@ const InteractiveTerminal = ({
         result = (
           <div className="space-y-1 text-xs text-slate-300">
             <div className="text-blue-400 font-bold">WINDOWS COMPATIBILITY MATRIX:</div>
-            <div>• Engine: Wine 9.0 Staging + Bottles Pro Prefixes</div>
-            <div>• DirectX Layer: DXVK 2.3 (DirectX 9/10/11) + VKD3D (DirectX 12)</div>
-            <div>• Audio Driver: PulseAudio / PipeWire low-latency ASIO</div>
+            <div>• Engine 9.0 Staging + Bottles Pro Prefixes</div>
+            <div>• DirectX Layer 2.3 (DirectX 9/10/11) + VKD3D (DirectX 12)</div>
+            <div>• Audio Driver / PipeWire low-latency ASIO</div>
             <div>• Binary Compatibility: 98.4% of tested .exe / .msi software</div>
             <div className="text-emerald-400">● Ready to launch Photoshop, AutoCAD, FL Studio, and Steam</div>
           </div>
@@ -3090,9 +3022,9 @@ const InteractiveTerminal = ({
           <div className="space-y-1 text-xs text-slate-300">
             <div className="text-rose-400 font-bold">MASTER 5-MENU GRUB ARCHITECTURE:</div>
             <div>• Config Path: /boot/grub/grub.cfg (Attributes: ----i---------)</div>
-            <div>• NVRAM Status: Motherboard BIOS Priority #1 Verified</div>
+            <div>• NVRAM Status BIOS Priority #1 Verified</div>
             <div>• Theme Engine: 4K 3D Brushed Metallic "R" with Concentric Rings</div>
-            <div>• Fast Boot Modes: Standard UEFI + Direct SSD-to-RAM Toram Mode</div>
+            <div>• Fast Boot Modes UEFI + Direct SSD-to-RAM Toram Mode</div>
           </div>
         );
         break;
@@ -3263,7 +3195,7 @@ const DownloadModal = ({ isOpen, onClose }) => {
       build: 'Build 2026.08-UEFI',
       kernel: 'Linux 6.12.0-custom-x86_64',
       sha256: '9f8a3c4e7b2d1094f61e89a5c3e7d1b2f0a4c8e6d2b8a0f4e2c6d8a0b4c2e6f8',
-      desc: 'The complete 3-in-1 powerhouse: Debian 12 Base, 4K Frosted Glass UI, Waydroid Android Subsystem, and Bottles Windows Wine Engine.',
+      desc: 'The complete 3-in-1 powerhouse 12 Base, 4K Frosted Glass UI, Waydroid Android Subsystem, and Bottles Windows Wine Engine.',
       isoName: 'RiteshPC-OS-v2.0-Ultimate-3in1-x86_64.iso',
     },
     {
@@ -3298,7 +3230,7 @@ const DownloadModal = ({ isOpen, onClose }) => {
       confetti({
         particleCount: 80,
         spread: 70,
-        origin: { y: 0.6 },
+        origin,
         colors: ['#00f0ff', '#ff0055', '#3b82f6'],
       });
     } catch {
@@ -3313,9 +3245,9 @@ const DownloadModal = ({ isOpen, onClose }) => {
           `Edition: ${current.name}\n` +
           `Kernel: ${current.kernel}\n` +
           `SHA256: ${current.sha256}\n` +
-          `Mirror: Global High-Speed CDN Edge Node #1\n` +
-          `Author: Riteshguru\n` +
-          `Instructions: Flash via Ventoy or Rufus in GPT/UEFI mode.\n`,
+          `Mirror High-Speed CDN Edge Node #1\n` +
+          `Author\n` +
+          `Instructions via Ventoy or Rufus in GPT/UEFI mode.\n`,
       ],
       { type: 'text/plain' }
     );
@@ -3394,7 +3326,7 @@ const DownloadModal = ({ isOpen, onClose }) => {
                     <div className="text-[11px] text-slate-400 line-clamp-2 mt-1">{ed.desc}</div>
                   </div>
                   <div className="text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800/80">
-                    Kernel: {ed.kernel.split('-')[0]}
+                    Kernel
                   </div>
                 </div>
               );
@@ -3565,10 +3497,7 @@ const DonateModal = ({ isOpen, onClose }) => {
     QRCode.toDataURL(upiUri, {
       width: 320,
       margin: 1,
-      color: {
-        dark: '#000000',
-        light: '#ffffff',
-      },
+      color,
       errorCorrectionLevel: 'H',
     })
       .then((url) => {
@@ -3606,7 +3535,7 @@ const DonateModal = ({ isOpen, onClose }) => {
     }, 1000);
 
     setTimeout(() => {
-      setVerificationStep('Authenticating Payee: REETIK KUMAR YADAV...');
+      setVerificationStep('Authenticating Payee KUMAR YADAV...');
     }, 2000);
 
     setTimeout(() => {
@@ -3619,7 +3548,7 @@ const DonateModal = ({ isOpen, onClose }) => {
         confetti({
           particleCount: 100,
           spread: 80,
-          origin: { y: 0.6 },
+          origin,
           colors: ['#00f0ff', '#ff0055', '#3b82f6', '#10b981', '#f59e0b'],
         });
       } catch {
@@ -3754,7 +3683,7 @@ const DonateModal = ({ isOpen, onClose }) => {
         ) : (
           /* Main Interactive Payment Interface */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Left Column: Authentic PhonePe QR Card Frame matching user upload */}
+            {/* Left Column PhonePe QR Card Frame matching user upload */}
             <div className="lg:col-span-6 flex flex-col items-center">
               <div className="relative w-full max-w-[320px] rounded-3xl bg-white text-black p-5 shadow-[0_0_40px_rgba(103,57,183,0.35)] flex flex-col items-center text-center space-y-3 overflow-hidden border-2 border-purple-200">
                 {/* PhonePe Header Branding */}
@@ -3836,7 +3765,7 @@ const DonateModal = ({ isOpen, onClose }) => {
               )}
             </div>
 
-            {/* Right Column: Amount Selector, Controls & Instant Pay */}
+            {/* Right Column Selector, Controls & Instant Pay */}
             <div className="lg:col-span-6 space-y-5">
               {/* Preset Amounts Grid */}
               <div className="space-y-2">
@@ -4372,7 +4301,7 @@ const Footer = ({ onOpenDownload, onOpenTerminal, onOpenDonate }) => {
             <div className="flex items-center gap-2 text-slate-300">
               <span className="px-2.5 py-1 rounded-md bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                Auth: Riteshguru (Passed)
+                Auth (Passed)
               </span>
               <span className="px-2.5 py-1 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-[11px]">
                 4096-BIT RSA
@@ -4539,7 +4468,7 @@ import {
 } from 'lucide-react';
 
 
-const tabOrder: PageTabId[] = [
+const tabOrder[] = [
   'overview',
   'simulator',
   'ecosystem',
@@ -4558,7 +4487,7 @@ function App() {
   const [turboMode, setTurboMode] = useState(false);
 
   // Switch tab with directional slide-in animation tracking
-  const handleTabChange = (newTab: PageTabId) => {
+  const handleTabChange = (newTab) => {
     const currentIndex = tabOrder.indexOf(activeTab);
     const newIndex = tabOrder.indexOf(newTab);
     setDirection(newIndex > currentIndex ? 1 : -1);
@@ -4585,29 +4514,23 @@ function App() {
 
   // Slide-in animation variants
   const slideVariants = {
-    enter: (dir: number) => ({
+    enter: (dir) => ({
       x: dir >= 0 ? 90 : -90,
       opacity: 0,
       filter: 'blur(4px)',
     }),
-    center: {
-      x: 0,
-      opacity: 1,
-      filter: 'blur(0px)',
-      transition: {
-        x: { type: 'spring', stiffness: 280, damping: 28 },
-        opacity: { duration: 0.25 },
-        filter: { duration: 0.2 },
+    center,
+        opacity,
+        filter,
       },
     },
-    exit: (dir: number) => ({
+    exit: (dir) => ({
       x: dir >= 0 ? -90 : 90,
       opacity: 0,
       filter: 'blur(4px)',
-      transition: {
-        x: { type: 'spring', stiffness: 280, damping: 28 },
-        opacity: { duration: 0.2 },
-        filter: { duration: 0.15 },
+      transition,
+        opacity,
+        filter,
       },
     }),
   };
@@ -4811,7 +4734,7 @@ function App() {
                     title: 'Ultimate 3-in-1 Edition',
                     badge: 'FLAGSHIP',
                     size: '4.2 GB',
-                    desc: 'The complete powerhouse: Debian 12 Bookworm, Waydroid 13 APK gaming, and Bottles / Wine 9.0 Windows compatibility.',
+                    desc: 'The complete powerhouse 12 Bookworm, Waydroid 13 APK gaming, and Bottles / Wine 9.0 Windows compatibility.',
                     kernel: '6.12.0-custom-x86_64',
                     sha: '9f8a3c4e7b2d1094f61e89a5c3e7d1b2f0a4c8e6d2b8a0f4e2c6d8a0b4c2e6f8',
                     popular: true,
@@ -4880,7 +4803,7 @@ function App() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300">
                   <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
-                    <span className="text-cyan-300 font-bold">Method A: Ventoy (Drag & Drop)</span>
+                    <span className="text-cyan-300 font-bold">Method A (Drag & Drop)</span>
                     <p className="text-[11px] text-slate-400 leading-relaxed">
                       1. Install Ventoy on any 16GB+ USB flash drive.<br />
                       2. Copy the downloaded <code className="text-cyan-400">RiteshPC-OS.iso</code> directly to the USB drive.<br />
@@ -4888,7 +4811,7 @@ function App() {
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
-                    <span className="text-rose-300 font-bold">Method B: Rufus (Windows)</span>
+                    <span className="text-rose-300 font-bold">Method B (Windows)</span>
                     <p className="text-[11px] text-slate-400 leading-relaxed">
                       1. Select USB drive and the ISO in Rufus.<br />
                       2. Partition Scheme: <strong className="text-white">GPT</strong>, Target System: <strong className="text-white">UEFI (non-CSM)</strong>.<br />
@@ -4969,7 +4892,7 @@ function App() {
 
                   <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/20 text-[11px] space-y-1 text-slate-300">
                     <div className="text-emerald-400 font-bold">[✓] UEFI NVRAM Entry: 0001 (RITESH-PC-OS-UEFI) → Priority #1</div>
-                    <div className="text-emerald-400 font-bold">[✓] Direct DRM/KMS Framebuffer Video Splash: Sync 60 FPS</div>
+                    <div className="text-emerald-400 font-bold">[✓] Direct DRM/KMS Framebuffer Video Splash 60 FPS</div>
                     <div className="text-emerald-400 font-bold">[✓] Waydroid Android LXC Passthrough: /dev/dri/renderD128 Vulkan 1.3 Active</div>
                     <div className="text-emerald-400 font-bold">[✓] Toram SquashFS RAM Caching: 15.2 GB/s NVMe Throughput</div>
                     <div className="text-cyan-300 font-bold">System Status: 100% OPERATIONAL // ZERO COMPROMISE</div>
@@ -5053,7 +4976,7 @@ if (ReactDOM.createRoot) {
 // Trigger Lucide Icons
 setTimeout(() => {
   if (window.lucide) window.lucide.createIcons();
-}, 200);
+}, 100);
 setInterval(() => {
   if (window.lucide) window.lucide.createIcons();
 }, 1000);
