@@ -23,10 +23,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="relative pt-6 sm:pt-10 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col justify-center"
     >
       {/* Background Cyber Grid with Ambient Neon Glows */}
@@ -68,31 +68,36 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span className="text-blue-400 font-semibold">Windows compatibility subsystems</span>, and hardware UEFI/NVRAM security.
           </p>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-3">
+          {/* Symmetrically Aligned Action CTAs */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4">
+            {/* Button 1: Download ISO */}
             <button
               onClick={onOpenDownload}
-              className="relative group w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-xs sm:text-base tracking-wider uppercase transition-all shadow-[0_0_30px_rgba(0,240,255,0.4)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-3 cursor-pointer"
+              className="relative group w-full sm:w-auto min-h-[52px] px-7 sm:px-8 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(0,240,255,0.35)] hover:shadow-[0_0_35px_rgba(0,240,255,0.6)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer overflow-hidden border border-cyan-300/40"
             >
-              <Download className="w-5 h-5 text-black" />
-              <span>Download Live ISO (v1.0)</span>
+              <Download className="w-4 h-4 text-black" />
+              <span>Download Live ISO (V1.0)</span>
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform" />
             </button>
 
+            {/* Button 2: Explore Architecture */}
             <button
               onClick={onExploreArch}
-              className="w-full sm:w-auto px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl bg-[#091122]/80 hover:bg-[#0f1d38] backdrop-blur-xl border border-cyan-500/40 text-cyan-300 hover:text-white font-cyber font-bold text-xs sm:text-base tracking-wider transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-lg hover:border-cyan-400"
+              className="relative group w-full sm:w-auto min-h-[52px] px-7 sm:px-8 rounded-xl bg-[#091224]/90 hover:bg-[#0f1d38] backdrop-blur-xl border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white font-cyber font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer overflow-hidden"
             >
-              <Zap className="w-5 h-5 text-cyan-400" />
+              <Zap className="w-4 h-4 text-cyan-400 group-hover:rotate-12 transition-transform" />
               <span>Explore Architecture</span>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent transition-transform" />
             </button>
 
+            {/* Button 3: Run CLI Diagnostic */}
             <button
               onClick={onOpenTerminal}
-              className="w-full sm:w-auto px-6 py-3.5 sm:py-4 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-700 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-300 font-mono text-xs sm:text-sm tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="relative group w-full sm:w-auto min-h-[52px] px-6 sm:px-7 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/60 text-slate-300 hover:text-emerald-300 font-mono text-xs sm:text-sm tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer overflow-hidden"
             >
               <Terminal className="w-4 h-4 text-emerald-400" />
               <span>Run CLI Diagnostic</span>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent transition-transform" />
             </button>
           </div>
 

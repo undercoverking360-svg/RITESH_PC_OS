@@ -43,17 +43,13 @@ const tabOrder: PageTabId[] = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<PageTabId>('overview');
-  const [direction, setDirection] = useState<number>(0);
   const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const [terminalModalOpen, setTerminalModalOpen] = useState(false);
   const [donateModalOpen, setDonateModalOpen] = useState(false);
   const [turboMode, setTurboMode] = useState(false);
 
-  // Switch tab with directional slide-in animation tracking
+  // Switch tab with smooth vertical scrolling to top
   const handleTabChange = (newTab: PageTabId) => {
-    const currentIndex = tabOrder.indexOf(activeTab);
-    const newIndex = tabOrder.indexOf(newTab);
-    setDirection(newIndex > currentIndex ? 1 : -1);
     setActiveTab(newTab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -75,28 +71,28 @@ export default function App() {
     handleTabChange('ecosystem');
   };
 
-  // Slide-in animation variants with smooth fade
-  const slideVariants = {
-    enter: (dir: number) => ({
-      x: dir >= 0 ? 50 : -50,
+  // Ultra-Smooth Vertical Fade In-Out Transition for Tab Switching
+  const pageVariants = {
+    initial: {
       opacity: 0,
-    }),
-    center: {
-      x: 0,
+      y: 20,
+    },
+    animate: {
       opacity: 1,
+      y: 0,
       transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
-        opacity: { duration: 0.3 },
+        duration: 0.35,
+        ease: [0.22, 1, 0.36, 1],
       },
     },
-    exit: (dir: number) => ({
-      x: dir >= 0 ? -50 : 50,
+    exit: {
       opacity: 0,
+      y: -20,
       transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
+        duration: 0.22,
+        ease: [0.22, 1, 0.36, 1],
       },
-    }),
+    },
   };
 
   return (
@@ -116,16 +112,15 @@ export default function App() {
         onOpenDonate={handleOpenDonate}
       />
 
-      {/* 3. Main Animated Page Content with Directional Slide-in & Smooth Scroll Reveal */}
+      {/* 3. Main Animated Page Content with Smooth Vertical Fade In-Out */}
       <main className="relative z-10 min-h-[70vh] pt-16 sm:pt-20 pb-20">
-        <AnimatePresence mode="wait" custom={direction}>
+        <AnimatePresence mode="wait">
           {activeTab === 'overview' && (
             <motion.div
               key="page-overview"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="space-y-4 sm:space-y-6 pt-1"
             >
@@ -139,7 +134,7 @@ export default function App() {
               {/* Live Interactive GRUB Simulator Preview */}
               <motion.section
                 id="simulator"
-                initial={{ opacity: 0, y: 45 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -175,7 +170,7 @@ export default function App() {
 
               {/* Epic Call to Action */}
               <motion.section
-                initial={{ opacity: 0, y: 45 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -223,10 +218,9 @@ export default function App() {
           {activeTab === 'simulator' && (
             <motion.div
               key="page-simulator"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-8"
             >
@@ -245,10 +239,9 @@ export default function App() {
           {activeTab === 'ecosystem' && (
             <motion.div
               key="page-ecosystem"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="py-6 sm:py-10"
             >
@@ -259,10 +252,9 @@ export default function App() {
           {activeTab === 'security' && (
             <motion.div
               key="page-security"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="py-6 sm:py-10"
             >
@@ -273,10 +265,9 @@ export default function App() {
           {activeTab === 'bootflow' && (
             <motion.div
               key="page-bootflow"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="py-6 sm:py-10"
             >
@@ -287,10 +278,9 @@ export default function App() {
           {activeTab === 'downloads' && (
             <motion.div
               key="page-downloads"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="pt-6 sm:pt-10 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-8 sm:space-y-12"
             >
@@ -431,10 +421,9 @@ export default function App() {
           {activeTab === 'terminal' && (
             <motion.div
               key="page-terminal"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
               exit="exit"
               className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-6"
             >
