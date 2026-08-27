@@ -45,38 +45,38 @@ export const LiveBootloaderSimulator: React.FC<LiveBootloaderSimulatorProps> = (
   const menuItems = [
     {
       id: 0,
-      label: '1. 🐧 BOOT RITESH PC OS (Live UEFI 64-bit)',
-      badge: 'RECOMMENDED',
-      desc: 'Debian 12 + Linux 6.12 64-bit live kernel with persistent NVMe overlay',
-      mode: 'Standard Live OS',
+      label: '1. 🪟 Windows (Direct UEFI Boot Pass)',
+      badge: 'WINDOWS 11 / 10',
+      desc: 'Boots existing Windows EFI bootloader with native NVMe drive access',
+      mode: 'Windows Boot',
     },
     {
       id: 1,
-      label: '2. ⚡ DIRECT RAM BOOT (SSD to RAM - Toram Fast Mode)',
-      badge: 'ULTRA SPEED',
-      desc: 'Loads entire OS into RAM for 15GB/s read/write zero-lag execution',
-      mode: 'Toram Memory Mode',
+      label: '2. 🐧 RITESH OS (Live 4K Cybernetic Workstation)',
+      badge: 'RECOMMENDED',
+      desc: 'Debian 12 + Linux 6.12 64-bit live kernel with persistent NVMe overlay & 3-in-1 Subsystem',
+      mode: 'Ritesh OS Live',
     },
     {
       id: 2,
-      label: '3. 🤖 DIRECT ANDROID WAYDROID SUBSYSTEM',
-      badge: 'GPU ACCEL',
-      desc: 'Boots directly into LXC container with direct GPU hardware acceleration',
-      mode: 'Android Waydroid',
+      label: '3. ⚡ Shutdown (ACPI Power Off)',
+      badge: 'POWER OFF',
+      desc: 'Safe ACPI hardware power off and cache sync',
+      mode: 'Shutdown',
     },
     {
       id: 3,
-      label: '4. 🪟 WINDOWS WINE / BOTTLES PRODUCTIVITY ENGINE',
-      badge: 'DXVK 2.3',
-      desc: 'Seamless Windows app runtime environment preconfigured with gaming prefixes',
-      mode: 'Windows Compatibility',
+      label: '4. 🔄 Restart (Cold UEFI Reboot)',
+      badge: 'REBOOT',
+      desc: 'Triggers clean hardware reset and EFI bootloader reload',
+      mode: 'Restart',
     },
     {
       id: 4,
-      label: '5. 🛡️ UEFI BIOS NVRAM & MASTER RECOVERY SUITE',
-      badge: 'IMMUTABLE',
-      desc: 'Chattr +i protected boot manager & SSD health diagnostic toolkit',
-      mode: 'Hardware Recovery',
+      label: '5. ❓ Help (Hardware Diagnostic Guide)',
+      badge: 'HELP & SPECS',
+      desc: 'Displays UEFI parameters, keybindings, memory tests, and driver status',
+      mode: 'Help Menu',
     },
   ];
 
@@ -515,7 +515,7 @@ export const LiveBootloaderSimulator: React.FC<LiveBootloaderSimulatorProps> = (
                       <div className="p-3 rounded-xl bg-black/50 border border-slate-800">
                         <div className="text-slate-400 text-[10px]">BOOT DRIVE</div>
                         <div className="text-rose-400 font-bold mt-1">NVMe Persistence</div>
-                        <div className="text-slate-400 text-[10px] mt-0.5">chattr +i Lock</div>
+                        <div className="text-slate-400 text-[10px] mt-0.5">Hardware UEFI Lock</div>
                       </div>
                     </div>
 

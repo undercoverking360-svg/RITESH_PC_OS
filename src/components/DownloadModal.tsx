@@ -21,42 +21,42 @@ interface DownloadModalProps {
 }
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
-  const [selectedEdition, setSelectedEdition] = useState<string>('ultimate');
+  const [selectedEdition, setSelectedEdition] = useState<string>('stable');
   const [downloadStarted, setDownloadStarted] = useState(false);
-  const [activeGuide, setActiveGuide] = useState<'rufus' | 'ventoy' | 'dd'>('ventoy');
+  const [activeGuide, setActiveGuide] = useState<'ventoy' | 'rufus' | 'etcher'>('ventoy');
 
   if (!isOpen) return null;
 
   const editions = [
     {
-      id: 'ultimate',
-      name: 'RITESH PC OS v2.0 - Ultimate 3-in-1 Edition',
-      badge: 'MOST POPULAR',
-      size: '4.2 GB',
-      build: 'Build 2026.08-UEFI',
-      kernel: 'Linux 6.12.0-custom-x86_64',
-      desc: 'The complete 3-in-1 powerhouse: Debian 12 Base, 4K Frosted Glass UI, Waydroid Android Subsystem, and Bottles Windows Wine Engine.',
-      isoName: 'RiteshPC-OS-v2.0-Ultimate-3in1-x86_64.iso',
+      id: 'light',
+      name: 'RITESH PC OS - Light V1.0',
+      badge: 'LIGHT V1.0',
+      size: '2.8 GB',
+      build: 'Build 2026.08-Light',
+      kernel: 'Linux 6.12.0-light-x86_64',
+      desc: 'Super lightweight & optimized edition with core Debian 12 utilities, fast RAM boot, and minimal resource footprint.',
+      isoName: 'Ritesh-PC-OS-Light-V1.0.iso',
     },
     {
-      id: 'toram',
-      name: 'RITESH PC OS v2.0 - Toram Ultra-Fast RAM Edition',
-      badge: '15GB/s MEMORY SPEED',
+      id: 'stable',
+      name: 'RITESH PC OS - Stable V1.0',
+      badge: 'STABLE V1.0 (RECOMMENDED)',
       size: '3.6 GB',
-      build: 'Build 2026.08-Toram',
-      kernel: 'Linux 6.12.0-toram-x86_64',
-      desc: 'Pre-tuned to load the entire operating system into RAM on boot. Runs 100% in memory with zero storage latency.',
-      isoName: 'RiteshPC-OS-v2.0-Toram-RAM-x86_64.iso',
+      build: 'Build 2026.08-Stable',
+      kernel: 'Linux 6.12.0-stable-x86_64',
+      desc: 'The rock-solid 3-in-1 flagship powerhouse: Toram ultra-speed RAM mode, Waydroid Android gaming, and Windows Wine engine.',
+      isoName: 'Ritesh-PC-OS-Stable-V1.0.iso',
     },
     {
-      id: 'forensic',
-      name: 'RITESH PC OS v2.0 - Cyber Security & Forensic Edition',
-      badge: 'KALI PEN-TEST SUITE',
+      id: 'everything',
+      name: 'RITESH PC OS - Everything Edition',
+      badge: 'CYBER SECURITY & FORENSIC',
       size: '4.9 GB',
       build: 'Build 2026.08-Sec',
       kernel: 'Linux 6.12.0-hardened-x86_64',
-      desc: 'Hardened kernel with Wi-Fi packet injection, Bluetooth analysis, network scanner daemons, and encrypted Ramdisk vaults.',
-      isoName: 'RiteshPC-OS-v2.0-CyberSec-Forensic-x86_64.iso',
+      desc: 'The complete cyber suite with Kali penetration testing tools, Wi-Fi packet analysis, sandboxed dev tools, and network diagnostics.',
+      isoName: 'Ritesh-PC-OS-Everything.iso',
     },
   ];
 
@@ -75,16 +75,15 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
       // Confetti fallback
     }
 
-    // Create synthetic download trigger for the ISO bundle descriptor
     const blob = new Blob(
       [
-        `# RITESH PC OS v2.0 OFFICIAL DOWNLOAD METADATA\n` +
+        `# RITESH PC OS V1.0 OFFICIAL DOWNLOAD METADATA\n` +
           `File: ${current.isoName}\n` +
           `Edition: ${current.name}\n` +
           `Kernel: ${current.kernel}\n` +
           `Mirror: Global High-Speed CDN Edge Node #1\n` +
           `Author: Riteshguru\n` +
-          `Instructions: Flash via Ventoy or Rufus in GPT/UEFI mode.\n`,
+          `Instructions: Flash via Ventoy, Rufus, or Balena Etcher in GPT/UEFI mode.\n`,
       ],
       { type: 'text/plain' }
     );
@@ -113,10 +112,10 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             </div>
             <div>
               <span className="text-[10px] sm:text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">
-                OFFICIAL ISO DISTRIBUTION
+                OFFICIAL ISO DISTRIBUTION (V1.0)
               </span>
               <h3 className="font-cyber font-black text-lg sm:text-2xl text-white">
-                Download RITESH PC OS (v2.0)
+                Download RITESH PC OS (V1.0)
               </h3>
             </div>
           </div>
@@ -153,7 +152,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                       </span>
                       <span className="text-xs font-mono text-cyan-400 font-bold">{ed.size}</span>
                     </div>
-                    <div className="font-cyber font-bold text-sm text-white">{ed.name.split('-')[1]}</div>
+                    <div className="font-cyber font-bold text-sm text-white">{ed.name}</div>
                     <div className="text-[11px] text-slate-400 line-clamp-2 mt-1">{ed.desc}</div>
                   </div>
                   <div className="text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800/80">
@@ -171,7 +170,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             <div>
               <div className="font-cyber font-bold text-base sm:text-lg text-white break-words">{current.isoName}</div>
               <div className="text-xs font-mono text-cyan-400">
-                UEFI 64-bit • Direct USB / NVMe Live Boot • 5-Menu GRUB Suite Included
+                UEFI / NVRAM 64-bit • Direct USB / NVMe Live Boot • Master 5-Menu GRUB Suite Included
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -209,7 +208,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               Flashing &amp; Live Boot Guide:
             </span>
             <div className="flex gap-2 text-xs font-mono">
-              {(['ventoy', 'rufus', 'dd'] as const).map((method) => (
+              {(['ventoy', 'rufus', 'etcher'] as const).map((method) => (
                 <button
                   key={method}
                   onClick={() => setActiveGuide(method)}
@@ -219,7 +218,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                       : 'bg-black/40 text-slate-500 hover:text-slate-300'
                   }`}
                 >
-                  {method.toUpperCase()}
+                  {method === 'etcher' ? 'BALENA ETCHER' : method.toUpperCase()}
                 </button>
               ))}
             </div>
@@ -227,21 +226,57 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
 
           <div className="p-4 rounded-xl bg-black/40 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
             {activeGuide === 'ventoy' && (
-              <div>
-                <span className="text-cyan-400 font-bold">1. Recommended (Ventoy MultiBoot):</span> Install Ventoy to a USB flash drive (16GB+), then simply drag and drop the <code className="text-rose-300">RiteshPC-OS.iso</code> into the USB drive. Boot in UEFI mode.
+              <div className="space-y-2">
+                <div>
+                  <span className="text-cyan-400 font-bold">1. Recommended (Ventoy MultiBoot):</span> Install Ventoy to a USB flash drive (16GB+), then simply drag and drop the <code className="text-rose-300">Ritesh-PC-OS.iso</code> into the USB drive. Boot in UEFI mode.
+                </div>
+                <div className="pt-1">
+                  <a
+                    href="https://www.ventoy.net/en/download.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:bg-slate-800 transition-colors text-[11px]"
+                  >
+                    <span>Download Ventoy Official Flasher</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
             )}
             {activeGuide === 'rufus' && (
-              <div>
-                <span className="text-cyan-400 font-bold">2. Rufus (Windows Flasher):</span> Open Rufus, select the USB drive and ISO. Choose Partition Scheme: <code className="text-cyan-300">GPT</code>, Target System: <code className="text-cyan-300">UEFI (non-CSM)</code>. Flash in <code className="text-yellow-300">ISO mode</code> (or DD mode).
+              <div className="space-y-2">
+                <div>
+                  <span className="text-cyan-400 font-bold">2. Rufus (Windows Flasher):</span> Open Rufus, select the USB drive and ISO. Choose Partition Scheme: <code className="text-cyan-300">GPT</code>, Target System: <code className="text-cyan-300">UEFI (non-CSM)</code>. Flash in <code className="text-yellow-300">ISO mode</code>.
+                </div>
+                <div className="pt-1">
+                  <a
+                    href="https://rufus.ie/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:bg-slate-800 transition-colors text-[11px]"
+                  >
+                    <span>Download Rufus Windows Flasher</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
             )}
-            {activeGuide === 'dd' && (
-              <div>
-                <span className="text-cyan-400 font-bold">3. Linux Terminal DD CLI:</span>{' '}
-                <code className="text-emerald-400 bg-slate-950 p-1 rounded break-all">
-                  sudo dd if=RiteshPC-OS.iso of=/dev/sdX bs=4M status=progress oflag=sync
-                </code>
+            {activeGuide === 'etcher' && (
+              <div className="space-y-2">
+                <div>
+                  <span className="text-cyan-400 font-bold">3. Balena Etcher (Cross-Platform Flasher):</span> Select the downloaded ISO file, choose your target USB drive, and click Flash! Works flawlessly on Windows, Mac, and Linux.
+                </div>
+                <div className="pt-1">
+                  <a
+                    href="https://etcher.balena.io/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:bg-slate-800 transition-colors text-[11px]"
+                  >
+                    <span>Download Balena Etcher Official Flasher</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
             )}
           </div>

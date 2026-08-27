@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Shield,
   Video,
-  Lock,
+  Share2,
   Trash2,
   Cpu,
   Zap,
@@ -16,7 +16,8 @@ import {
   Activity,
   Key,
   Database,
-  X
+  X,
+  Globe
 } from 'lucide-react';
 
 interface ToolDetailModalProps {
@@ -30,6 +31,7 @@ interface ToolDetailModalProps {
     specs: string[];
     terminalCommand: string;
     terminalOutput: string;
+    link?: string;
   } | null;
   onClose: () => void;
 }
@@ -52,44 +54,56 @@ const ToolDetailModal: React.FC<ToolDetailModalProps> = ({ tool, onClose }) => {
               <Icon className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-cyan-400 font-bold tracking-widest uppercase">
-                {tool.badge}
+              <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">
+                {tool.category}
               </span>
-              <h3 className="font-cyber font-black text-xl text-white">{tool.title}</h3>
+              <h3 className="font-cyber font-black text-2xl text-white">{tool.title}</h3>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <p className="text-sm text-slate-300 leading-relaxed font-normal">
-          {tool.description}
-        </p>
+        <p className="text-slate-300 text-sm leading-relaxed">{tool.description}</p>
 
-        {/* Technical Specifications */}
+        {tool.link && (
+          <div className="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-between">
+            <span className="text-xs font-mono text-cyan-300">Live Web Sharing Portal:</span>
+            <a
+              href={tool.link}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-cyber font-bold text-xs transition-colors"
+            >
+              <span>{tool.link.replace('https://', '')}</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        )}
+
         <div className="space-y-2">
           <div className="text-xs font-mono text-slate-400 uppercase tracking-wider font-bold">
-            Hardware & Kernel Specifications:
+            Technical Architecture Specifications:
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2">
             {tool.specs.map((spec, i) => (
-              <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-black/40 border border-slate-800 text-xs font-mono text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+              <div key={i} className="flex items-start gap-2 text-xs font-mono text-slate-300">
+                <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
                 <span>{spec}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Live Command Diagnostic Box */}
-        <div className="p-4 rounded-xl bg-black/80 border border-cyan-500/20 font-mono text-xs space-y-2">
+        {/* Live Terminal Output Box */}
+        <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/20 font-mono text-xs space-y-2">
           <div className="text-slate-500 flex items-center justify-between">
             <span>Terminal CLI Diagnostic:</span>
-            <span className="text-[10px] text-emerald-400">● IMMUTABLE ACTIVE</span>
+            <span className="text-[10px] text-emerald-400">● LIVE RUNTIME</span>
           </div>
           <div className="text-cyan-400 font-bold">$ {tool.terminalCommand}</div>
           <pre className="text-slate-300 whitespace-pre-wrap leading-relaxed text-[11px] bg-slate-950 p-2.5 rounded-lg border border-slate-900 overflow-x-auto">
@@ -100,7 +114,7 @@ const ToolDetailModal: React.FC<ToolDetailModalProps> = ({ tool, onClose }) => {
         <div className="flex justify-end pt-2">
           <button
             onClick={onClose}
-            className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-cyber font-bold text-xs tracking-wider uppercase transition-colors"
+            className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-cyber font-bold text-xs tracking-wider uppercase transition-colors cursor-pointer"
           >
             Close Inspector
           </button>
@@ -117,22 +131,22 @@ export const AdvancedToolingGrid: React.FC = () => {
     {
       id: 'grub-suite',
       title: 'Master 5-Menu GRUB Suite',
-      badge: 'IMMUTABLE CHATTR +I',
-      category: 'BOOT SECURITY',
+      badge: 'RITESH FROST & METALLIC LOGO',
+      category: 'BOOT COMPOSITOR',
       icon: Shield,
       glow: 'cyan',
       description:
-        'Customized UEFI Boot Manager with automatic BIOS NVRAM sync (Priority #1). Protected by file system immutable flags (chattr +i /boot/grub/grub.cfg) to prevent OS overwrites, malware tampering, and partition corruption.',
+        'Customized UEFI Boot Manager with automatic BIOS NVRAM sync (Priority #1) and sleek Ritesh Frost theme with 3D metallic logo. Includes 5 clean unified menu options: 1-Windows, 2-Ritesh OS, 3-Shutdown, 4-Restart, and 5-Help.',
       specs: [
-        'Motherboard BIOS NVRAM auto-injection via efibootmgr',
-        'chattr +i immutable attribute lock on all boot config files',
-        'Direct RAM Fast Boot (Toram mode: SSD to RAM pre-fetch)',
-        'Automatic dual-boot detection (Windows 11 / Kali / Arch / MX)',
-        'Built-in memtest86+ hardware memory diagnostics',
+        '1. 🪟 Windows (Direct UEFI EFI Pass to Windows Boot Manager)',
+        '2. 🐧 RITESH OS (Live 4K Cybernetic Workstation with NVMe Persistence)',
+        '3. ⚡ Shutdown System (Clean ACPI Hardware Power Off)',
+        '4. 🔄 Restart System (Cold UEFI Hardware Reset & Reload)',
+        '5. ❓ Help & Hardware Specs (Diagnostic & Memory Information)',
       ],
       terminalCommand: 'sudo ritesh-grub --status',
       terminalOutput:
-        '[OK] NVRAM Entry: 0001 (RITESH-PC-OS-UEFI) -> Priority #1\n[OK] Immutable flag check: /boot/efi/EFI/BOOT/BOOTX64.EFI (+i immutable active)\n[OK] Toram fast caching module loaded (15.2 GB/s NVMe bus detected)',
+        '[OK] NVRAM Entry: 0001 (RITESH-PC-OS-UEFI) -> Priority #1\n[OK] Ritesh Frost Theme: 4K Metallic Logo Compositor Loaded\n[OK] 5-Menu Suite: [Windows | Ritesh OS | Shutdown | Restart | Help]\n[OK] Toram fast caching module loaded (15.2 GB/s NVMe bus detected)',
     },
     {
       id: 'video-bootloader',
@@ -156,23 +170,24 @@ export const AdvancedToolingGrid: React.FC = () => {
     },
     {
       id: 'vaultpulse',
-      title: 'VaultPulse Security Matrix',
-      badge: 'MILITARY ENCRYPTION',
-      category: 'KERNEL INTEGRITY',
-      icon: Lock,
+      title: 'VaultPulse Sharing Matrix',
+      badge: 'P2P FILE SHARING HUB',
+      category: 'P2P SYNC & TRANSFERS',
+      icon: Share2,
       glow: 'cyan',
+      link: 'https://share.welcomeriteshguru.in',
       description:
-        'Real-time cryptographic process isolation, LUKS2 volume encryption, and 1-touch profile lockdown. Safeguards developer keys, tokens, and browser credentials against unauthorized memory dumps.',
+        'High-speed encrypted P2P workspace and direct file transfer sharing system. Send large ISO files, project code, media, and APKs directly between PC and mobile devices at maximum LAN/Wi-Fi speeds without cloud upload limits. Live hub: share.welcomeriteshguru.in',
       specs: [
-        'Hardware TPM 2.0 automatic key derivation and auto-unlock',
-        'LUKS2 AES-XTS-PLAIN64 full disk and swap encryption',
-        'Real-time process memory scrubber to eliminate cold-boot attacks',
-        'Instant Profile Quarantine hotkey (F12) to lock system in 0.1s',
-        'Pre-installed with Kali forensic audit suite and sandboxed Tor routing',
+        'Direct browser-to-PC WebRTC encrypted P2P data transfer',
+        'Instant multi-device pairing via QR code or short link',
+        'Zero server-side file retention for maximum privacy',
+        'Live integrated sharing hub at share.welcomeriteshguru.in',
+        'High-throughput LAN transfer speeds up to 1.2 GB/s',
       ],
-      terminalCommand: 'vaultpulse --verify-integrity',
+      terminalCommand: 'vaultpulse --share --hub share.welcomeriteshguru.in',
       terminalOutput:
-        '[OK] TPM 2.0 Chip: Detected & Enrolled\n[OK] Memory Integrity: Verified (Zero rogue ptrace hooks)\n[OK] Profile Status: ENCRYPTED // 4096-bit RSA keys active',
+        '[OK] Sharing Hub Connected: https://share.welcomeriteshguru.in\n[OK] Encrypted P2P Tunnel: Active (Zero Cloud Retention)\n[OK] Max Transfer Speed: 1.2 GB/s (Local Gigabit LAN/Wi-Fi 6)\n[OK] Web Portal: Ready for Instant Peer-to-Peer Sync',
     },
     {
       id: 'cleaner-suite',
@@ -201,102 +216,83 @@ export const AdvancedToolingGrid: React.FC = () => {
       id="features"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#040609] overflow-hidden"
     >
       {/* Background Cyber Glows */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-rose-500/5 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 space-y-12">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono uppercase tracking-widest">
-            <Shield className="w-3.5 h-3.5 text-rose-400" />
-            Hardened Kernel & Tooling Architecture
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            Core Cybernetic Tooling
           </div>
           <h2 className="font-cyber font-black text-3xl sm:text-4xl md:text-5xl text-white tracking-tight">
-            Engineered For Absolute Power, <br />
-            <span className="bg-gradient-to-r from-rose-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-              Speed & Hardware Dominance.
+            Engineered for Security, <br />
+            <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-rose-400 bg-clip-text text-transparent">
+              Speed &amp; Seamless P2P Sharing.
             </span>
           </h2>
           <p className="text-slate-300 text-sm sm:text-base font-normal">
-            Every layer from the UEFI firmware POST to the graphical user environment has been custom
-            architected for uncompromised reliability and zero system degradation.
+            Discover the custom hardware tools, Master 5-menu GRUB suite, and P2P workspace sharing engines integrated into RITESH PC OS.
           </p>
         </div>
 
-        {/* 4-Card Master Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {tools.map((tool) => {
-            const Icon = tool.icon;
+        {/* Tools 4-Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {tools.map((t) => {
+            const Icon = t.icon;
             return (
-              <motion.div
-                key={tool.id}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.3 }}
-                className="group relative flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-[#080d19]/80 backdrop-blur-2xl border border-cyan-500/20 hover:border-cyan-400/50 shadow-2xl transition-all duration-300 cursor-pointer"
-                onClick={() => setSelectedTool(tool)}
+              <div
+                key={t.id}
+                onClick={() => setSelectedTool(t)}
+                className="group relative p-6 sm:p-8 rounded-3xl bg-[#080e1b]/80 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer flex flex-col justify-between space-y-6"
               >
-                {/* Glowing Top Edge Line */}
-                <div className="absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent group-hover:via-cyan-400 transition-all" />
-
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="p-3.5 rounded-2xl bg-[#0a1224] border border-cyan-500/30 text-cyan-400 group-hover:scale-110 transition-transform">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-xs font-mono px-3 py-1 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 font-bold">
-                      {tool.badge}
+                    <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-cyan-300 font-bold">
+                      {t.badge}
                     </span>
+                    <span className="text-xs font-mono text-slate-500 uppercase">{t.category}</span>
                   </div>
 
-                  <div>
-                    <span className="text-[11px] font-mono text-cyan-400/80 uppercase tracking-widest">
-                      {tool.category}
-                    </span>
-                    <h3 className="font-cyber font-black text-xl sm:text-2xl text-white group-hover:text-cyan-300 transition-colors mt-1">
-                      {tool.title}
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 group-hover:scale-110 transition-transform">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-cyber font-black text-xl sm:text-2xl text-white group-hover:text-cyan-300 transition-colors">
+                      {t.title}
                     </h3>
                   </div>
 
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                    {tool.description}
+                  <p className="text-slate-400 text-xs leading-relaxed font-mono line-clamp-3">
+                    {t.description}
                   </p>
-
-                  {/* Bullet Highlights */}
-                  <div className="space-y-2 pt-2">
-                    {tool.specs.slice(0, 3).map((spec, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs font-mono text-slate-300">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
-                        <span className="truncate">{spec}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
-                {/* Card Action Link */}
-                <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-cyan-400 group-hover:text-cyan-300">
-                  <span className="flex items-center gap-1.5 font-bold">
-                    <span>Inspect Blueprint & CLI</span>
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
+                  <span className="text-cyan-400 font-bold flex items-center gap-1">
+                    <span>Inspect Tool Specs</span>
+                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
-                  <span className="text-slate-500 text-[11px]">Click to open</span>
+                  <span className="text-slate-500 text-[11px]">[CLICK TO OPEN]</span>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
-      </div>
 
-      {/* Tool Detail Modal */}
-      <AnimatePresence>
-        {selectedTool && (
-          <ToolDetailModal tool={selectedTool} onClose={() => setSelectedTool(null)} />
-        )}
-      </AnimatePresence>
+        {/* Interactive Tool Modal */}
+        <AnimatePresence>
+          {selectedTool && (
+            <ToolDetailModal tool={selectedTool} onClose={() => setSelectedTool(null)} />
+          )}
+        </AnimatePresence>
+      </div>
     </motion.section>
   );
 };

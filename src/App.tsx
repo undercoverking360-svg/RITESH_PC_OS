@@ -26,7 +26,8 @@ import {
   HardDrive,
   Copy,
   Check,
-  Radio
+  Radio,
+  ExternalLink
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -138,10 +139,10 @@ export default function App() {
               {/* Live Interactive GRUB Simulator Preview */}
               <motion.section
                 id="simulator"
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 45 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative"
               >
                 <div className="max-w-7xl mx-auto space-y-5 sm:space-y-6">
@@ -174,10 +175,10 @@ export default function App() {
 
               {/* Epic Call to Action */}
               <motion.section
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 45 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#050811] via-[#081224] to-[#040609] overflow-hidden"
               >
                 <div className="max-w-5xl mx-auto text-center relative z-10 space-y-5 sm:space-y-6">
@@ -203,7 +204,7 @@ export default function App() {
                       className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-black text-xs sm:text-base tracking-wider uppercase shadow-[0_0_30px_rgba(0,240,255,0.5)] transform hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer"
                     >
                       <Download className="w-5 h-5 text-black" />
-                      <span>Download Live ISO (v2.0)</span>
+                      <span>Download Live ISO (V1.0)</span>
                     </button>
 
                     <button
@@ -234,7 +235,7 @@ export default function App() {
                   UEFI GRUB 2 &amp; 4K Frosted Glass Sandbox
                 </h1>
                 <p className="text-slate-300 text-xs sm:text-sm font-mono">
-                  Interact directly with the custom 5-menu GRUB bootloader. Use keyboard Arrow keys or on-screen buttons, then press Enter to trigger the 7-second video splash transition to the live desktop.
+                  Interact directly with the custom Master 5-menu GRUB bootloader. Use keyboard Arrow keys or on-screen buttons, then press Enter to trigger the 7-second video splash transition to the live desktop.
                 </p>
               </div>
               <LiveBootloaderSimulator onOpenDownload={handleOpenDownload} />
@@ -295,10 +296,10 @@ export default function App() {
             >
               <div className="text-center max-w-3xl mx-auto space-y-3">
                 <h1 className="font-cyber font-black text-2xl sm:text-5xl text-white">
-                  Download RITESH PC OS (v2.0)
+                  Download RITESH PC OS (V1.0)
                 </h1>
                 <p className="text-slate-300 text-xs sm:text-sm font-mono">
-                  Select your desired ISO flavor. All builds include UEFI 64-bit Secure Boot compatibility, NVMe SSD TRIM discard schedulers, and Master GRUB with immutable chattr +i.
+                  Select your desired ISO flavor. All builds include UEFI / NVRAM 64-bit Secure Boot compatibility, NVMe SSD TRIM discard schedulers, and Master 5-Menu GRUB Suite.
                 </p>
               </div>
 
@@ -306,30 +307,27 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
                 {[
                   {
-                    title: 'Ultimate 3-in-1 Edition',
-                    badge: 'FLAGSHIP',
-                    size: '4.2 GB',
-                    desc: 'The complete powerhouse: Debian 12 Bookworm, Waydroid 13 APK gaming, and Bottles / Wine 9.0 Windows compatibility.',
-                    kernel: '6.12.0-custom-x86_64',
-                    sha: '9f8a3c4e7b2d189af61e89a5c3e7d1b2fa4c8e6d2b8a0f4e2c6d8a0b4c2e6f8',
-                    popular: true,
-                  },
-                  {
-                    title: 'Toram Fast-RAM Edition',
-                    badge: '15 GB/s SPEED',
-                    size: '3.6 GB',
-                    desc: 'Pre-configured to copy the full filesystem into RAM at boot for zero storage latency and infinite responsiveness.',
-                    kernel: '6.12.0-toram-x86_64',
-                    sha: '3c8b1c4e9f2a0076a5b4c3d2e1f8a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2',
+                    title: 'RITESH PC OS - Light V1.0',
+                    badge: 'LIGHT V1.0',
+                    size: '2.8 GB',
+                    desc: 'Super lightweight & optimized edition with core Debian 12 utilities, fast RAM boot, and minimal resource footprint.',
+                    kernel: '6.12.0-light-x86_64',
                     popular: false,
                   },
                   {
-                    title: 'Forensic & Security Edition',
-                    badge: 'AUDIT SUITE',
+                    title: 'RITESH PC OS - Stable V1.0',
+                    badge: 'STABLE V1.0 (RECOMMENDED)',
+                    size: '3.6 GB',
+                    desc: 'The rock-solid 3-in-1 flagship powerhouse: Toram ultra-speed RAM mode, Waydroid Android gaming, and Windows Wine engine.',
+                    kernel: '6.12.0-stable-x86_64',
+                    popular: true,
+                  },
+                  {
+                    title: 'RITESH PC OS - Everything Edition',
+                    badge: 'CYBER SECURITY & FORENSIC',
                     size: '4.9 GB',
-                    desc: 'Hardened Linux kernel loaded with Wi-Fi monitor mode, Bluetooth packet analysis, and encrypted memory vaults.',
+                    desc: 'The complete cyber suite with Kali penetration testing tools, Wi-Fi packet analysis, sandboxed dev tools, and network diagnostics.',
                     kernel: '6.12.0-hardened-x86_64',
-                    sha: '7a1b2c3e4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4c5',
                     popular: false,
                   },
                 ].map((item, idx) => (
@@ -380,23 +378,49 @@ export default function App() {
               <div className="p-5 sm:p-6 rounded-3xl bg-[#080d19]/90 border border-cyan-500/20 font-mono text-xs space-y-4">
                 <div className="text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-2">
                   <Zap className="w-4 h-4" />
-                  USB Flashing Instructions (Ventoy &amp; Rufus):
+                  USB Flashing Instructions (Ventoy, Rufus &amp; Balena Etcher):
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
                   <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
-                    <div className="text-cyan-300 font-bold">Method A: Ventoy (Drag &amp; Drop)</div>
+                    <div className="text-cyan-300 font-bold">Method A: Ventoy (MultiBoot)</div>
                     <div className="text-[11px] text-slate-400 leading-relaxed">
-                      1. Install Ventoy on any 16GB+ USB flash drive.<br />
-                      2. Copy the downloaded <code>.iso</code> directly to the USB drive.<br />
-                      3. Reboot PC and select USB in UEFI Boot Menu.
+                      1. Install Ventoy to a USB drive (16GB+).<br />
+                      2. Drag &amp; drop the downloaded ISO file.<br />
+                      3. Reboot and select USB in UEFI Boot Menu.
+                    </div>
+                    <div className="pt-1">
+                      <a href="https://www.ventoy.net/en/download.html" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline flex items-center gap-1 text-[10px]">
+                        <span>Download Ventoy</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
                     </div>
                   </div>
                   <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
                     <div className="text-cyan-300 font-bold">Method B: Rufus (Windows)</div>
                     <div className="text-[11px] text-slate-400 leading-relaxed">
-                      1. Select USB drive and the ISO in Rufus.<br />
-                      2. Partition Scheme: <strong>GPT</strong>, Target System: <strong>UEFI (non-CSM)</strong>.<br />
-                      3. Click Start and flash in ISO or DD image mode.
+                      1. Select USB drive and ISO in Rufus.<br />
+                      2. Partition: <strong>GPT</strong>, Target: <strong>UEFI</strong>.<br />
+                      3. Flash in <strong>ISO mode</strong>.
+                    </div>
+                    <div className="pt-1">
+                      <a href="https://rufus.ie/" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline flex items-center gap-1 text-[10px]">
+                        <span>Download Rufus</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                  <div className="p-4 rounded-xl bg-black/50 border border-slate-800 space-y-2">
+                    <div className="text-cyan-300 font-bold">Method C: Balena Etcher</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      1. Select downloaded ISO.<br />
+                      2. Select target USB drive.<br />
+                      3. Click Flash! (Win/Mac/Linux).
+                    </div>
+                    <div className="pt-1">
+                      <a href="https://etcher.balena.io/" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline flex items-center gap-1 text-[10px]">
+                        <span>Download Etcher</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -447,7 +471,7 @@ export default function App() {
                 </div>
 
                 <div className="flex-1 p-4 sm:p-5 overflow-y-auto font-mono text-xs space-y-3 cyber-grid">
-                  <div className="text-cyan-400 font-bold">RITESH PC OS v2.0 (Debian 12 Bookworm / Linux Kernel 6.12.0-x86_64)</div>
+                  <div className="text-cyan-400 font-bold">RITESH PC OS V1.0 (Debian 12 Bookworm / Linux Kernel 6.12.0-x86_64)</div>
                   <div className="text-slate-300">Type commands or click quick action pills below:</div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
@@ -455,7 +479,7 @@ export default function App() {
                       { cmd: 'neofetch', label: '📊 neofetch' },
                       { cmd: 'waydroid', label: '🤖 waydroid status' },
                       { cmd: 'wine', label: '🪟 wine 9.0 test' },
-                      { cmd: 'grub', label: '🛡️ grub chattr +i' },
+                      { cmd: 'share', label: '🌐 share.welcomeriteshguru.in' },
                     ].map((k) => (
                       <button
                         key={k.cmd}
@@ -472,6 +496,7 @@ export default function App() {
                     <div>[✓] Direct DRM/KMS Framebuffer Video Splash: Sync 60 FPS</div>
                     <div>[✓] Waydroid Android LXC Passthrough: /dev/dri/renderD128 Vulkan 1.3 Active</div>
                     <div>[✓] Toram SquashFS RAM Caching: 15.2 GB/s NVMe Throughput</div>
+                    <div>[✓] VaultPulse Sharing Matrix Hub: share.welcomeriteshguru.in Active</div>
                     <div className="text-cyan-300 font-bold">SYSTEM STATUS: 100% OPERATIONAL // ZERO COMPROMISE</div>
                   </div>
 
@@ -507,7 +532,7 @@ export default function App() {
           title="Download ISO"
         >
           <Download className="w-5 h-5 text-black" />
-          <span className="font-cyber font-extrabold text-xs hidden sm:inline-block">ISO v2.0</span>
+          <span className="font-cyber font-extrabold text-xs hidden sm:inline-block">ISO V1.0</span>
         </button>
       </div>
 
