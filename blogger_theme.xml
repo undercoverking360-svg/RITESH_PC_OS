@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:version='2' class='dark' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
   <meta charset='UTF-8'/>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=5.0' name='viewport'/>
@@ -8,17 +8,13 @@
   <meta content='Ultra-futuristic cybernetic OS engineered with 4K Frosted Glass UI, 3-in-1 combo (Debian Bookworm 12 Linux + Android Waydroid + Windows Layer), 15s instant live boot, and immutable BIOS security.' name='description'/>
   <meta content='#040609' name='theme-color'/>
 
-  <!-- Google Cyber Fonts -->
   <link href='https://fonts.googleapis.com' rel='preconnect'/>
   <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
-  <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&amp;family=Orbitron:wght@400;600;700;800;900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Rajdhani:wght@500;600;700&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Orbitron:wght@400;700;900&amp;family=Space+Grotesk:wght@400;600;700&amp;family=Rajdhani:wght@600;700&amp;display=swap' rel='stylesheet'/>
 
-  <!-- External Compiled Production CSS via CDN -->
   <link href='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@main/dist/assets/index.css' rel='stylesheet'/>
 
-  <!-- Blogger Skin Stylesheet -->
   <b:skin><![CDATA[
-    /* Hide ONLY Blogger admin widgets, NEVER user navigation */
     #b-navbar, .widget-item-control, .quickedit, .status-msg-wrap, .Blog, .b-mobile { display: none !important; }
     html, body {
       margin: 0 !important;
@@ -28,10 +24,6 @@
       font-family: 'Space Grotesk', system-ui, sans-serif !important;
       overflow-x: hidden !important;
     }
-  ]]></b:skin>
-
-  <style>
-    /* Ensure Header & Navbar Flexbox is NEVER overridden by Blogger */
     header {
       display: flex !important;
       flex-direction: row !important;
@@ -46,32 +38,21 @@
       z-index: 9999 !important;
       background-color: rgba(8, 11, 16, 0.95) !important;
       backdrop-filter: blur(20px) !important;
-      -webkit-backdrop-filter: blur(20px) !important;
       border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
       padding-left: 1rem !important;
       padding-right: 1rem !important;
     }
-    
-    @media (min-width: 768px) {
-      header nav {
-        display: flex !important;
-      }
-    }
-  </style>
+  ]]></b:skin>
 </head>
 <body class='bg-[#040609] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden'>
-
-  <!-- React 19 Root App Container -->
   <div id='root'></div>
 
-  <!-- Mandatory Blogger Section & Widget (Hidden from UI) -->
   <div style='display:none;'>
-    <b:section id='main' maxwidgets='1' showaddelement='no'>
+    <b:section id='main' showaddelement='no'>
       <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2' visible='false'/>
     </b:section>
   </div>
 
-  <!-- Complete Pre-Compiled React Production Bundle via jsDelivr CDN -->
   <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/undercoverking360-svg/RITESH_PC_OS@main/dist/assets/index.js' type='module'></script>
 </body>
 </html>
