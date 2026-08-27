@@ -359,9 +359,6 @@ export default function App() {
                       <div className="text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-800">
                         Kernel: <span className="text-slate-300">{item.kernel}</span>
                       </div>
-                      <div className="text-[10px] font-mono text-slate-400 break-all select-all pt-1">
-                        SHA256: <span className="text-cyan-300 font-bold">{item.sha}</span>
-                      </div>
                     </div>
 
                     <button

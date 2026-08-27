@@ -4,8 +4,6 @@ import confetti from 'canvas-confetti';
 import {
   Download,
   X,
-  Copy,
-  Check,
   HardDrive,
   Shield,
   Zap,
@@ -24,7 +22,6 @@ interface DownloadModalProps {
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   const [selectedEdition, setSelectedEdition] = useState<string>('ultimate');
-  const [copiedSha, setCopiedSha] = useState(false);
   const [downloadStarted, setDownloadStarted] = useState(false);
   const [activeGuide, setActiveGuide] = useState<'rufus' | 'ventoy' | 'dd'>('ventoy');
 
@@ -38,7 +35,6 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
       size: '4.2 GB',
       build: 'Build 2026.08-UEFI',
       kernel: 'Linux 6.12.0-custom-x86_64',
-      sha256: '9f8a3c4e7b2d1094f61e89a5c3e7d1b2f0a4c8e6d2b8a0f4e2c6d8a0b4c2e6f8',
       desc: 'The complete 3-in-1 powerhouse: Debian 12 Base, 4K Frosted Glass UI, Waydroid Android Subsystem, and Bottles Windows Wine Engine.',
       isoName: 'RiteshPC-OS-v2.0-Ultimate-3in1-x86_64.iso',
     },
@@ -49,7 +45,6 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
       size: '3.6 GB',
       build: 'Build 2026.08-Toram',
       kernel: 'Linux 6.12.0-toram-x86_64',
-      sha256: '3d8b1c4e9f2a0076a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2',
       desc: 'Pre-tuned to load the entire operating system into RAM on boot. Runs 100% in memory with zero storage latency.',
       isoName: 'RiteshPC-OS-v2.0-Toram-RAM-x86_64.iso',
     },
@@ -60,7 +55,6 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
       size: '4.9 GB',
       build: 'Build 2026.08-Sec',
       kernel: 'Linux 6.12.0-hardened-x86_64',
-      sha256: '7a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',
       desc: 'Hardened kernel with Wi-Fi packet injection, Bluetooth analysis, network scanner daemons, and encrypted Ramdisk vaults.',
       isoName: 'RiteshPC-OS-v2.0-CyberSec-Forensic-x86_64.iso',
     },
@@ -88,7 +82,6 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
           `File: ${current.isoName}\n` +
           `Edition: ${current.name}\n` +
           `Kernel: ${current.kernel}\n` +
-          `SHA256: ${current.sha256}\n` +
           `Mirror: Global High-Speed CDN Edge Node #1\n` +
           `Author: Riteshguru\n` +
           `Instructions: Flash via Ventoy or Rufus in GPT/UEFI mode.\n`,
@@ -98,16 +91,10 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${current.isoName}.sha256.txt`;
+    a.download = `${current.isoName}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  };
-
-  const copySha256 = () => {
-    navigator.clipboard.writeText(current.sha256);
-    setCopiedSha(true);
-    setTimeout(() => setCopiedSha(false), 2500);
   };
 
   return (
@@ -193,24 +180,6 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                 Global CDN Online
               </span>
             </div>
-          </div>
-
-          {/* Fully Wrapped SHA-256 Checksum Box with No Overflow */}
-          <div className="p-3.5 rounded-2xl bg-[#040812] border border-cyan-500/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 font-mono">
-            <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
-              <Shield className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5 sm:mt-0" />
-              <div className="min-w-0 flex-1">
-                <span className="text-[10px] sm:text-xs text-slate-400 font-bold block sm:inline mr-2">SHA-256 CHECKSUM:</span>
-                <span className="text-[10px] sm:text-xs text-cyan-300 break-all select-all font-mono tracking-tighter sm:tracking-normal">{current.sha256}</span>
-              </div>
-            </div>
-            <button
-              onClick={copySha256}
-              className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 hover:text-white transition-all text-xs font-mono font-bold flex-shrink-0 shadow-[0_0_10px_rgba(0,240,255,0.15)] cursor-pointer"
-            >
-              {copiedSha ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSha ? 'Copied!' : 'Copy Hash'}</span>
-            </button>
           </div>
 
           {/* Download Buttons */}
