@@ -224,7 +224,11 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4 flex-shrink-0">
-          <div className="flex items-center gap-3">
+          <div 
+            onClick={() => !isAdmin && setShowPinModal(true)}
+            className="flex items-center gap-3 cursor-pointer select-none"
+            title="Documentation Hub"
+          >
             <div className="p-2.5 sm:p-3 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
               <BookOpen className="w-5 sm:w-6 h-5 sm:h-6" />
             </div>
@@ -240,7 +244,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
           </div>
 
           <div className="flex items-center gap-2">
-            {isAdmin ? (
+            {isAdmin && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowEditor(!showEditor)}
@@ -257,15 +261,6 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
                   <span>New Folder</span>
                 </button>
               </div>
-            ) : (
-              <button
-                onClick={() => setShowPinModal(true)}
-                className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono"
-                title="Admin Security Access"
-              >
-                <Lock className="w-4 h-4" />
-                <span className="hidden sm:inline">Editor Lock</span>
-              </button>
             )}
 
             <button

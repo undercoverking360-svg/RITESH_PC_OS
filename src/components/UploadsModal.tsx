@@ -232,11 +232,18 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
         {/* Modal Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pr-8">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold tracking-wider uppercase">
+            <div 
+              onClick={() => !isAdmin && setShowPinModal(true)}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold tracking-wider uppercase cursor-pointer select-none"
+              title="Repository Hub"
+            >
               <UploadCloud className="w-3.5 h-3.5 text-cyan-400" />
               Community &amp; Verified Uploads Hub
             </div>
-            <h2 className="font-cyber font-black text-2xl sm:text-3xl text-white tracking-wide">
+            <h2 
+              onClick={() => !isAdmin && setShowPinModal(true)}
+              className="font-cyber font-black text-2xl sm:text-3xl text-white tracking-wide cursor-pointer select-none"
+            >
               UPLOAD &amp; RELEASE REPOSITORY
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 font-mono">
@@ -244,21 +251,13 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
             </p>
           </div>
 
-          {/* Admin PIN Authentication Toggle */}
+          {/* Admin PIN Authentication (Stealth / Secret click on badge or when unlocked) */}
           <div className="flex items-center gap-2">
-            {isAdmin ? (
+            {isAdmin && (
               <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5">
                 <Unlock className="w-3.5 h-3.5 text-emerald-400" />
                 <span>ADMIN UNLOCKED</span>
               </div>
-            ) : (
-              <button
-                onClick={() => setShowPinModal(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <Lock className="w-3.5 h-3.5 text-amber-400" />
-                <span>Admin Lock (PIN)</span>
-              </button>
             )}
           </div>
         </div>
