@@ -32,7 +32,6 @@ interface ToolDetailModalProps {
     terminalCommand: string;
     terminalOutput: string;
     link?: string;
-    downloadUrl?: string;
   } | null;
   onClose: () => void;
 }
@@ -70,24 +69,6 @@ const ToolDetailModal: React.FC<ToolDetailModalProps> = ({ tool, onClose }) => {
         </div>
 
         <p className="text-slate-300 text-sm leading-relaxed">{tool.description}</p>
-
-        {tool.downloadUrl && (
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-[#0c1a30] to-[#0a1224] border border-cyan-400/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-[0_0_25px_rgba(0,240,255,0.2)]">
-            <div>
-              <div className="text-xs font-cyber font-bold text-white">VaultPulse Portable Standalone Suite</div>
-              <div className="text-[11px] font-mono text-cyan-300">Offline Vault + P2P Sharing App (407 MB ZIP)</div>
-            </div>
-            <a
-              href={tool.downloadUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all shrink-0"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download Suite ZIP</span>
-            </a>
-          </div>
-        )}
 
         {tool.link && (
           <div className="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-between">
@@ -189,25 +170,24 @@ export const AdvancedToolingGrid: React.FC = () => {
     },
     {
       id: 'vaultpulse',
-      title: 'VaultPulse Cyber Security & File Sharing Matrix',
-      badge: 'OFFLINE VAULT + P2P SHARING (407 MB)',
-      category: 'ENCRYPTED VAULT & P2P HUB',
+      title: 'VaultPulse Sharing Matrix',
+      badge: 'P2P FILE SHARING HUB',
+      category: 'P2P SYNC & TRANSFERS',
       icon: Share2,
       glow: 'cyan',
       link: 'https://share.welcomeriteshguru.in',
-      downloadUrl: 'https://github.com/undercoverking360-svg/ritesh_pc_os_light-v1.0/releases/download/v1.0/VaultPulse_v1.0.zip',
       description:
-        'Zero-knowledge offline credentials vault and high-speed encrypted P2P sharing system. Protects passwords, API keys, and private files with military-grade SHA-512 encryption, while offering instant multi-device P2P transfers via share.welcomeriteshguru.in with zero server-side retention.',
+        'High-speed encrypted P2P workspace and direct file transfer sharing system. Send large ISO files, project code, media, and APKs directly between PC and mobile devices at maximum LAN/Wi-Fi speeds without cloud upload limits. Live hub: share.welcomeriteshguru.in',
       specs: [
-        'Complete Standalone Windows & Linux Portable Executable Suite (407 MB)',
-        'Direct browser-to-PC WebRTC encrypted P2P data transfer up to 1.2 GB/s',
-        'Zero-Knowledge offline password & credentials vault with SHA-512 security',
-        'Instant multi-device pairing via QR code or short link with zero cloud retention',
-        'Built-in background server controls (START_SERVER.bat & STOP_SERVER.bat)',
+        'Direct browser-to-PC WebRTC encrypted P2P data transfer',
+        'Instant multi-device pairing via QR code or short link',
+        'Zero server-side file retention for maximum privacy',
+        'Live integrated sharing hub at share.welcomeriteshguru.in',
+        'High-throughput LAN transfer speeds up to 1.2 GB/s',
       ],
-      terminalCommand: 'vaultpulse --start-suite --port 8080',
+      terminalCommand: 'vaultpulse --share --hub share.welcomeriteshguru.in',
       terminalOutput:
-        '[OK] VaultPulse Offline Engine: Active (SHA-512 Hardware Encrypted)\n[OK] Sharing Hub: https://share.welcomeriteshguru.in\n[OK] P2P LAN Throughput: 1.2 GB/s\n[OK] Standalone Executable Ready: VaultPulse_v1.0.zip (407 MB)',
+        '[OK] Sharing Hub Connected: https://share.welcomeriteshguru.in\n[OK] Encrypted P2P Tunnel: Active (Zero Cloud Retention)\n[OK] Max Transfer Speed: 1.2 GB/s (Local Gigabit LAN/Wi-Fi 6)\n[OK] Web Portal: Ready for Instant Peer-to-Peer Sync',
     },
     {
       id: 'cleaner-suite',

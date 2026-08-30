@@ -11,8 +11,6 @@ import { InteractiveBootSequence } from './components/InteractiveBootSequence';
 import { InteractiveTerminal } from './components/InteractiveTerminal';
 import { DownloadModal } from './components/DownloadModal';
 import { DonateModal } from './components/DonateModal';
-import { UploadSheetModal } from './components/UploadSheetModal';
-import { GuideModal } from './components/GuideModal';
 import { Footer } from './components/Footer';
 import {
   Terminal,
@@ -29,9 +27,7 @@ import {
   Copy,
   Check,
   Radio,
-  ExternalLink,
-  Upload,
-  BookOpen
+  ExternalLink
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -50,8 +46,6 @@ export default function App() {
   const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const [terminalModalOpen, setTerminalModalOpen] = useState(false);
   const [donateModalOpen, setDonateModalOpen] = useState(false);
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [turboMode, setTurboMode] = useState(false);
 
   // Switch tab with smooth vertical scrolling to top
@@ -72,12 +66,6 @@ export default function App() {
 
   const handleOpenDonate = () => setDonateModalOpen(true);
   const handleCloseDonate = () => setDonateModalOpen(false);
-
-  const handleOpenUpload = () => setUploadModalOpen(true);
-  const handleCloseUpload = () => setUploadModalOpen(false);
-
-  const handleOpenGuide = () => setGuideModalOpen(true);
-  const handleCloseGuide = () => setGuideModalOpen(false);
 
   const handleExploreArch = () => {
     handleTabChange('ecosystem');
@@ -122,8 +110,6 @@ export default function App() {
         onOpenDownload={handleOpenDownload}
         onOpenTerminal={handleOpenTerminal}
         onOpenDonate={handleOpenDonate}
-        onOpenUpload={handleOpenUpload}
-        onOpenGuide={handleOpenGuide}
       />
 
       {/* 3. Main Animated Page Content with Smooth Vertical Fade In-Out */}
@@ -143,8 +129,6 @@ export default function App() {
                 onOpenDownload={handleOpenDownload}
                 onOpenTerminal={handleOpenTerminal}
                 onExploreArch={handleExploreArch}
-                onOpenUpload={handleOpenUpload}
-                onOpenGuide={handleOpenGuide}
               />
 
               {/* SECTION 2: Live Interactive GRUB Simulator Preview */}
@@ -523,45 +507,22 @@ export default function App() {
       </main>
 
       {/* 4. Floating Action Buttons (Desktop & Tablet) */}
-      <div className="hidden sm:flex fixed bottom-5 right-5 z-40 items-center gap-2.5">
-        {/* Floating Guide > Button */}
-        <button
-          onClick={handleOpenGuide}
-          className="p-3 px-4 rounded-full bg-[#081020]/95 hover:bg-cyan-950 border border-cyan-500/60 text-cyan-300 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5 font-cyber font-bold text-xs"
-          title="Open Flashing Guide"
-        >
-          <BookOpen className="w-4 h-4 text-cyan-400" />
-          <span>Guide &gt;</span>
-        </button>
-
-        {/* Floating Upload / Sheet Button */}
-        <button
-          onClick={handleOpenUpload}
-          className="p-3 px-4 rounded-full bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500/60 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5 font-cyber font-bold text-xs"
-          title="Upload / Google Sheet Sync"
-        >
-          <Upload className="w-4 h-4 text-emerald-400" />
-          <span>Upload</span>
-        </button>
-
-        {/* Floating CLI Terminal Button */}
+      <div className="hidden sm:flex fixed bottom-5 right-5 z-40 items-center gap-3">
         <button
           onClick={handleOpenTerminal}
-          className="p-3 rounded-full bg-[#081020]/90 hover:bg-cyan-950 border border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all hover:scale-110 active:scale-95 cursor-pointer"
+          className="p-3.5 rounded-full bg-[#081020]/90 hover:bg-cyan-950 border border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all hover:scale-110 active:scale-95 cursor-pointer"
           title="Open Hacker Terminal"
           aria-label="Open CLI Terminal"
         >
-          <Terminal className="w-4 h-4" />
+          <Terminal className="w-5 h-5" />
         </button>
-
-        {/* Floating Download ISO Button */}
         <button
           onClick={handleOpenDownload}
-          className="p-3 px-5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
+          className="p-3.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all hover:scale-110 active:scale-95 cursor-pointer flex items-center gap-2 px-5"
           title="Download ISO"
         >
-          <Download className="w-4 h-4 text-black" />
-          <span className="font-cyber font-extrabold text-xs">ISO V1.0</span>
+          <Download className="w-5 h-5 text-black" />
+          <span className="font-cyber font-extrabold text-xs hidden sm:inline-block">ISO V1.0</span>
         </button>
       </div>
 
@@ -572,32 +533,19 @@ export default function App() {
         onOpenDownload={handleOpenDownload}
       />
 
-      {/* 6. Download Distribution Modal (5 Mirrors & 3 Editions) */}
+      {/* 6. Download Distribution Modal */}
       <DownloadModal
         isOpen={downloadModalOpen}
         onClose={handleCloseDownload}
       />
 
-      {/* 7. Google Sheet & Community Upload Modal */}
-      <UploadSheetModal
-        isOpen={uploadModalOpen}
-        onClose={handleCloseUpload}
-      />
-
-      {/* 8. USB Flashing & Installation Guide Modal */}
-      <GuideModal
-        isOpen={guideModalOpen}
-        onClose={handleCloseGuide}
-        onOpenDownload={handleOpenDownload}
-      />
-
-      {/* 9. Donation & Payment Gateway Modal */}
+      {/* 7. Donation & Payment Gateway Modal */}
       <DonateModal
         isOpen={donateModalOpen}
         onClose={handleCloseDonate}
       />
 
-      {/* 10. Footer */}
+      {/* 8. Footer */}
       <Footer
         onOpenDownload={handleOpenDownload}
         onOpenTerminal={handleOpenTerminal}

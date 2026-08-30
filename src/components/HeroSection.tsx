@@ -1,61 +1,55 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import {
-  Download,
-  Zap,
-  Terminal,
-  Cpu,
-  Layers,
-  Shield,
-  CheckCircle2,
-  Sparkles,
-  Upload,
-  BookOpen,
-  HardDrive
-} from 'lucide-react';
+import { MetallicLogo } from './MetallicLogo';
+import { Download, Cpu, Zap, Shield, Sparkles, Terminal, ArrowRight, Play, CheckCircle2 } from 'lucide-react';
 
 interface HeroSectionProps {
   onOpenDownload: () => void;
   onOpenTerminal: () => void;
   onExploreArch: () => void;
-  onOpenUpload: () => void;
-  onOpenGuide: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenDownload,
   onOpenTerminal,
   onExploreArch,
-  onOpenUpload,
-  onOpenGuide,
 }) => {
   const highlights = [
-    { label: 'Instant Live Boot', value: '15.2s', sub: 'Toram SquashFS RAM', icon: Zap },
-    { label: 'Idle RAM Consumption', value: '480 MB', sub: 'Debian 12 Lightweight', icon: Cpu },
-    { label: 'Subsystem Passthrough', value: '3-in-1', sub: 'Linux + Android + Wine', icon: Layers },
-    { label: 'UEFI & BIOS Security', value: '100%', sub: 'Immutable NVRAM Priority', icon: Shield },
+    { label: 'Instant Boot Time', value: '15s', sub: 'NVMe / Fast RAM Mode', icon: Zap },
+    { label: 'Display Engine', value: '4K 60FPS', sub: 'Frosted Glass Compositor', icon: Sparkles },
+    { label: 'Zero Bloat', value: '0.0%', sub: 'Pure Debian Bookworm 12', icon: Cpu },
+    { label: 'BIOS Priority', value: 'UEFI / NVRAM', sub: 'Hardware Protected Boot', icon: Shield },
   ];
 
   return (
     <motion.section
-      id="overview"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="relative min-h-[85vh] flex items-center justify-center pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      className="relative pt-6 sm:pt-10 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col justify-center"
     >
-      <div className="relative z-10 max-w-6xl mx-auto w-full space-y-8 sm:space-y-10">
-        {/* Top Floating Badge */}
+      {/* Background Cyber Grid with Ambient Neon Glows */}
+      <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-rose-600/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto w-full relative z-10">
+        {/* Top Floating Cyber Status Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: false, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="flex justify-center"
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex justify-center mb-5 sm:mb-6"
         >
-          <div className="inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-4 py-1.5 rounded-full bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md">
-            <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" />
-            <span className="font-mono text-xs tracking-wider uppercase font-bold">
-              V1.0 OFFICIAL RELEASE LIVE
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-[#081020]/90 backdrop-blur-xl border border-cyan-500/40 shadow-[0_0_20px_rgba(0,240,255,0.2)] max-w-full">
+            <span className="flex h-2 w-2 relative flex-shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+            </span>
+            <span className="font-mono text-[10px] sm:text-xs font-semibold text-cyan-300 tracking-wider uppercase truncate">
+              ● LIVE UEFI / NVRAM HYBRID KERNEL v6.12
             </span>
             <span className="hidden sm:inline-block text-slate-500">|</span>
             <span className="hidden sm:inline-block font-mono text-xs text-rose-400 font-bold">
@@ -92,7 +86,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span className="text-blue-400 font-semibold">Windows compatibility subsystems</span>, and hardware UEFI/NVRAM security.
           </motion.p>
 
-          {/* Symmetrically Aligned 4 Action CTAs including Upload and Guide > */}
+          {/* Symmetrically Aligned 3 Action CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -100,17 +94,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4"
           >
-            {/* Button 1: Upload / Sheet Sync */}
-            <button
-              onClick={onOpenUpload}
-              className="relative group w-full sm:w-auto min-h-[52px] px-7 sm:px-8 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-cyber font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(16,185,129,0.35)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer overflow-hidden border border-emerald-300/40"
-            >
-              <Upload className="w-4 h-4 text-black" />
-              <span>Upload / Sheet Sync</span>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform" />
-            </button>
-
-            {/* Button 2: Download ISO */}
+            {/* Button 1: Download ISO */}
             <button
               onClick={onOpenDownload}
               className="relative group w-full sm:w-auto min-h-[52px] px-7 sm:px-8 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(0,240,255,0.35)] hover:shadow-[0_0_35px_rgba(0,240,255,0.6)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer overflow-hidden border border-cyan-300/40"
@@ -120,17 +104,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform" />
             </button>
 
-            {/* Button 3: Installation Guide > */}
+            {/* Button 2: Explore Architecture */}
             <button
-              onClick={onOpenGuide}
-              className="relative group w-full sm:w-auto min-h-[52px] px-6 sm:px-7 rounded-xl bg-[#091224]/90 hover:bg-[#0f1d38] backdrop-blur-xl border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white font-cyber font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer overflow-hidden"
+              onClick={onExploreArch}
+              className="relative group w-full sm:w-auto min-h-[52px] px-7 sm:px-8 rounded-xl bg-[#091224]/90 hover:bg-[#0f1d38] backdrop-blur-xl border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white font-cyber font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer overflow-hidden"
             >
-              <BookOpen className="w-4 h-4 text-cyan-400" />
-              <span>Flashing Guide &gt;</span>
+              <Zap className="w-4 h-4 text-cyan-400 group-hover:rotate-12 transition-transform" />
+              <span>Explore Architecture</span>
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent transition-transform" />
             </button>
 
-            {/* Button 4: Run CLI Diagnostic */}
+            {/* Button 3: Run CLI Diagnostic */}
             <button
               onClick={onOpenTerminal}
               className="relative group w-full sm:w-auto min-h-[52px] px-6 sm:px-7 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/60 text-slate-300 hover:text-emerald-300 font-mono text-xs sm:text-sm tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer overflow-hidden"
