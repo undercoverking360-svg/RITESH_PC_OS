@@ -14,7 +14,9 @@ import {
   Clock,
   Search,
   CheckCircle2,
-  Trash2
+  Trash2,
+  BookOpen,
+  FolderArchive
 } from 'lucide-react';
 
 export interface UploadItem {
@@ -35,14 +37,30 @@ interface UploadsModalProps {
 const DEFAULT_UPLOADS: UploadItem[] = [
   {
     slNo: 1,
-    title: 'RITESH PC OS - Light Edition V1.0 (2.09 GB Direct Drive)',
-    icon: '⚡',
-    links: 'https://drive.usercontent.google.com/download?id=1a9mIS760nvmK8b72agB3enNijx3QNhKF&export=download&confirm=t',
-    description: '2.09 GB Ultra-Light Debian 12 Bookworm + Instant 15s Toram Live Boot.',
+    title: 'VaultPulse Standalone Portable Suite (407 MB ZIP)',
+    icon: '📦',
+    links: 'https://github.com/undercoverking360-svg/ritesh_pc_os_light-v1.0/releases/download/v1.0/VaultPulse_v1.0.zip',
+    description: 'Complete 407 MB standalone encrypted file-sharing suite extracted directly from P9 partition.',
     timestamp: '2026-08-31'
   },
   {
     slNo: 2,
+    title: 'Official USB Flashing & MultiBoot Installation Toolkit',
+    icon: '📖',
+    links: 'https://www.ventoy.net/en/download.html',
+    description: 'Official Ventoy & Rufus Flashing Toolkit with complete Drag-and-Drop ISO multiboot guide.',
+    timestamp: '2026-08-31'
+  },
+  {
+    slNo: 3,
+    title: 'RITESH PC OS - Light Edition V1.0 (2.09 GB Direct Drive)',
+    icon: '⚡',
+    links: 'https://drive.usercontent.google.com/download?id=1a9mIS760nvmK8b72agB3enNijx3QNhKF&export=download&confirm=t',
+    description: '2.09 GB Ultra-Light Debian 12 Bookworm + Instant 15s Toram Live Boot (1-Tap Direct Download).',
+    timestamp: '2026-08-31'
+  },
+  {
+    slNo: 4,
     title: 'RITESH PC OS - Ultimate Master Flagship (4.6 GB Direct Drive)',
     icon: '💿',
     links: 'https://drive.usercontent.google.com/download?id=1pM2BFxbMvfTl9_G5U51_NECv0rnC1RpG&export=download&confirm=t',
@@ -50,23 +68,15 @@ const DEFAULT_UPLOADS: UploadItem[] = [
     timestamp: '2026-08-31'
   },
   {
-    slNo: 3,
-    title: 'VaultPulse Standalone Suite (407 MB Portable ZIP)',
-    icon: '📦',
-    links: 'https://github.com/undercoverking360-svg/ritesh_pc_os_light-v1.0/releases/download/v1.0/VaultPulse_v1.0.zip',
-    description: 'Portable zero-install encrypted file sharing vault from P9 partition.',
-    timestamp: '2026-08-31'
-  },
-  {
-    slNo: 4,
+    slNo: 5,
     title: 'Light Edition Official BitTorrent Magnet Link',
     icon: '🧲',
     links: 'https://archive.org/download/ritesh-pc-os-light-v-1.0/ritesh-pc-os-light-v-1.0_archive.torrent',
-    description: 'Decentralized P2P seed file for high-speed torrent clients.',
+    description: 'Decentralized high-speed P2P torrent seed file for unlimited speed download.',
     timestamp: '2026-08-31'
   },
   {
-    slNo: 5,
+    slNo: 6,
     title: 'Ultimate Edition Official BitTorrent Magnet Link',
     icon: '🧲',
     links: 'https://archive.org/download/ritesh-pc-os-ultimate/ritesh-pc-os-ultimate_archive.torrent',
@@ -76,17 +86,17 @@ const DEFAULT_UPLOADS: UploadItem[] = [
 ];
 
 const PRESET_ICONS = [
+  { emoji: '📦', label: 'Vault ZIP' },
+  { emoji: '📖', label: 'Guide Doc' },
   { emoji: '💿', label: 'ISO Disk' },
-  { emoji: '🚀', label: 'Fast Boot' },
-  { emoji: '📦', label: 'Package' },
-  { emoji: '⚡', label: 'Torrent' },
+  { emoji: '⚡', label: 'Fast Mirror' },
+  { emoji: '🧲', label: 'Torrent' },
   { emoji: '🐙', label: 'GitHub' },
   { emoji: '🛡️', label: 'Security' },
   { emoji: '🐧', label: 'Linux' },
   { emoji: '🤖', label: 'Android' },
   { emoji: '💻', label: 'System' },
   { emoji: '🔧', label: 'Utility' },
-  { emoji: '🔥', label: 'Turbo' },
   { emoji: '🌐', label: 'Web Mirror' },
 ];
 
@@ -96,7 +106,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
   appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec'
 }) => {
   const [uploads, setUploads] = useState<UploadItem[]>(() => {
-    const saved = localStorage.getItem('ritesh_pc_os_uploads');
+    const saved = localStorage.getItem('ritesh_pc_os_uploads_v2');
     return saved ? JSON.parse(saved) : DEFAULT_UPLOADS;
   });
 
@@ -110,14 +120,14 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
 
   // Form State
   const [title, setTitle] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState('💿');
+  const [selectedIcon, setSelectedIcon] = useState('📦');
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [desc, setDesc] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('ritesh_pc_os_uploads', JSON.stringify(uploads));
+    localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(uploads));
   }, [uploads]);
 
   // Fetch initial data from Google Apps Script if provided
@@ -128,7 +138,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setUploads(data);
-          localStorage.setItem('ritesh_pc_os_uploads', JSON.stringify(data));
+          localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(data));
         }
       })
       .catch((err) => {
@@ -165,7 +175,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
 
     const updated = [newItem, ...uploads];
     setUploads(updated);
-    localStorage.setItem('ritesh_pc_os_uploads', JSON.stringify(updated));
+    localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(updated));
 
     // Optional POST sync to Google Apps Script
     if (appsScriptUrl) {
@@ -185,14 +195,14 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     setTitle('');
     setLinkUrl('');
     setDesc('');
-    setSelectedIcon('💿');
+    setSelectedIcon('📦');
     setIsSubmitting(false);
   };
 
   const handleDeleteUpload = (slNo: number) => {
     const updated = uploads.filter((u) => u.slNo !== slNo);
     setUploads(updated);
-    localStorage.setItem('ritesh_pc_os_uploads', JSON.stringify(updated));
+    localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(updated));
   };
 
   const filteredUploads = uploads.filter(
@@ -229,7 +239,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
               UPLOAD &amp; RELEASE REPOSITORY
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 font-mono">
-              Live Google Sheets synced database of verified ISO builds &amp; packages.
+              Live Google Sheets synced database of verified VaultPulse Suites, Guides &amp; ISO builds.
             </p>
           </div>
 
