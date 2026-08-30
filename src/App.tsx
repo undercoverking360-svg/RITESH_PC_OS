@@ -11,6 +11,8 @@ import { InteractiveBootSequence } from './components/InteractiveBootSequence';
 import { InteractiveTerminal } from './components/InteractiveTerminal';
 import { DownloadModal } from './components/DownloadModal';
 import { DonateModal } from './components/DonateModal';
+import { UploadsModal } from './components/UploadsModal';
+import { GuideModal } from './components/GuideModal';
 import { Footer } from './components/Footer';
 import {
   Terminal,
@@ -27,7 +29,9 @@ import {
   Copy,
   Check,
   Radio,
-  ExternalLink
+  ExternalLink,
+  UploadCloud,
+  BookOpen
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -46,6 +50,8 @@ export default function App() {
   const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const [terminalModalOpen, setTerminalModalOpen] = useState(false);
   const [donateModalOpen, setDonateModalOpen] = useState(false);
+  const [uploadsModalOpen, setUploadsModalOpen] = useState(false);
+  const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [turboMode, setTurboMode] = useState(false);
 
   // Switch tab with smooth vertical scrolling to top
@@ -508,21 +514,24 @@ export default function App() {
 
       {/* 4. Floating Action Buttons (Desktop & Tablet) */}
       <div className="hidden sm:flex fixed bottom-5 right-5 z-40 items-center gap-3">
+        {/* Left Circle Button: Guide Modal Trigger (with >_ icon) */}
         <button
-          onClick={handleOpenTerminal}
-          className="p-3.5 rounded-full bg-[#081020]/90 hover:bg-cyan-950 border border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all hover:scale-110 active:scale-95 cursor-pointer"
-          title="Open Hacker Terminal"
-          aria-label="Open CLI Terminal"
+          onClick={() => setGuideModalOpen(true)}
+          className="p-3.5 rounded-full bg-[#081020]/90 hover:bg-cyan-950 border border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center font-mono font-bold text-sm min-w-[46px] min-h-[46px]"
+          title="Open Flashing & Live Boot Guide"
+          aria-label="Open Flashing Guide"
         >
-          <Terminal className="w-5 h-5" />
+          <span>&gt;_</span>
         </button>
+
+        {/* Right Pill Button: Upload Modal Trigger (with UploadCloud icon) */}
         <button
-          onClick={handleOpenDownload}
+          onClick={() => setUploadsModalOpen(true)}
           className="p-3.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all hover:scale-110 active:scale-95 cursor-pointer flex items-center gap-2 px-5"
-          title="Download ISO"
+          title="Uploads & Community Repository"
         >
-          <Download className="w-5 h-5 text-black" />
-          <span className="font-cyber font-extrabold text-xs hidden sm:inline-block">ISO V1.0</span>
+          <UploadCloud className="w-5 h-5 text-black" />
+          <span className="font-cyber font-extrabold text-xs hidden sm:inline-block">Upload</span>
         </button>
       </div>
 
@@ -533,19 +542,33 @@ export default function App() {
         onOpenDownload={handleOpenDownload}
       />
 
-      {/* 6. Download Distribution Modal */}
+      {/* 6. Download Distribution Modal (3 Editions & 5 Mirrors) */}
       <DownloadModal
         isOpen={downloadModalOpen}
         onClose={handleCloseDownload}
       />
 
-      {/* 7. Donation & Payment Gateway Modal */}
+      {/* 7. Uploads & Community Repository Modal (with PIN 231001 & Google Apps Script Sync) */}
+      <UploadsModal
+        isOpen={uploadsModalOpen}
+        onClose={() => setUploadsModalOpen(false)}
+        appsScriptUrl="https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec"
+      />
+
+      {/* 8. USB Flashing & Installation Guide Modal */}
+      <GuideModal
+        isOpen={guideModalOpen}
+        onClose={() => setGuideModalOpen(false)}
+        onOpenDownload={handleOpenDownload}
+      />
+
+      {/* 9. Donation & Payment Gateway Modal */}
       <DonateModal
         isOpen={donateModalOpen}
         onClose={handleCloseDonate}
       />
 
-      {/* 8. Footer */}
+      {/* 10. Footer */}
       <Footer
         onOpenDownload={handleOpenDownload}
         onOpenTerminal={handleOpenTerminal}
