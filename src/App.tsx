@@ -555,11 +555,11 @@ export default function App() {
         appsScriptUrl="https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec"
       />
 
-      {/* 8. USB Flashing & Installation Guide Modal */}
+      {/* 8. Documentation & Guide CMS Modal (Animated Folders, Rich Writer & PIN 231001) */}
       <GuideModal
         isOpen={guideModalOpen}
         onClose={() => setGuideModalOpen(false)}
-        onOpenDownload={handleOpenDownload}
+        appsScriptUrl="https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec"
       />
 
       {/* 9. Donation & Payment Gateway Modal */}
