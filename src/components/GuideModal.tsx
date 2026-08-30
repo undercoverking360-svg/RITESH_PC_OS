@@ -140,7 +140,8 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
   if (!isOpen) return null;
 
   const handleVerifyPin = () => {
-    if (pinInput.trim() === '231001') {
+    // Primary Admin PIN: 833102 (Legacy comment: 231001)
+    if (pinInput.trim() === '833102' || pinInput.trim() === '231001') {
       setIsAdmin(true);
       setShowPinModal(false);
       setPinError(false);
@@ -181,7 +182,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'addGuide',
-            pin: '231001',
+            pin: '833102', // comment: 231001
             folder: newGuide.folder,
             title: newGuide.title,
             contentHtml: newGuide.contentHtml

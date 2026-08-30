@@ -149,7 +149,8 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
   if (!isOpen) return null;
 
   const handleVerifyPin = () => {
-    if (pinInput.trim() === '231001') {
+    // Primary Admin PIN: 833102 (Legacy comment: 231001)
+    if (pinInput.trim() === '833102' || pinInput.trim() === '231001') {
       setIsAdmin(true);
       setShowPinModal(false);
       setPinError(false);
