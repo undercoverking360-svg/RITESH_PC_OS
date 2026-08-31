@@ -73,6 +73,12 @@ export default function App() {
   const handleOpenDonate = () => setDonateModalOpen(true);
   const handleCloseDonate = () => setDonateModalOpen(false);
 
+  const handleOpenGuide = () => setGuideModalOpen(true);
+  const handleCloseGuide = () => setGuideModalOpen(false);
+
+  const handleOpenUploads = () => setUploadsModalOpen(true);
+  const handleCloseUploads = () => setUploadsModalOpen(false);
+
   const handleExploreArch = () => {
     handleTabChange('ecosystem');
   };
