@@ -23,16 +23,7 @@ import {
   Loader2
 } from 'lucide-react';
 
-import { fetchLiveGuides, insertLiveGuide } from '../lib/supabase';
-
-interface GuidePost {
-  id: string;
-  folder: string;
-  title: string;
-  contentHtml: string;
-  author: string;
-  timestamp: string;
-}
+import { getLiveGuides, saveLiveGuide, GuidePost } from '../lib/supabase';
 
 interface GuideModalProps {
   isOpen: boolean;
@@ -67,14 +58,14 @@ export const GuideModal: React.FC<GuideModalProps> = ({
   const [showNewFolderModal, setShowNewFolderModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Ultra-Fast Live Sync with Supabase Database
-  const fetchSupabaseGuides = async () => {
+  // Ultra-Fast Live Sync with Google Sheet + Supabase Cache
+  const fetchLiveGuidesData = async () => {
     setIsLoading(true);
     try {
-      const liveData = await fetchLiveGuides();
+      const liveData = await getLiveGuides();
       if (liveData && liveData.length > 0) {
         setGuides(liveData);
-        // Derive unique folders
+        // Strictly derive folders from genuine live records
         const derivedFolders = Array.from(
           new Set(liveData.map((g) => g.folder).filter(Boolean))
         ) as string[];
@@ -84,7 +75,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({
         }
       }
     } catch (err) {
-      console.error('Supabase guides fetch error:', err);
+      console.error('Live guides fetch error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -92,7 +83,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      fetchSupabaseGuides();
+      fetchLiveGuidesData();
     }
   }, [isOpen]);
 
@@ -136,9 +127,9 @@ export const GuideModal: React.FC<GuideModalProps> = ({
       timestamp: new Date().toISOString()
     };
 
-    // Instant Supabase Insert
+    // Dual Sync: Google Sheet Primary + Supabase Cache
     try {
-      await insertLiveGuide({
+      await saveLiveGuide({
         folder: newGuide.folder,
         title: newGuide.title,
         contentHtml: newGuide.contentHtml,
@@ -149,7 +140,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({
       const updatedFolders = Array.from(new Set(updatedGuides.map((g) => g.folder).filter(Boolean)));
       setFolders(updatedFolders);
     } catch (err) {
-      console.error('Supabase guide insert failed:', err);
+      console.error('Save guide failed:', err);
     }
 
     setEditTitle('');
@@ -157,8 +148,8 @@ export const GuideModal: React.FC<GuideModalProps> = ({
     setShowEditor(false);
     setIsSubmitting(false);
 
-    // Refresh from Supabase
-    fetchSupabaseGuides();
+    // Refresh after short delay
+    setTimeout(fetchLiveGuidesData, 1000);
   };
 
   const insertTag = (openTag: string, closeTag: string) => {

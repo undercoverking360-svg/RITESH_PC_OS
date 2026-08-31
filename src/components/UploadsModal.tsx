@@ -18,7 +18,7 @@ import {
   Loader2
 } from 'lucide-react';
 
-import { fetchLiveUploads, insertLiveUpload } from '../lib/supabase';
+import { getLiveUploads, saveLiveUpload } from '../lib/supabase';
 
 export interface UploadItem {
   slNo: number;
@@ -74,16 +74,16 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
   const [desc, setDesc] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Ultra-Fast Live Sync with Supabase Database
+  // Ultra-Fast Live Sync with Google Sheet + Supabase Cache
   const fetchLiveData = async () => {
     setIsLoading(true);
     try {
-      const liveData = await fetchLiveUploads();
+      const liveData = await getLiveUploads();
       if (liveData && liveData.length > 0) {
         setUploads(liveData);
       }
     } catch (err) {
-      console.error('Supabase live fetch error:', err);
+      console.error('Live uploads fetch error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -124,9 +124,9 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
       timestamp: new Date().toISOString()
     };
 
-    // Instant Supabase Insert
+    // Dual Sync: Google Sheet Primary + Supabase Cache
     try {
-      await insertLiveUpload({
+      await saveLiveUpload({
         slNo: newItem.slNo,
         title: newItem.title,
         icon: newItem.icon,
@@ -135,7 +135,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
       });
       setUploads((prev) => [newItem, ...prev]);
     } catch (err) {
-      console.error('Failed to sync to Supabase:', err);
+      console.error('Failed to sync upload:', err);
     }
 
     // Reset Form
@@ -145,8 +145,8 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     setSelectedIcon('💿');
     setIsSubmitting(false);
 
-    // Re-verify from Supabase
-    fetchLiveData();
+    // Refresh after short delay
+    setTimeout(fetchLiveData, 1000);
   };
 
   const filteredUploads = uploads.filter(
