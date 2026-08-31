@@ -15,8 +15,7 @@ import {
   Search,
   CheckCircle2,
   Trash2,
-  BookOpen,
-  FolderArchive
+  Loader2
 } from 'lucide-react';
 
 export interface UploadItem {
@@ -34,63 +33,12 @@ interface UploadsModalProps {
   appsScriptUrl?: string;
 }
 
-const DEFAULT_UPLOADS: UploadItem[] = [
-  {
-    slNo: 1,
-    title: 'VaultPulse Standalone Portable Suite (407 MB ZIP)',
-    icon: '📦',
-    links: 'https://github.com/undercoverking360-svg/ritesh_pc_os_light-v1.0/releases/download/v1.0/VaultPulse_v1.0.zip',
-    description: 'Complete 407 MB standalone encrypted file-sharing suite extracted directly from P9 partition.',
-    timestamp: '2026-08-31'
-  },
-  {
-    slNo: 2,
-    title: 'Official USB Flashing & MultiBoot Installation Toolkit',
-    icon: '📖',
-    links: 'https://www.ventoy.net/en/download.html',
-    description: 'Official Ventoy & Rufus Flashing Toolkit with complete Drag-and-Drop ISO multiboot guide.',
-    timestamp: '2026-08-31'
-  },
-  {
-    slNo: 3,
-    title: 'RITESH PC OS - Light Edition V1.0 (2.09 GB Direct Drive)',
-    icon: '⚡',
-    links: 'https://drive.usercontent.google.com/download?id=1a9mIS760nvmK8b72agB3enNijx3QNhKF&export=download&confirm=t',
-    description: '2.09 GB Ultra-Light Debian 12 Bookworm + Instant 15s Toram Live Boot (1-Tap Direct Download).',
-    timestamp: '2026-08-31'
-  },
-  {
-    slNo: 4,
-    title: 'RITESH PC OS - Ultimate Master Flagship (4.6 GB Direct Drive)',
-    icon: '💿',
-    links: 'https://drive.usercontent.google.com/download?id=1pM2BFxbMvfTl9_G5U51_NECv0rnC1RpG&export=download&confirm=t',
-    description: '4.6 GB Master Universal Hybrid ISO with 522-Line Kinetic GRUB & Android 11 Subsystem.',
-    timestamp: '2026-08-31'
-  },
-  {
-    slNo: 5,
-    title: 'Light Edition Official BitTorrent Magnet Link',
-    icon: '🧲',
-    links: 'https://archive.org/download/ritesh-pc-os-light-v-1.0/ritesh-pc-os-light-v-1.0_archive.torrent',
-    description: 'Decentralized high-speed P2P torrent seed file for unlimited speed download.',
-    timestamp: '2026-08-31'
-  },
-  {
-    slNo: 6,
-    title: 'Ultimate Edition Official BitTorrent Magnet Link',
-    icon: '🧲',
-    links: 'https://archive.org/download/ritesh-pc-os-ultimate/ritesh-pc-os-ultimate_archive.torrent',
-    description: 'Decentralized P2P seed file for unlimited speed torrent clients.',
-    timestamp: '2026-08-31'
-  }
-];
-
 const PRESET_ICONS = [
-  { emoji: '📦', label: 'Vault ZIP' },
-  { emoji: '📖', label: 'Guide Doc' },
   { emoji: '💿', label: 'ISO Disk' },
-  { emoji: '⚡', label: 'Fast Mirror' },
+  { emoji: '⚡', label: 'Fast Drive' },
+  { emoji: '📦', label: 'ZIP Suite' },
   { emoji: '🧲', label: 'Torrent' },
+  { emoji: '📖', label: 'Guide Doc' },
   { emoji: '🐙', label: 'GitHub' },
   { emoji: '🛡️', label: 'Security' },
   { emoji: '🐧', label: 'Linux' },
@@ -105,11 +53,10 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
   onClose,
   appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec'
 }) => {
-  const [uploads, setUploads] = useState<UploadItem[]>(() => {
-    const saved = localStorage.getItem('ritesh_pc_os_uploads_v2');
-    return saved ? JSON.parse(saved) : DEFAULT_UPLOADS;
-  });
+  const [uploads, setUploads] = useState<UploadItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Admin PIN Authentication
   const [isAdmin, setIsAdmin] = useState(false);
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState(false);
@@ -120,39 +67,43 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
 
   // Form State
   const [title, setTitle] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState('📦');
+  const [selectedIcon, setSelectedIcon] = useState('💿');
   const [showIconPicker, setShowIconPicker] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [desc, setDesc] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(uploads));
-  }, [uploads]);
-
-  // Fetch live data from Google Apps Script
-  useEffect(() => {
-    if (!appsScriptUrl || !isOpen) return;
+  // 100% Live Sync with Google Sheets backend
+  const fetchLiveData = () => {
+    if (!appsScriptUrl) return;
+    setIsLoading(true);
     fetch(appsScriptUrl)
       .then((res) => res.json())
       .then((data) => {
-        if (data && data.uploads && Array.isArray(data.uploads) && data.uploads.length > 0) {
+        if (data && data.uploads && Array.isArray(data.uploads)) {
           setUploads(data.uploads);
-          localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(data.uploads));
-        } else if (Array.isArray(data) && data.length > 0) {
+        } else if (Array.isArray(data)) {
           setUploads(data);
-          localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(data));
         }
       })
       .catch((err) => {
-        console.warn('Apps Script fetch failed, using local/default store:', err);
+        console.error('Google Sheets live fetch error:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchLiveData();
+    }
   }, [appsScriptUrl, isOpen]);
 
   if (!isOpen) return null;
 
   const handleVerifyPin = () => {
-    // Primary Admin PIN: 833102 / 231001
+    // Admin PIN: 833102 / 231001
     if (pinInput.trim() === '833102' || pinInput.trim() === '231001') {
       setIsAdmin(true);
       setShowPinModal(false);
@@ -173,13 +124,9 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
       title: title.trim(),
       icon: selectedIcon,
       links: linkUrl.trim(),
-      description: desc.trim() || 'Custom verified release link.',
-      timestamp: new Date().toISOString().split('T')[0]
+      description: desc.trim() || 'Official release link.',
+      timestamp: new Date().toISOString()
     };
-
-    const updated = [newItem, ...uploads];
-    setUploads(updated);
-    localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(updated));
 
     // Live POST sync to Google Apps Script Backend
     if (appsScriptUrl) {
@@ -198,29 +145,28 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
           })
         });
       } catch (err) {
-        console.warn('Apps script sync failed:', err);
+        console.warn('Apps script sync error:', err);
       }
     }
+
+    setUploads((prev) => [newItem, ...prev]);
 
     // Reset Form
     setTitle('');
     setLinkUrl('');
     setDesc('');
-    setSelectedIcon('📦');
+    setSelectedIcon('💿');
     setIsSubmitting(false);
-  };
 
-  const handleDeleteUpload = (slNo: number) => {
-    const updated = uploads.filter((u) => u.slNo !== slNo);
-    setUploads(updated);
-    localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(updated));
+    // Re-sync after short delay
+    setTimeout(fetchLiveData, 1500);
   };
 
   const filteredUploads = uploads.filter(
     (item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.slNo.toString().includes(searchQuery)
+      (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.slNo && item.slNo.toString().includes(searchQuery))
   );
 
   return (
@@ -242,26 +188,26 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
         {/* Modal Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pr-8">
           <div className="space-y-1">
-            <div 
+            <div
               onClick={() => !isAdmin && setShowPinModal(true)}
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold tracking-wider uppercase cursor-pointer select-none"
               title="Repository Hub"
             >
               <UploadCloud className="w-3.5 h-3.5 text-cyan-400" />
-              Community &amp; Verified Uploads Hub
+              Live Google Sheets Repository
             </div>
-            <h2 
+            <h2
               onClick={() => !isAdmin && setShowPinModal(true)}
               className="font-cyber font-black text-2xl sm:text-3xl text-white tracking-wide cursor-pointer select-none"
             >
               UPLOAD &amp; RELEASE REPOSITORY
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 font-mono">
-              Live Google Sheets synced database of verified VaultPulse Suites, Guides &amp; ISO builds.
+              Live synchronized database directly connected to Google Sheets backend.
             </p>
           </div>
 
-          {/* Admin PIN Authentication (Stealth / Secret click on badge or when unlocked) */}
+          {/* Admin Unlocked Indicator (Stealth Mode) */}
           <div className="flex items-center gap-2">
             {isAdmin && (
               <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5">
@@ -272,7 +218,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
           </div>
         </div>
 
-        {/* PIN Verification Modal */}
+        {/* Secret PIN Verification Prompt */}
         <AnimatePresence>
           {showPinModal && (
             <motion.div
@@ -284,7 +230,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-amber-300 text-xs font-bold font-mono">
                   <ShieldAlert className="w-4 h-4 text-amber-400" />
-                  ENTER ADMIN SECURITY PIN TO MANAGE RELEASES
+                  ENTER ADMIN SECURITY PIN
                 </div>
                 <button
                   onClick={() => setShowPinModal(false)}
@@ -300,7 +246,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleVerifyPin()}
-                  placeholder="Enter PIN (231001)..."
+                  placeholder="Enter PIN (833102)..."
                   className="flex-1 px-4 py-2 rounded-xl bg-black/60 border border-slate-700 text-white font-mono text-xs focus:outline-none focus:border-amber-400"
                 />
                 <button
@@ -312,19 +258,19 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
               </div>
               {pinError && (
                 <div className="text-[11px] font-mono text-rose-400 font-bold">
-                  ⚠️ Invalid PIN code! Please enter the authorized 6-digit PIN (231001).
+                  ⚠️ Invalid PIN code! Please enter the authorized PIN.
                 </div>
               )}
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Admin Upload Entry Form (Unlocked when PIN 231001 is verified) */}
+        {/* Admin Upload Entry Form (Appears when unlocked) */}
         {isAdmin && (
           <form onSubmit={handleAddUpload} className="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 space-y-3">
             <div className="text-xs font-mono text-cyan-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <Plus className="w-4 h-4 text-cyan-400" />
-              ADD NEW RELEASE / UPDATE FILE (AUTO SL NO: #{uploads.length + 1})
+              ADD NEW ENTRY TO GOOGLE SHEET
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
@@ -396,23 +342,23 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)] cursor-pointer"
+                className="px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-cyber font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)] cursor-pointer disabled:opacity-50"
               >
-                <Plus className="w-4 h-4" />
-                <span>Publish Release Entry</span>
+                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                <span>{isSubmitting ? 'Syncing to Google Sheet...' : 'Publish Release Entry'}</span>
               </button>
             </div>
           </form>
         )}
 
-        {/* Real-time Search Input Bar */}
+        {/* Search Input Bar */}
         <div className="relative">
           <Search className="w-4 h-4 text-cyan-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search releases by name, ISO size, keyword or SL #..."
+            placeholder="Search verified releases..."
             className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#090e1c] border border-cyan-500/30 text-white font-mono text-xs focus:outline-none focus:border-cyan-400 placeholder:text-slate-500 shadow-inner"
           />
           {searchQuery && (
@@ -425,44 +371,59 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
           )}
         </div>
 
-        {/* Release Registry Table & Download Cards */}
+        {/* Release Registry Cards */}
         <div className="space-y-3">
           <div className="text-xs font-mono text-slate-400 uppercase tracking-wider font-bold flex items-center justify-between">
-            <span>Published Artifacts &amp; Download Links:</span>
+            <span>Google Sheets Live Records:</span>
             <span className="text-cyan-400">
-              {filteredUploads.length} of {uploads.length} Entries
+              {filteredUploads.length} Entries
             </span>
           </div>
 
           <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-cyan-500/40 scrollbar-track-black/40">
-            {filteredUploads.length === 0 ? (
+            {isLoading && uploads.length === 0 ? (
+              <div className="p-12 text-center rounded-2xl bg-black/40 border border-slate-800 flex flex-col items-center justify-center gap-3">
+                <Loader2 className="w-7 h-7 text-cyan-400 animate-spin" />
+                <span className="text-xs font-mono text-slate-400">Fetching live releases from Google Sheet...</span>
+              </div>
+            ) : filteredUploads.length === 0 ? (
               <div className="p-8 text-center rounded-2xl bg-black/40 border border-slate-800 text-slate-400 text-xs font-mono">
-                🔍 No releases found matching &quot;<span className="text-cyan-300">{searchQuery}</span>&quot;
+                {searchQuery ? (
+                  <>🔍 No releases found matching &quot;<span className="text-cyan-300">{searchQuery}</span>&quot;</>
+                ) : (
+                  <>📦 No releases recorded in Google Sheet yet.</>
+                )}
               </div>
             ) : (
-              filteredUploads.map((item) => (
+              filteredUploads.map((item, idx) => (
                 <div
-                  key={item.slNo}
+                  key={idx}
                   className="p-4 rounded-2xl bg-black/50 border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                 >
                   <div className="flex items-start gap-3">
                     <div className="p-2.5 rounded-xl bg-[#0c1527] border border-cyan-500/20 text-xl flex-shrink-0">
-                      {item.icon}
+                      {item.icon || '💿'}
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 font-bold">
-                          SL #{item.slNo}
+                          SL #{item.slNo || idx + 1}
                         </span>
                         <span className="font-cyber font-bold text-sm text-white group-hover:text-cyan-300 transition-colors">
                           {item.title}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-400 line-clamp-1">{item.description}</div>
+                      {item.description && (
+                        <div className="text-xs text-slate-400 line-clamp-1">{item.description}</div>
+                      )}
                       <div className="text-[10px] font-mono text-slate-500 flex items-center gap-2">
-                        <Clock className="w-3 h-3 text-slate-500" />
-                        <span>{item.timestamp}</span>
-                        <span>•</span>
+                        {item.timestamp && (
+                          <>
+                            <Clock className="w-3 h-3 text-slate-500" />
+                            <span>{new Date(item.timestamp).toLocaleDateString()}</span>
+                            <span>•</span>
+                          </>
+                        )}
                         <span className="text-slate-400 truncate max-w-[280px]">{item.links}</span>
                       </div>
                     </div>
@@ -479,16 +440,6 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
                       <span>Download</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
-
-                    {isAdmin && (
-                      <button
-                        onClick={() => handleDeleteUpload(item.slNo)}
-                        className="p-2 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-400 hover:bg-rose-600 hover:text-white transition-colors cursor-pointer"
-                        title="Delete Entry"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
                   </div>
                 </div>
               ))
