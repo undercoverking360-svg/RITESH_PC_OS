@@ -88,13 +88,15 @@ chainloader /EFI/Microsoft/Boot/bootmgfw.efi</pre>
 
 export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScriptUrl }) => {
   const [guides, setGuides] = useState<GuidePost[]>(() => {
-    const saved = localStorage.getItem('ritesh_pc_os_guides');
+    const saved = localStorage.getItem('ritesh_pc_os_guides_v2');
     return saved ? JSON.parse(saved) : DEFAULT_GUIDES;
   });
 
   const [folders, setFolders] = useState<string[]>(() => {
-    const saved = localStorage.getItem('ritesh_pc_os_folders');
-    return saved ? JSON.parse(saved) : ['Getting Started', 'Dual Boot & UEFI', 'Android 11 Subsystem', 'Cyberpunk Customization'];
+    const saved = localStorage.getItem('ritesh_pc_os_folders_v2');
+    if (saved) return JSON.parse(saved);
+    const dynamicFolders = Array.from(new Set(DEFAULT_GUIDES.map((g) => g.folder).filter(Boolean)));
+    return dynamicFolders.length > 0 ? dynamicFolders : ['Getting Started'];
   });
 
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -116,10 +118,11 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
   const [showNewFolderModal, setShowNewFolderModal] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('ritesh_pc_os_guides', JSON.stringify(guides));
-    localStorage.setItem('ritesh_pc_os_folders', JSON.stringify(folders));
+    localStorage.setItem('ritesh_pc_os_guides_v2', JSON.stringify(guides));
+    localStorage.setItem('ritesh_pc_os_folders_v2', JSON.stringify(folders));
   }, [guides, folders]);
 
+  // Live Sync with Google Sheets backend
   useEffect(() => {
     if (appsScriptUrl && isOpen) {
       fetch(appsScriptUrl)
@@ -127,9 +130,13 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
         .then((data) => {
           if (data && data.guides && Array.isArray(data.guides) && data.guides.length > 0) {
             setGuides(data.guides);
+            // Strictly derive folders from actual Google Sheets guide records
             const serverFolders = Array.from(new Set(data.guides.map((g: any) => g.folder).filter(Boolean))) as string[];
             if (serverFolders.length > 0) {
-              setFolders((prev) => Array.from(new Set([...prev, ...serverFolders])));
+              setFolders(serverFolders);
+              if (!serverFolders.includes(editFolder)) {
+                setEditFolder(serverFolders[0]);
+              }
             }
           }
         })
@@ -140,7 +147,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
   if (!isOpen) return null;
 
   const handleVerifyPin = () => {
-    // Primary Admin PIN: 833102 (Legacy comment: 231001)
+    // Primary Admin PIN: 833102 / 231001
     if (pinInput.trim() === '833102' || pinInput.trim() === '231001') {
       setIsAdmin(true);
       setShowPinModal(false);
@@ -153,10 +160,12 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
 
   const handleCreateFolder = () => {
     if (!newFolderName.trim()) return;
-    if (!folders.includes(newFolderName.trim())) {
-      const updated = [...folders, newFolderName.trim()];
+    const cleanName = newFolderName.trim();
+    if (!folders.includes(cleanName)) {
+      const updated = [...folders, cleanName];
       setFolders(updated);
-      setEditFolder(newFolderName.trim());
+      setEditFolder(cleanName);
+      localStorage.setItem('ritesh_pc_os_folders_v2', JSON.stringify(updated));
     }
     setNewFolderName('');
     setShowNewFolderModal(false);
@@ -175,14 +184,16 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
       timestamp: new Date().toISOString().split('T')[0]
     };
 
+    // Live POST sync to Google Sheets backend
     if (appsScriptUrl) {
       try {
         await fetch(appsScriptUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
+            pin: '231001',
             action: 'addGuide',
-            pin: '833102', // comment: 231001
             folder: newGuide.folder,
             title: newGuide.title,
             contentHtml: newGuide.contentHtml
@@ -193,7 +204,10 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, appsScr
       }
     }
 
-    setGuides([newGuide, ...guides]);
+    const updatedGuides = [newGuide, ...guides];
+    setGuides(updatedGuides);
+    const updatedFolders = Array.from(new Set(updatedGuides.map((g) => g.folder).filter(Boolean)));
+    setFolders(updatedFolders);
     setEditTitle('');
     setEditHtml('');
     setShowEditor(false);

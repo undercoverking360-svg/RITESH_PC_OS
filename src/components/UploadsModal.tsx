@@ -130,13 +130,16 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(uploads));
   }, [uploads]);
 
-  // Fetch initial data from Google Apps Script if provided
+  // Fetch live data from Google Apps Script
   useEffect(() => {
     if (!appsScriptUrl || !isOpen) return;
     fetch(appsScriptUrl)
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (data && data.uploads && Array.isArray(data.uploads) && data.uploads.length > 0) {
+          setUploads(data.uploads);
+          localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(data.uploads));
+        } else if (Array.isArray(data) && data.length > 0) {
           setUploads(data);
           localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(data));
         }
@@ -149,7 +152,7 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
   if (!isOpen) return null;
 
   const handleVerifyPin = () => {
-    // Primary Admin PIN: 833102 (Legacy comment: 231001)
+    // Primary Admin PIN: 833102 / 231001
     if (pinInput.trim() === '833102' || pinInput.trim() === '231001') {
       setIsAdmin(true);
       setShowPinModal(false);
@@ -167,10 +170,10 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     setIsSubmitting(true);
     const newItem: UploadItem = {
       slNo: uploads.length + 1,
-      title,
+      title: title.trim(),
       icon: selectedIcon,
-      links: linkUrl,
-      description: desc || 'Custom verified release link.',
+      links: linkUrl.trim(),
+      description: desc.trim() || 'Custom verified release link.',
       timestamp: new Date().toISOString().split('T')[0]
     };
 
@@ -178,16 +181,26 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     setUploads(updated);
     localStorage.setItem('ritesh_pc_os_uploads_v2', JSON.stringify(updated));
 
-    // Optional POST sync to Google Apps Script
+    // Live POST sync to Google Apps Script Backend
     if (appsScriptUrl) {
       try {
         await fetch(appsScriptUrl, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newItem)
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            pin: '231001',
+            action: 'addUpload',
+            title: newItem.title,
+            icon: newItem.icon,
+            links: newItem.links,
+            description: newItem.description
+          })
         });
       } catch (err) {
+        console.warn('Apps script sync failed:', err);
+      }
+    }
         console.warn('Apps script sync failed:', err);
       }
     }
