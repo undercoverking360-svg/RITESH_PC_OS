@@ -18,6 +18,8 @@ import {
   Loader2
 } from 'lucide-react';
 
+import { fetchLiveUploads, insertLiveUpload } from '../lib/supabase';
+
 export interface UploadItem {
   slNo: number;
   title: string;
@@ -50,8 +52,7 @@ const PRESET_ICONS = [
 
 export const UploadsModal: React.FC<UploadsModalProps> = ({
   isOpen,
-  onClose,
-  appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec'
+  onClose
 }) => {
   const [uploads, setUploads] = useState<UploadItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -73,32 +74,26 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
   const [desc, setDesc] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 100% Live Sync with Google Sheets backend
-  const fetchLiveData = () => {
-    if (!appsScriptUrl) return;
+  // Ultra-Fast Live Sync with Supabase Database
+  const fetchLiveData = async () => {
     setIsLoading(true);
-    fetch(appsScriptUrl)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.uploads && Array.isArray(data.uploads)) {
-          setUploads(data.uploads);
-        } else if (Array.isArray(data)) {
-          setUploads(data);
-        }
-      })
-      .catch((err) => {
-        console.error('Google Sheets live fetch error:', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const liveData = await fetchLiveUploads();
+      if (liveData && liveData.length > 0) {
+        setUploads(liveData);
+      }
+    } catch (err) {
+      console.error('Supabase live fetch error:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     if (isOpen) {
       fetchLiveData();
     }
-  }, [appsScriptUrl, isOpen]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -119,8 +114,9 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     if (!title || !linkUrl) return;
 
     setIsSubmitting(true);
+    const nextSl = (uploads[0]?.slNo || uploads.length) + 1;
     const newItem: UploadItem = {
-      slNo: uploads.length + 1,
+      slNo: nextSl,
       title: title.trim(),
       icon: selectedIcon,
       links: linkUrl.trim(),
@@ -128,28 +124,19 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
       timestamp: new Date().toISOString()
     };
 
-    // Live POST sync to Google Apps Script Backend
-    if (appsScriptUrl) {
-      try {
-        await fetch(appsScriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            pin: '231001',
-            action: 'addUpload',
-            title: newItem.title,
-            icon: newItem.icon,
-            links: newItem.links,
-            description: newItem.description
-          })
-        });
-      } catch (err) {
-        console.warn('Apps script sync error:', err);
-      }
+    // Instant Supabase Insert
+    try {
+      await insertLiveUpload({
+        slNo: newItem.slNo,
+        title: newItem.title,
+        icon: newItem.icon,
+        links: newItem.links,
+        description: newItem.description
+      });
+      setUploads((prev) => [newItem, ...prev]);
+    } catch (err) {
+      console.error('Failed to sync to Supabase:', err);
     }
-
-    setUploads((prev) => [newItem, ...prev]);
 
     // Reset Form
     setTitle('');
@@ -158,8 +145,8 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
     setSelectedIcon('💿');
     setIsSubmitting(false);
 
-    // Re-sync after short delay
-    setTimeout(fetchLiveData, 1500);
+    // Re-verify from Supabase
+    fetchLiveData();
   };
 
   const filteredUploads = uploads.filter(

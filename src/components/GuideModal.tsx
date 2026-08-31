@@ -23,6 +23,8 @@ import {
   Loader2
 } from 'lucide-react';
 
+import { fetchLiveGuides, insertLiveGuide } from '../lib/supabase';
+
 interface GuidePost {
   id: string;
   folder: string;
@@ -40,8 +42,7 @@ interface GuideModalProps {
 
 export const GuideModal: React.FC<GuideModalProps> = ({
   isOpen,
-  onClose,
-  appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzPnrzy7QlJEM8L30R7JTeoopoO1-OS0ZyJLhVx9fxM5JaIH29Po6AqPWWm8VKirRlrDg/exec'
+  onClose
 }) => {
   const [guides, setGuides] = useState<GuidePost[]>([]);
   const [folders, setFolders] = useState<string[]>([]);
@@ -66,38 +67,34 @@ export const GuideModal: React.FC<GuideModalProps> = ({
   const [showNewFolderModal, setShowNewFolderModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 100% Pure Live Sync with Google Sheets backend (Zero mock data)
-  const fetchLiveGuides = () => {
-    if (!appsScriptUrl) return;
+  // Ultra-Fast Live Sync with Supabase Database
+  const fetchSupabaseGuides = async () => {
     setIsLoading(true);
-    fetch(appsScriptUrl)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.guides && Array.isArray(data.guides)) {
-          setGuides(data.guides);
-          // Strictly derive folders only from sheet records
-          const derivedFolders = Array.from(
-            new Set(data.guides.map((g: any) => g.folder).filter(Boolean))
-          ) as string[];
-          setFolders(derivedFolders);
-          if (derivedFolders.length > 0 && !editFolder) {
-            setEditFolder(derivedFolders[0]);
-          }
+    try {
+      const liveData = await fetchLiveGuides();
+      if (liveData && liveData.length > 0) {
+        setGuides(liveData);
+        // Derive unique folders
+        const derivedFolders = Array.from(
+          new Set(liveData.map((g) => g.folder).filter(Boolean))
+        ) as string[];
+        setFolders(derivedFolders);
+        if (derivedFolders.length > 0 && !editFolder) {
+          setEditFolder(derivedFolders[0]);
         }
-      })
-      .catch((err) => {
-        console.error('Google Sheets guides fetch error:', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      }
+    } catch (err) {
+      console.error('Supabase guides fetch error:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     if (isOpen) {
-      fetchLiveGuides();
+      fetchSupabaseGuides();
     }
-  }, [appsScriptUrl, isOpen]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -139,37 +136,29 @@ export const GuideModal: React.FC<GuideModalProps> = ({
       timestamp: new Date().toISOString()
     };
 
-    // Live POST sync to Google Sheets backend
-    if (appsScriptUrl) {
-      try {
-        await fetch(appsScriptUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            pin: '231001',
-            action: 'addGuide',
-            folder: newGuide.folder,
-            title: newGuide.title,
-            contentHtml: newGuide.contentHtml
-          })
-        });
-      } catch (err) {
-        console.error('Apps Script Sync failed:', err);
-      }
+    // Instant Supabase Insert
+    try {
+      await insertLiveGuide({
+        folder: newGuide.folder,
+        title: newGuide.title,
+        contentHtml: newGuide.contentHtml,
+        author: newGuide.author
+      });
+      const updatedGuides = [newGuide, ...guides];
+      setGuides(updatedGuides);
+      const updatedFolders = Array.from(new Set(updatedGuides.map((g) => g.folder).filter(Boolean)));
+      setFolders(updatedFolders);
+    } catch (err) {
+      console.error('Supabase guide insert failed:', err);
     }
 
-    const updatedGuides = [newGuide, ...guides];
-    setGuides(updatedGuides);
-    const updatedFolders = Array.from(new Set(updatedGuides.map((g) => g.folder).filter(Boolean)));
-    setFolders(updatedFolders);
     setEditTitle('');
     setEditHtml('');
     setShowEditor(false);
     setIsSubmitting(false);
 
-    // Refresh data after short delay
-    setTimeout(fetchLiveGuides, 1500);
+    // Refresh from Supabase
+    fetchSupabaseGuides();
   };
 
   const insertTag = (openTag: string, closeTag: string) => {
