@@ -193,30 +193,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>DOWNLOAD ISO</span>
         </button>
 
-        {/* Mobile Quick Action Pill 1: [ >_ Guide ] (Mobile Only: lg:hidden) */}
-        {onOpenGuide && (
-          <button
-            onClick={onOpenGuide}
-            className="lg:hidden p-2 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 active:scale-90 transition-transform cursor-pointer font-mono text-xs font-bold shadow-[0_0_8px_rgba(0,240,255,0.2)] flex items-center justify-center"
-            title="Guide CMS"
-            aria-label="Guide CMS"
-          >
-            <span className="font-cyber font-black text-xs leading-none">&gt;_</span>
-          </button>
-        )}
-
-        {/* Mobile Quick Action Pill 2: [ ☁️ Uploads ] (Mobile Only: lg:hidden) */}
-        {onOpenUploads && (
-          <button
-            onClick={onOpenUploads}
-            className="lg:hidden p-2 rounded-lg bg-blue-950/80 border border-blue-500/40 text-blue-300 active:scale-90 transition-transform cursor-pointer shadow-[0_0_8px_rgba(59,130,246,0.2)] flex items-center justify-center"
-            title="Uploads Hub"
-            aria-label="Uploads Hub"
-          >
-            <UploadCloud className="w-4 h-4 text-blue-400" />
-          </button>
-        )}
-
         {/* Mobile Glowing [⬇] Icon Button */}
         <button
           onClick={onOpenDownload}
