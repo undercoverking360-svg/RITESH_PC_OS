@@ -463,8 +463,8 @@ export const GuideModal: React.FC<GuideModalProps> = ({
             </form>
           ) : activePost ? (
             /* Reader View */
-            <div className="space-y-4 bg-black/60 p-6 rounded-2xl border border-cyan-500/30">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="space-y-4 bg-black/60 p-4 sm:p-6 rounded-2xl border border-cyan-500/30">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <button
                   onClick={() => setActivePost(null)}
                   className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
@@ -479,23 +479,23 @@ export const GuideModal: React.FC<GuideModalProps> = ({
               </div>
 
               <div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 font-bold uppercase">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 font-bold uppercase border border-cyan-500/30">
                   {activePost.folder}
                 </span>
-                <h2 className="font-cyber font-bold text-xl sm:text-2xl text-white mt-1">
+                <h2 className="font-cyber font-bold text-lg sm:text-2xl text-white mt-2 break-words leading-snug">
                   {activePost.title}
                 </h2>
               </div>
 
               <div
-                className="prose prose-invert max-w-none text-slate-300 text-xs sm:text-sm font-sans leading-relaxed pt-2"
+                className="prose prose-invert max-w-none text-slate-300 text-xs sm:text-sm font-sans leading-relaxed pt-2 break-words overflow-x-auto"
                 dangerouslySetInnerHTML={{ __html: activePost.contentHtml }}
               />
             </div>
           ) : activeFolder ? (
             /* Folder Contents View */
             <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
                 <button
                   onClick={() => setActiveFolder(null)}
                   className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
@@ -518,14 +518,14 @@ export const GuideModal: React.FC<GuideModalProps> = ({
                       className="p-4 rounded-2xl bg-black/50 border border-slate-800 hover:border-cyan-500/40 transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
                     >
                       <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <FileText className="w-4 h-4 text-cyan-400" />
-                          <h4 className="font-cyber font-bold text-sm text-white group-hover:text-cyan-300 transition-colors">
+                        <div className="flex items-start gap-2.5">
+                          <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+                          <h4 className="font-cyber font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition-colors break-words leading-snug flex-1">
                             {post.title}
                           </h4>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-900">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-slate-400 pt-2 border-t border-slate-900">
                         <span>By {post.author || 'Admin'}</span>
                         <span className="text-cyan-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                           Read Guide <ChevronRight className="w-3 h-3" />
@@ -561,14 +561,14 @@ export const GuideModal: React.FC<GuideModalProps> = ({
                         whileHover={{ scale: 1.03, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setActiveFolder(folderName)}
-                        className="p-5 rounded-2xl bg-gradient-to-b from-[#0c1527] to-[#060a14] border border-slate-800 hover:border-cyan-500/50 shadow-lg hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all cursor-pointer flex flex-col justify-between space-y-4 group"
+                        className="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#0c1527] to-[#060a14] border border-slate-800 hover:border-cyan-500/50 shadow-lg hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
                       >
-                        <div className="p-3 rounded-2xl bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 w-fit group-hover:bg-cyan-500/20 group-hover:text-cyan-300 transition-colors">
-                          <Folder className="w-6 h-6" />
+                        <div className="p-2.5 sm:p-3 rounded-2xl bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 w-fit group-hover:bg-cyan-500/20 group-hover:text-cyan-300 transition-colors">
+                          <Folder className="w-5 sm:w-6 h-5 sm:h-6" />
                         </div>
 
                         <div>
-                          <h4 className="font-cyber font-bold text-sm text-white group-hover:text-cyan-300 transition-colors">
+                          <h4 className="font-cyber font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition-colors break-words leading-snug">
                             {folderName}
                           </h4>
                           <div className="text-[11px] font-mono text-slate-500 mt-1">
