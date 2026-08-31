@@ -193,6 +193,30 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>DOWNLOAD ISO</span>
         </button>
 
+        {/* Mobile Quick Action Pill 1: [ >_ Guide ] (Mobile Only: lg:hidden) */}
+        {onOpenGuide && (
+          <button
+            onClick={onOpenGuide}
+            className="lg:hidden p-2 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 active:scale-90 transition-transform cursor-pointer font-mono text-xs font-bold shadow-[0_0_8px_rgba(0,240,255,0.2)] flex items-center justify-center"
+            title="Guide CMS"
+            aria-label="Guide CMS"
+          >
+            <span className="font-cyber font-black text-xs leading-none">&gt;_</span>
+          </button>
+        )}
+
+        {/* Mobile Quick Action Pill 2: [ ☁️ Uploads ] (Mobile Only: lg:hidden) */}
+        {onOpenUploads && (
+          <button
+            onClick={onOpenUploads}
+            className="lg:hidden p-2 rounded-lg bg-blue-950/80 border border-blue-500/40 text-blue-300 active:scale-90 transition-transform cursor-pointer shadow-[0_0_8px_rgba(59,130,246,0.2)] flex items-center justify-center"
+            title="Uploads Hub"
+            aria-label="Uploads Hub"
+          >
+            <UploadCloud className="w-4 h-4 text-blue-400" />
+          </button>
+        )}
+
         {/* Mobile Glowing [⬇] Icon Button */}
         <button
           onClick={onOpenDownload}
@@ -224,6 +248,34 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* 4. MOBILE / TABLET CYBER DRAWER (Slide Down with ALL Header Options) */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed top-16 left-0 right-0 max-h-[85vh] overflow-y-auto bg-[#070b14]/98 backdrop-blur-2xl border-b border-cyan-500/40 px-4 py-4 space-y-2 font-mono text-sm shadow-[0_20px_50px_rgba(0,0,0,0.95)] z-50 animate-in fade-in slide-in-from-top-4 duration-200">
+          {/* Top 2 Special Quick Action Cards in Mobile Drawer */}
+          <div className="grid grid-cols-2 gap-2 pb-1">
+            {onOpenGuide && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenGuide();
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-cyan-950/90 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-bold hover:bg-cyan-500/20 shadow-[0_0_12px_rgba(0,240,255,0.25)] active:scale-95 transition-all cursor-pointer"
+              >
+                <span className="font-cyber font-black text-cyan-400 text-sm">&gt;_</span>
+                <span>Guide CMS</span>
+              </button>
+            )}
+
+            {onOpenUploads && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenUploads();
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-blue-950/90 border border-blue-500/50 text-blue-300 font-mono text-xs font-bold hover:bg-blue-500/20 shadow-[0_0_12px_rgba(59,130,246,0.25)] active:scale-95 transition-all cursor-pointer"
+              >
+                <UploadCloud className="w-4 h-4 text-blue-400" />
+                <span>Uploads Hub</span>
+              </button>
+            )}
+          </div>
           {/* [🏠 Overview] */}
           <button
             onClick={() => {
