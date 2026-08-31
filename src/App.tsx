@@ -116,6 +116,8 @@ export default function App() {
         onOpenDownload={handleOpenDownload}
         onOpenTerminal={handleOpenTerminal}
         onOpenDonate={handleOpenDonate}
+        onOpenGuide={handleOpenGuide}
+        onOpenUploads={handleOpenUploads}
       />
 
       {/* 3. Main Animated Page Content with Smooth Vertical Fade In-Out */}

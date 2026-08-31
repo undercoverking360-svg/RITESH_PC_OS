@@ -13,6 +13,8 @@ import {
   Home,
   DollarSign,
   Activity,
+  BookOpen,
+  UploadCloud,
 } from 'lucide-react';
 import { PageTabId } from '../types';
 
@@ -22,6 +24,8 @@ interface NavbarProps {
   onOpenDownload: () => void;
   onOpenTerminal: () => void;
   onOpenDonate: () => void;
+  onOpenGuide?: () => void;
+  onOpenUploads?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -30,6 +34,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenDownload,
   onOpenTerminal,
   onOpenDonate,
+  onOpenGuide,
+  onOpenUploads,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [livePing, setLivePing] = useState(13);
@@ -197,16 +203,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Download className="w-4 h-4 stroke-[2.5]" />
         </button>
 
-        {/* Animated Cyber Hamburger Toggle (Visible on Screens < lg) */}
+        {/* Exact Cyber 3-Line Hamburger Toggle (Mobile Only: lg:hidden) */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 rounded-lg bg-slate-900/90 border border-cyan-500/40 text-cyan-300 hover:text-white active:scale-90 transition-all cursor-pointer shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+          className="lg:hidden p-2 rounded-xl bg-slate-900/90 border border-cyan-500/40 text-cyan-300 hover:text-white active:scale-90 transition-all cursor-pointer shadow-[0_0_12px_rgba(0,240,255,0.25)] flex items-center justify-center"
           aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? (
             <X className="w-5 h-5 text-rose-400" />
           ) : (
-            <Menu className="w-5 h-5 text-cyan-400" />
+            <div className="w-5 h-5 flex flex-col justify-center items-center gap-1">
+              <span className="w-4 h-[2px] bg-cyan-400 rounded-full transition-all" />
+              <span className="w-4 h-[2px] bg-cyan-400 rounded-full transition-all" />
+              <span className="w-4 h-[2px] bg-cyan-400 rounded-full transition-all" />
+            </div>
           )}
         </button>
       </div>
@@ -293,6 +303,34 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Zap className="w-4 h-4 text-cyan-400" />
             <span>15s Boot Sequence &amp; Specs</span>
           </button>
+
+          {/* [📖 Guide & Documentation Hub] */}
+          {onOpenGuide && (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenGuide();
+              }}
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl w-full text-left text-slate-300 hover:text-cyan-400 hover:bg-slate-900/60 transition-all border border-cyan-500/20 bg-cyan-950/20"
+            >
+              <BookOpen className="w-4 h-4 text-cyan-400" />
+              <span className="text-cyan-300 font-semibold">Live Documentation &amp; Guide</span>
+            </button>
+          )}
+
+          {/* [☁️ Uploads & Release Registry] */}
+          {onOpenUploads && (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenUploads();
+              }}
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl w-full text-left text-slate-300 hover:text-cyan-400 hover:bg-slate-900/60 transition-all border border-cyan-500/20 bg-cyan-950/20"
+            >
+              <UploadCloud className="w-4 h-4 text-cyan-400" />
+              <span className="text-cyan-300 font-semibold">Uploads &amp; Community Portal</span>
+            </button>
+          )}
 
           {/* [💻 Launch CLI Diagnostic Terminal] */}
           <button
