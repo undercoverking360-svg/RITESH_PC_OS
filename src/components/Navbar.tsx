@@ -224,34 +224,53 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* 4. MOBILE / TABLET CYBER DRAWER (Slide Down with ALL Header Options) */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed top-16 left-0 right-0 max-h-[85vh] overflow-y-auto bg-[#070b14]/98 backdrop-blur-2xl border-b border-cyan-500/40 px-4 py-4 space-y-2 font-mono text-sm shadow-[0_20px_50px_rgba(0,0,0,0.95)] z-50 animate-in fade-in slide-in-from-top-4 duration-200">
-          {/* Top 2 Special Quick Action Cards in Mobile Drawer */}
-          <div className="grid grid-cols-2 gap-2 pb-1">
-            {onOpenGuide && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenGuide();
-                }}
-                className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-cyan-950/90 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-bold hover:bg-cyan-500/20 shadow-[0_0_12px_rgba(0,240,255,0.25)] active:scale-95 transition-all cursor-pointer"
-              >
-                <span className="font-cyber font-black text-cyan-400 text-sm">&gt;_</span>
-                <span>Guide CMS</span>
-              </button>
-            )}
+          {/* [📖 Guide CMS / Live Documentation Row] */}
+          {onOpenGuide && (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenGuide();
+              }}
+              className="flex items-center justify-between py-2.5 px-3.5 rounded-xl w-full text-left bg-cyan-950/80 hover:bg-cyan-900/60 border border-cyan-500/50 text-cyan-300 transition-all shadow-[0_0_12px_rgba(0,240,255,0.15)] active:scale-98 cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center flex-shrink-0 font-cyber font-black text-cyan-400 text-xs">
+                  &gt;_
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-cyan-300 truncate">Guide &amp; Documentation</div>
+                  <div className="text-[10px] text-cyan-400/70 truncate">Live Blogger KB &amp; Tutorials</div>
+                </div>
+              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-mono font-bold flex-shrink-0 ml-2">
+                GUIDE
+              </span>
+            </button>
+          )}
 
-            {onOpenUploads && (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenUploads();
-                }}
-                className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-blue-950/90 border border-blue-500/50 text-blue-300 font-mono text-xs font-bold hover:bg-blue-500/20 shadow-[0_0_12px_rgba(59,130,246,0.25)] active:scale-95 transition-all cursor-pointer"
-              >
-                <UploadCloud className="w-4 h-4 text-blue-400" />
-                <span>Uploads Hub</span>
-              </button>
-            )}
-          </div>
+          {/* [☁️ Uploads & Community Portal Row] */}
+          {onOpenUploads && (
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenUploads();
+              }}
+              className="flex items-center justify-between py-2.5 px-3.5 rounded-xl w-full text-left bg-blue-950/80 hover:bg-blue-900/60 border border-blue-500/50 text-blue-300 transition-all shadow-[0_0_12px_rgba(59,130,246,0.15)] active:scale-98 cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-6 h-6 rounded-lg bg-blue-500/20 border border-blue-500/40 flex items-center justify-center flex-shrink-0 text-blue-400">
+                  <UploadCloud className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-xs text-blue-300 truncate">Uploads &amp; Community</div>
+                  <div className="text-[10px] text-blue-400/70 truncate">Releases, ISOs &amp; Toolkits</div>
+                </div>
+              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 border border-blue-500/40 text-blue-300 font-mono font-bold flex-shrink-0 ml-2">
+                UPLOADS
+              </span>
+            </button>
+          )}
           {/* [🏠 Overview] */}
           <button
             onClick={() => {
