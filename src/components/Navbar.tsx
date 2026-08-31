@@ -332,34 +332,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>15s Boot Sequence &amp; Specs</span>
           </button>
 
-          {/* [📖 Guide & Documentation Hub] */}
-          {onOpenGuide && (
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenGuide();
-              }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl w-full text-left text-slate-300 hover:text-cyan-400 hover:bg-slate-900/60 transition-all border border-cyan-500/20 bg-cyan-950/20"
-            >
-              <BookOpen className="w-4 h-4 text-cyan-400" />
-              <span className="text-cyan-300 font-semibold">Live Documentation &amp; Guide</span>
-            </button>
-          )}
-
-          {/* [☁️ Uploads & Release Registry] */}
-          {onOpenUploads && (
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenUploads();
-              }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl w-full text-left text-slate-300 hover:text-cyan-400 hover:bg-slate-900/60 transition-all border border-cyan-500/20 bg-cyan-950/20"
-            >
-              <UploadCloud className="w-4 h-4 text-cyan-400" />
-              <span className="text-cyan-300 font-semibold">Uploads &amp; Community Portal</span>
-            </button>
-          )}
-
           {/* [💻 Launch CLI Diagnostic Terminal] */}
           <button
             onClick={() => {
