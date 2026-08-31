@@ -201,9 +201,6 @@ export const UploadsModal: React.FC<UploadsModalProps> = ({
         console.warn('Apps script sync failed:', err);
       }
     }
-        console.warn('Apps script sync failed:', err);
-      }
-    }
 
     // Reset Form
     setTitle('');
